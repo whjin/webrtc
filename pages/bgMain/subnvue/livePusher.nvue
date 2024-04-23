@@ -1,0 +1,105 @@
+<template>
+	<view class="wrapper">
+		<live-pusher id="livePusher" :muted="muted" :enable-ans="true" :enable-camera="false" style="width: 100%; height: 100%;" :url="pushUrl"></live-pusher>
+	</view>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+
+export default {
+	data() {
+		return {
+			pushUrl: '',
+			// 定时器
+			timer: null
+		};
+	},
+	computed: {
+		...mapState({
+			// 主机静音状态
+			muted: state => state.app.muted
+		})
+	},
+	created() {
+		const vm = this;
+		uni.$on('live-push', data => {
+			if (data.status === 'start') {
+				vm.pushUrl = data.url;
+				vm.startLivePush();
+			} else if (data.status === 'stop') {
+				vm.stopLivePush();
+			} else if (data.status === 'startPre') {
+				vm.startPreLivePush();
+			} else if (data.status === 'stopPre') {
+				vm.stopPreLivePush();
+			}
+		});
+	},
+	onReady() {
+		this.pushContext = uni.createLivePusherContext('livePusher', this);
+	},
+	methods: {
+		startLivePush() {
+			this.pushContext.stop();
+			this.pushContext = uni.createLivePusherContext('livePusher', this);
+			this.startPushMethod();
+			clearInterval(this.timer);
+		},
+		startPushMethod() {
+			const vm = this;
+			this.pushContext.start({
+				success: a => {
+					console.log('开始推流');
+					uni.getCurrentSubNVue().hide('auto');
+					clearInterval(this.timer);
+				},
+				fail: err => {
+					console.log('推流失败:' + JSON.stringify(err));
+					this.timer = setInterval(() => {
+						this.startPushMethod();
+					}, 1500);
+				}
+			});
+		},
+		stopLivePush() {
+			this.pushContext.stop({
+				success: res => {
+					console.log('停止推流');
+					uni.$emit('live-back', {
+						status: 'stop'
+					});
+					uni.getCurrentSubNVue().hide('auto');
+				}
+			});
+		},
+		startPreLivePush() {
+			this.pushContext.startPreview({
+				success: a => {
+					console.log('开始预览');
+					uni.$emit('live-back', {
+						status: 'startPre'
+					});
+				}
+			});
+		},
+		stopPreLivePush() {
+			this.pushContext.stopPreview({
+				success: a => {
+					console.log('停止预览');
+					uni.$emit('live-back', {
+						status: 'stopPre'
+					});
+					uni.getCurrentSubNVue().hide('auto');
+				}
+			});
+		}
+	}
+};
+</script>
+
+<style>
+.wrapper {
+	background-color: transparent;
+}
+</style>

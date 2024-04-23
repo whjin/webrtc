@@ -1,0 +1,107 @@
+{
+	"pages": [
+		{
+			"path": "pages/bgMain/bgMain",
+			"style": {
+				"navigationBarTitleText": "主页",
+				"app-plus": {
+					"bounce": "none",
+					"subNVues": [
+						{
+							"id": "livePusher",
+							"path": "pages/bgMain/subnvue/livePusher",
+							"style": {
+								"position": "absolute",
+								"bottom": "1px",
+								"left": "1px",
+								"width": "1px",
+								"height": "1px",
+								"background": "transparent"
+							}
+						},
+						{
+							"id": "nodePlayer",
+							"path": "pages/bgMain/subnvue/nodePlayer",
+							"style": {
+								"background": "transparent"
+							}
+						}
+					]
+				}
+			}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
+		},
+		{
+			"path": "pages/intercom/intercom",
+			"style": {
+				"navigationBarTitleText": "视频对讲",
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
+		},
+		{
+			"path": "pages/radio/radio",
+			"style": {
+				"navigationBarTitleText": "语音广播",
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
+		},
+		{
+			"path": "pages/audio/audio",
+			"style": {
+				"navigationBarTitleText": "音频广播",
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
+		},
+		{
+			"path": "pages/video/video",
+			"style": {
+				"navigationBarTitleText": "点播直播",
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
+		},
+		{
+			"path": "pages/setting/setting",
+			"style": {
+				"navigationBarTitleText": "系统设置",
+				"app-plus": {
+					"bounce": "none"
+				}
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"pageOrientation": "landscape",
+		"rpxCalcBaseDeviceWidth": 1140
+	},
+	"condition": {
+		"current": 0,
+		"list": [
+			{
+				"name": "主页",
+				"path": "pages/bgMain/bgMain",
+				"query": "interval=4000&autoplay=false"
+			},
+			{
+				"name": "开发页面_st1",
+				"path": "pages/intercom/intercom"
+			}
+		]
+	}
+}

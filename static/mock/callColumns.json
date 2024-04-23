@@ -1,0 +1,14 @@
+[
+    {
+        "title": "监室号",
+        "key": "name"
+    },
+    {
+        "title": "连接状态",
+        "key": "state"
+    },
+    {
+        "title": "点名状态",
+        "key": "rcStatus"
+    }
+]

@@ -1,0 +1,18 @@
+[
+    {
+        "title": "姓名",
+        "key": "xm"
+    },
+    {
+        "title": "签到状态",
+        "key": "status"
+    },
+    {
+        "title": "体温",
+        "key": "temperature"
+    },
+    {
+        "title": "备注",
+        "key": "remark"
+    }
+]

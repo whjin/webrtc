@@ -1,0 +1,22 @@
+[
+  {
+    "code": 0,
+    "value": "30S",
+    "spacing": 30
+  },
+  {
+    "code": 1,
+    "value": "60S",
+    "spacing": 60
+  },
+  {
+    "code": 2,
+    "value": "120S",
+    "spacing": 123
+  },
+  {
+    "code": 3,
+    "value": "180S",
+    "spacing": 180
+  }
+]

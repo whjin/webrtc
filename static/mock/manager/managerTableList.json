@@ -1,0 +1,94 @@
+[
+    [
+        {
+            "site": "监室1",
+            "status": false,
+            "startTime": 0,
+            "endTime": 0
+        },
+        {
+            "site": "监室2",
+            "status": false,
+            "startTime": 0,
+            "endTime": 0
+        }
+    ],
+    [
+        {
+            "site": "监室1",
+            "status": false
+        },
+        {
+            "site": "监室2",
+            "status": false
+        }
+    ],
+    [
+        {
+            "site": "监室1",
+            "status": true
+        },
+        {
+            "site": "监室2",
+            "status": false
+        }
+    ],
+    [
+        {
+            "site": "监室1",
+            "status": false
+        },
+        {
+            "site": "监室2",
+            "status": false
+        }
+    ],
+    [
+        {
+            "site": "监室1",
+            "status": false
+        },
+        {
+            "site": "监室2",
+            "status": false
+        }
+    ],
+    [
+        {
+            "site": "监室1",
+            "status": true,
+            "tem": 20.2,
+            "hum": 55
+        },
+        {
+            "site": "监室2",
+            "status": true,
+            "tem": 20.3,
+            "hum": 57
+        }
+    ],
+    [
+        {
+            "site": "监室1",
+            "status": true,
+            "value": 59.3
+        },
+        {
+            "site": "监室2",
+            "status": true,
+            "value": 60.9
+        }
+    ],
+    [
+        {
+            "site": "监室1",
+            "status": true,
+            "value": 42
+        },
+        {
+            "site": "监室2",
+            "status": true,
+            "value": 39
+        }
+    ]
+]

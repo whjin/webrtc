@@ -1,0 +1,12 @@
+[
+    {
+        "id": "0",
+        "type": "iconheadphone",
+        "name": "监视监听"
+    },
+    {
+        "id": "1",
+        "type": "iconintercom",
+        "name": "视频对讲"
+    }
+]

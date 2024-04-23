@@ -1,0 +1,50 @@
+[
+    {
+        "id": 41,
+        "name": "首页",
+        "type": "iconhomepage",
+        "url": "/pages/index/index"
+    },
+    {
+        "id": 42,
+        "name": "对讲",
+        "type": "iconintercom",
+        "url": "/pages/intercom/intercom"
+    },
+    {
+        "id": 43,
+        "name": "广播",
+        "type": "iconradio",
+        "url": "/pages/radio/radio"
+    },
+    {
+        "id": 44,
+        "name": "音频",
+        "type": "iconaudio",
+        "url": "/pages/audio/audio"
+    },
+    {
+        "id": 45,
+        "name": "视频",
+        "type": "iconvideo",
+        "url": "/pages/video/video"
+    },
+    {
+        "id": 48,
+        "name": "点名",
+        "type": "iconcall",
+        "url": "/pages/call/call"
+    },
+    {
+        "id": 46,
+        "name": "设置",
+        "type": "iconsetting",
+        "url": "/pages/setting/setting"
+    },
+    {
+        "id": 47,
+        "name": "管控",
+        "type": "iconkongzhi",
+        "url": "/pages/manager/manager"
+    }
+]
