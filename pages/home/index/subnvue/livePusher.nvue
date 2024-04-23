@@ -1,0 +1,131 @@
+<template>
+  <div class="wrapper">
+    <live-pusher
+      id="livePusher"
+      :style="livePusherStyle"
+      whiteness="3"
+      min-bitrate="100"
+      :url="pushUrl"
+      :mode="livePusherMode"
+    ></live-pusher>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      // 推流地址
+      pushUrl: "",
+      // 推流视频模式，SD（标清）, HD（高清）, FHD（超清）
+      livePusherMode: uni.getStorageSync("livePusherMode"),
+      livePusherStyle: {
+        width: "1px",
+        height: "1px",
+        left: "0",
+        top: "0",
+      },
+    };
+  },
+  created() {
+    const vm = this;
+    uni.$on("live-push", (data) => {
+      if (data.status == "start") {
+        vm.pushUrl = data.url;
+        vm.startLivePush();
+      } else if (data.status == "stop") {
+        vm.stopLivePush();
+      } else if (data.status == "startPre") {
+        vm.startPreLivePush();
+      } else if (data.status == "stopPre") {
+        vm.stopPreLivePush();
+      } else if (data.status == "snapshot") {
+        vm.livePushPreview();
+      } else if (data.status == "setStyle") {
+        vm.setLivePushStyle(data.width, data.height, data.left, data.top);
+      }
+    });
+  },
+  onReady() {
+    this.pushContext = uni.createLivePusherContext("livePusher", this);
+  },
+  methods: {
+    startLivePush() {
+      this.pushContext.stop();
+      this.pushContext = uni.createLivePusherContext("livePusher", this);
+      this.startPushMethod();
+    },
+    startPushMethod() {
+      const vm = this;
+      this.pushContext.start({
+        success: (res) => {
+          console.log("开始推流");
+          uni.$emit("live-back", {
+            status: "start",
+          });
+          uni.getCurrentSubNVue().hide("auto");
+        },
+        fail: (err) => {
+          console.log("推流失败:" + JSON.stringify(err));
+          setTimeout(() => {
+            this.startPushMethod();
+          }, 1500);
+        },
+      });
+    },
+    stopLivePush() {
+      this.pushContext.stop({
+        success: (res) => {
+          console.log("停止推流");
+          uni.$emit("live-back", {
+            status: "stop",
+          });
+          uni.getCurrentSubNVue().hide("auto");
+        },
+      });
+    },
+    startPreLivePush() {
+      this.pushContext.startPreview({
+        success: (res) => {
+          uni.$emit("live-back", {
+            status: "startPre",
+          });
+        },
+      });
+    },
+    stopPreLivePush() {
+      this.setLivePushStyle(1, 1, 0, 0);
+      this.pushContext.stopPreview({
+        success: (res) => {
+          uni.$emit("live-back", {
+            status: "stopPre",
+          });
+        },
+      });
+    },
+    livePushPreview() {
+      let _this = this;
+      this.pushContext.snapshot({
+        success: (e) => {
+          uni.$emit("get-img-path", e.message.tempImagePath);
+        },
+      });
+    },
+    setLivePushStyle(width = 1, height = 1, left = 0, top = 0) {
+      this.livePusherStyle = {
+        width: width + "px",
+        height: height + "px",
+        left: left + "px",
+        top: top + "px",
+      };
+    },
+  },
+};
+</script>
+
+<style>
+.wrapper {
+  position: relative;
+  background-color: transparent;
+}
+</style>

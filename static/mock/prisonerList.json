@@ -1,0 +1,62 @@
+[
+    {
+        "name": "在线购物",
+        "image": "/static/images/index/prisoner/zxgw.png",
+        "url": "",
+        "index": 8
+    },
+    {
+        "name": "值班签到",
+        "image": "/static/images/index/prisoner/zxdm.png",
+        "url": "",
+        "index": 9
+    },
+    {
+        "name": "预约申请",
+        "image": "/static/images/index/prisoner/yyth.png",
+        "url": "",
+        "index": 10
+    },
+    {
+        "name": "预约就医",
+        "image": "/static/images/index/prisoner/xsbb.png",
+        "url": "",
+        "index": 11
+    },
+    {
+        "name": "物品管理",
+        "image": "/static/images/index/prisoner/wpbx.png",
+        "url": "",
+        "index": 12
+    },
+    {
+        "name": "每日心情",
+        "image": "/static/images/index/prisoner/mrxq.png",
+        "url": "",
+        "index": 13
+    },
+    {
+        "name": "体温监测",
+        "image": "/static/images/index/prisoner/twjc.png",
+        "url": "",
+        "index": 15
+    },
+    {
+        "name": "服药管理",
+        "image": "/static/images/index/prisoner/medicationTips.png",
+        "url": "",
+        "index": 17
+    },
+    {
+        "name": "投诉建议",
+        "image": "/static/images/index/prisoner/medicationTips.png",
+        "url": "",
+        "index": 23
+    },
+    {
+        "name": "家属通信",
+        "image": "/static/images/index/prisoner/medicationTips.png",
+        "url": "",
+        "index": 24
+    }
+]

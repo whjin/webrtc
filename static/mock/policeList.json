@@ -1,0 +1,20 @@
+[
+    {
+        "name": "面对面管理",
+        "image": "/static/images/index/police/facemanage.png",
+        "url": "",
+        "index": 26
+    },
+    {
+        "name": "进出监室登记",
+        "image": "/static/images/index/police/entrance.png",
+        "url": "",
+        "index": 27
+    },
+    {
+        "name": "安全大检查",
+        "image": "/static/images/index/police/safecheck.png",
+        "url": "",
+        "index": 28
+    }
+]

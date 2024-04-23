@@ -1,0 +1,113 @@
+.fingerprint-container {
+  width: 100%;
+  box-sizing: border-box;
+  .fingerprint-wrapper {
+    .fingerprint-header {
+      .fingerprint-title {
+        margin-left: 48.61upx;
+        color: #35fffa;
+        font-size: 27.77upx;
+        font-weight: bold;
+        line-height: 83.33upx;
+      }
+      .fingerprint-btn-box {
+        display: flex;
+        .fingerprint-button {
+          margin-left: 50upx;
+          color: #fff;
+          background: rgba(0, 122, 255, 0.99);
+          border: rgba(0, 122, 255, 0.99) 0.69upx solid;
+          text-align: center;
+          height: 43.05upx;
+          width: 111.11upx;
+          font-size: 18.05upx;
+          font-weight: 500;
+          line-height: 45upx;
+          border-radius: 2.77upx;
+        }
+        .fingerprint-button:hover {
+          font-weight: bold;
+        }
+      }
+    }
+    .fingerprint-box {
+      width: 320.88upx;
+      height: 380upx;
+      overflow: auto;
+      box-sizing: border-box;
+      margin-top: 26upx;
+      .fingerprint-list {
+        .fingerprint-item {
+          display: flex;
+          align-items: center;
+          .checkbox {
+            width: 100%;
+            padding: 13.88upx 0 13.88upx 50upx;
+            font-size: 20upx;
+            color: #fff;
+            text {
+              margin-left: 13.88upx;
+            }
+            .mark {
+              width: 20upx;
+              height: 20upx;
+              box-sizing: border-box;
+              font-size: 14upx;
+              color: #fff;
+              background-color: #c00;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              position: relative;
+              bottom: 8upx;
+              right: 8upx;
+            }
+          }
+          .disabledCheck {
+            color: #808080;
+          }
+        }
+        .disabledClick {
+          pointer-events: none;
+        }
+      }
+    }
+  }
+  .neil-modal-container {
+    .fingerprint-modal-container {
+      width: 555.55upx;
+      height: 416.66upx;
+      display: flex;
+      flex-direction: column;
+      .fingerprint-header {
+        display: flex;
+        align-items: center;
+        height: 61.11upx;
+        justify-content: space-between;
+        padding: 0 27.77upx;
+        .fingerprint-title {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          font-size: 22.22upx;
+          font-weight: 500;
+          text {
+            color: #35fffa;
+          }
+        }
+        .fingerprint-close {
+          height: 100%;
+          width: 22upx;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          image {
+            height: 22upx;
+            width: 22upx;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,164 @@
+.recognition-dialogs-container {
+  width: 555.55upx;
+  min-height: 520upx;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  &.without-header {
+    padding-top: 88upx;
+  }
+
+  .modal-header {
+    height: 61.11upx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 27.77upx;
+
+    .modal-title {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-size: 22.22upx;
+      font-weight: 500;
+      color: #35fffa;
+    }
+
+    .modal-close {
+      height: 100%;
+      width: 22upx;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      image {
+        height: 22upx;
+        width: 22upx;
+      }
+    }
+  }
+
+  .recognition-main {
+    text-align: center;
+
+    .face-main-body {
+      width: 446upx;
+      height: 272upx;
+
+      .face-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+
+        .loading-tips {
+          width: 60upx;
+          height: 60upx;
+          animation: tipsRotate 3s ease 0s infinite;
+
+          @keyframes tipsRotate {
+            0% {
+              transform: rotate(0);
+            }
+
+            50% {
+              transform: rotate(180deg);
+            }
+
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+        }
+      }
+
+      .face-video {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .face-scantips {
+      display: inline-block;
+      font-size: 20.83upx;
+      font-weight: 400;
+      margin: 13.88upx 0;
+    }
+  }
+
+  .call-modal-content {
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+
+    .modal-fingerInit,
+    .modal-fingerSuccess {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .finger-image {
+        height: 122.22upx;
+        width: 141.66upx;
+      }
+
+      .finger-name {
+        font-size: 27.77upx;
+        font-weight: bold;
+        color: #35fffa;
+        line-height: 41.66upx;
+        margin-top: 50upx;
+      }
+
+      .finger-tip {
+        color: #fff;
+      }
+    }
+  }
+
+  .switch-btn-wrapper {
+    margin-bottom: 30upx;
+    width: 555.55upx;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .check-btn {
+      display: flex;
+      flex: 1;
+      justify-content: flex-start;
+      margin-left: 35upx;
+
+      span {
+        display: inline-block;
+        width: fit-content;
+        height: 43upx;
+        border-radius: 4px;
+        line-height: 43upx;
+        background-color: #ff9900;
+        color: #fff;
+        font-size: 20.83upx;
+        text-align: center;
+        padding: 0 13.88upx;
+      }
+    }
+
+    .switch-type-btn {
+      margin-right: 35upx;
+      width: 125upx;
+      height: 43upx;
+      border-radius: 4px;
+      line-height: 43upx;
+      background-color: #007aff;
+      color: #fff;
+      font-size: 20.83upx;
+      text-align: center;
+    }
+  }
+}

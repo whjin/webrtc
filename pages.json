@@ -1,0 +1,64 @@
+{
+	"pages": [
+		{
+			"path": "pages/home/index/index",
+			"style": {
+				"navigationBarTitleText": "仓内屏",
+				"app-plus": {
+					"bounce": "none",
+					"background": "#000",
+					"subNVues": [
+						{
+							"id": "livePusher",
+							"path": "pages/home/index/subnvue/livePusher",
+							"style": {
+								"background": "transparent"
+							}
+						},
+						{
+							"id": "coverImage",
+							"path": "pages/home/index/subnvue/coverImage",
+							"style": {
+								"background": "transparent"
+							}
+						},
+						{
+							"id": "videoPlayer",
+							"path": "pages/home/index/subnvue/videoPlayer",
+							"style": {
+								"background": "transparent"
+							}
+						}
+					]
+				}
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"pageOrientation": "landscape",
+		"rpxCalcBaseDeviceWidth": 1060
+	},
+	"condition": {
+		"current": 0,
+		"list": [
+			{
+				"name": "首页",
+				"path": "pages/home/index/index",
+				"query": "interval=4000&autoplay=false"
+			},
+			{
+				"name": "开发页面_st",
+				"path": "pages/home/index/index"
+			},
+			{
+				"name": "开发页面_pse",
+				"path": "pages/prisoner/mood/mood"
+			},
+			{
+				"name": "开发页面_cd",
+				"path": "pages/prisoner/talk/talk"
+			}
+		]
+	}
+}

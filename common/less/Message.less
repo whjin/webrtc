@@ -1,0 +1,99 @@
+.message-container {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  .message-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    .message-content {
+      display: flex;
+      flex-direction: column;
+      .message-title {
+        padding: 0 0 13.88upx 45upx;
+        text {
+          color: #35fffa;
+          font-size: 27.77upx;
+          font-weight: bold;
+        }
+      }
+      .message-box {
+        display: flex;
+        flex: 1;
+        .message-menu-list {
+          width: 148upx;
+          height: 100%;
+          box-sizing: border-box;
+          margin-left: 27.77upx;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .message-menu-item {
+            height: 120upx;
+            width: 120upx;
+            box-sizing: border-box;
+            margin-bottom: 32upx;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(93, 166, 222, 0.5);
+            border-radius: 3.88upx;
+            text {
+              margin-top: 6.88upx;
+              font-size: 18upx;
+              font-weight: 400;
+              color: #fff;
+            }
+          }
+          .message-menu-active {
+            background: rgba(0, 122, 255, 0.9);
+          }
+        }
+        .message-vertical-divider {
+          margin-right: 15upx;
+          width: 0.69upx;
+          background-image: linear-gradient(
+            to bottom,
+            rgba(0, 198, 255, 0),
+            rgba(0, 198, 255, 1),
+            rgba(0, 198, 255, 0)
+          );
+        }
+        .message-list-box {
+          height: 100%;
+          box-sizing: border-box;
+          display: flex;
+          .message-list-scroll {
+            height: 530upx;
+            .message-list {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              font-size: 18.05upx;
+              color: #fff;
+              padding: 6.88upx 0;
+              border-bottom: 1upx solid #113e8d;
+              .list-left {
+                display: flex;
+                align-items: center;
+                .list-title {
+                  color: #35fffa;
+                }
+                .list-content {
+                  width: 825upx;
+                  box-sizing: border-box;
+                  display: inline-block;
+                  overflow: auto;
+                  white-space: nowrap;
+                }
+              }
+              .list-right {
+                margin-left: 13.88upx;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

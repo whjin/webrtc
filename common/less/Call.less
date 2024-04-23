@@ -1,0 +1,104 @@
+.call-container {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  .call-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    .call-table-container {
+      .call-table-title {
+        display: flex;
+        height: 63.33upx;
+        text {
+          margin-left: 48.61upx;
+          color: #35fffa;
+          font-size: 27.77upx;
+          font-weight: bold;
+          line-height: 63.33upx;
+        }
+      }
+      .call-table-body {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        .table-box {
+          display: flex;
+          flex-direction: column;
+          color: #fff;
+          padding: 0 62.5upx 0 49.3upx;
+          .table-head {
+            display: flex;
+            .table-head-item {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 18.05upx;
+              font-weight: bold;
+              line-height: 43.75upx;
+              background: rgba(17, 62, 141, 0.5);
+            }
+          }
+          .call-table-scroll {
+            height: 546upx;
+            .table-content {
+              display: flex;
+              border-bottom: 1upx solid rgba(17, 62, 141, 0.9);
+              .table-content-item {
+                display: inline-block;
+                text-align: center;
+                font-size: 18.05upx;
+                font-weight: 400;
+                line-height: 48.61upx;
+                white-space: nowrap;
+                overflow: auto;
+              }
+            }
+            .current-content {
+              color: #35fffa;
+            }
+            .signed-content {
+              color: #808080;
+            }
+          }
+        }
+      }
+    }
+  }
+  .neil-modal-container {
+    .call-modal-box {
+      width: 556upx;
+      height: 332upx;
+      display: flex;
+      flex-direction: column;
+      .call-modal-content {
+        height: 100%;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        .modal-fingerInit,
+        .modal-fingerSuccess {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          .finger-image {
+            height: 122.22upx;
+            width: 141.66upx;
+          }
+          .finger-name {
+            font-size: 27.77upx;
+            font-weight: bold;
+            color: #35fffa;
+            line-height: 41.66upx;
+            margin-top: 20upx;
+          }
+          .finger-tip {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}
