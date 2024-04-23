@@ -1,0 +1,27 @@
+{
+  "name": "webrtc-server",
+  "version": "1.0.0",
+  "description": "webrtc,nodejs,express,socket.io",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "Administrator@192.168.1.72:SmartTerminal/WebRTC-Server.git"
+  },
+  "keywords": [
+    "webrtc",
+    "nodejs",
+    "express",
+    "socket.io"
+  ],
+  "author": "whjin",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "jsdom": "^23.0.1",
+    "socket.io": "^4.5.3"
+  }
+}
