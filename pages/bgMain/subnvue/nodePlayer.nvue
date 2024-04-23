@@ -1,0 +1,61 @@
+<template>
+	<div class="wrapper">
+		<node-player v-if="showPlayer" style="width: 1168px;height: 767px;" ref="nodePlayer" autoplay :src="nodePlayUrl"
+			@fullscreenchange="playerFullScreen"></node-player>
+	</div>
+</template>
+
+<script>
+	import {
+		mapState
+	} from 'vuex';
+
+	export default {
+		computed: {
+			...mapState({
+				// 播放组件显隐
+				showPlayer: state => state.app.showPlayer,
+				// 视频流地址
+				nodePlayUrl: state => state.app.nodePlayUrl
+			})
+		},
+		created() {
+			const _this = this;
+			uni.getSubNVueById('nodePlayer').hide();
+			uni.$on('set-fullscreen', () => {
+				_this.$refs.nodePlayer.toggleFullScreen();
+			});
+			uni.$on('stop-play', () => {
+				_this.$refs.nodePlayer.stop();
+			});
+			uni.$on('set-miniscreen', () => {
+				_this.$refs.nodePlayer.setMiniScreen();
+			});
+		},
+		methods: {
+			playerFullScreen(e) {
+				if (e.detail.isFullScreen) {
+					uni.getSubNVueById('nodePlayer').setStyle({
+						top: '0',
+						left: '0',
+						width: '1920',
+						height: '1080'
+					});
+				} else {
+					uni.getSubNVueById('nodePlayer').setStyle({
+						top: '178',
+						left: '367',
+						width: '1168',
+						height: '767'
+					});
+				}
+			}
+		}
+	};
+</script>
+
+<style>
+	.wrapper {
+		background-color: transparent;
+	}
+</style>

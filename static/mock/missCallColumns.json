@@ -1,0 +1,18 @@
+[
+    {
+        "title": "呼叫时间",
+        "key": "time"
+    },
+    {
+        "title": "呼叫者",
+        "key": "name"
+    },
+    {
+        "title": "呼叫类型",
+        "key": "type"
+    },
+    {
+        "title": "操作",
+        "key": "operate"
+    }
+]

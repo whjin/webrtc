@@ -1,0 +1,53 @@
+{
+	"pages": [
+		{
+			"path": "pages/bgMain/bgMain",
+			"style": {
+				"navigationBarTitleText": "管控主机",
+				"app-plus": {
+					"bounce": "none",
+					"subNVues": [
+						{
+							"id": "livePusher",
+							"path": "pages/bgMain/subnvue/livePusher",
+							"style": {
+								"position": "absolute",
+								"bottom": "1px",
+								"left": "1px",
+								"width": "1px",
+								"height": "1px",
+								"background": "transparent"
+							}
+						},
+						{
+							"id": "nodePlayer",
+							"path": "pages/bgMain/subnvue/nodePlayer",
+							"style": {
+								"background": "transparent"
+							}
+						}
+					]
+				}
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"pageOrientation": "landscape",
+		"rpxCalcBaseDeviceWidth": 1060
+	},
+	"condition": {
+		"current": 0,
+		"list": [
+			{
+				"name": "主页",
+				"path": "pages/bgMain/bgMain",
+				"query": "interval=4000&autoplay=false"
+			},
+			{
+				"name": "开发页面_st1",
+				"path": "pages/intercom/intercom"
+			}
+		]
+	}
+}

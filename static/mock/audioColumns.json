@@ -1,0 +1,14 @@
+[
+    {
+        "title": "名称",
+        "key": "name"
+    },
+    {
+        "title": "歌手",
+        "key": "singer"
+    },
+    {
+        "title": "时长",
+        "key": "duration"
+    }
+]

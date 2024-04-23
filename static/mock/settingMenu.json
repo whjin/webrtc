@@ -1,0 +1,42 @@
+[
+    {
+        "name": "本机设置",
+        "image": "/static/images/setting/setting.png",
+        "url": ""
+    },
+    {
+        "name": "网络设置",
+        "image": "/static/images/setting/net.png",
+        "url": ""
+    },
+    {
+        "name": "计划管理",
+        "image": "/static/images/setting/plan.png",
+        "url": ""
+    },
+    {
+        "name": "托管",
+        "image": "/static/images/setting/trusteeship.png",
+        "url": ""
+    },
+    {
+        "name": "日志查看",
+        "image": "/static/images/setting/log.png",
+        "url": ""
+    },
+    {
+        "name": "系统更新",
+        "image": "/static/images/setting/system_update.png",
+        "url": ""
+    },
+    {
+        "name": "分组设置",
+        "image": "/static/images/setting/group.png",
+        "url": ""
+    },
+    {
+        "name": "更新",
+        "image": "/static/images/setting/update.png",
+        "url": ""
+    }
+]

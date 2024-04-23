@@ -1,0 +1,22 @@
+[
+    {
+        "title": "监室号",
+        "key": "name"
+    },
+    {
+        "title": "连接状态",
+        "key": "state"
+    },
+    {
+        "title": "分机视频",
+        "key": "video"
+    },
+    {
+        "title": "分机音量",
+        "key": "volume"
+    },
+    {
+        "title": "操作",
+        "key": "operate"
+    }
+]

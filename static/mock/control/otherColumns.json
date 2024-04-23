@@ -1,0 +1,18 @@
+[
+    {
+        "title": "监室",
+        "key": "site"
+    },
+    {
+        "title": "设备状态",
+        "key": "status"
+    },
+    {
+        "title": "当前数值",
+        "key": "value"
+    },
+    {
+        "title": "操作",
+        "key": "operate"
+    }
+]
