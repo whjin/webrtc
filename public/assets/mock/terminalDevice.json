@@ -1,0 +1,54 @@
+[
+    [
+        {
+            "deviceId": "default",
+            "kind": "audioinput",
+            "label": "",
+            "groupId": "a\n3699f55b2092432602433410bd29d0e691df0c179481598397a0ab5373b572d"
+        },
+        {
+            "deviceId": "4\nf6489fcb7809f649ab8f046d3d8d3d07260638a71b9ce5591a44231221f803e",
+            "kind": "audioin\nput",
+            "label": "",
+            "groupId": "c720cfa7a12933fea21a3c799550083202047935dfd04df8f7bde\n1d15249ee3e"
+        },
+        {
+            "deviceId": "4f6489fcb7809f649ab8f046d3d8d3d07260638a71b9ce5591a44\n231221f803e",
+            "kind": "videoinput",
+            "label": "",
+            "groupId": "85511e0f108453d2557fa8884\nb9ab10c19b60606a4b0dc341a913760c43dddbe"
+        },
+        {
+            "deviceId": "default",
+            "kind": "audioout\nput",
+            "label": "",
+            "groupId": "default"
+        }
+    ],
+    [
+        {
+            "deviceId": "default",
+            "kind": "audioinput",
+            "label": "",
+            "groupId": "e\nab511fe559e5b12d0871a224dfb906f35529881ff0becac663364ff2aef234e"
+        },
+        {
+            "deviceId": "4\nf6489fcb7809f649ab8f046d3d8d3d07260638a71b9ce5591a44231221f803e",
+            "kind": "audioin\nput",
+            "label": "",
+            "groupId": "eb50711ee113906f8a0bdd52512faea93e942105841d148c67071\na62ee0df105"
+        },
+        {
+            "deviceId": "4f6489fcb7809f649ab8f046d3d8d3d07260638a71b9ce5591a44\n231221f803e",
+            "kind": "videoinput",
+            "label": "",
+            "groupId": "07313fee263a87f0167b046a7\n1764ffdb0010e65357830a91a2efa323454e953"
+        },
+        {
+            "deviceId": "default",
+            "kind": "audioout\nput",
+            "label": "",
+            "groupId": "default"
+        }
+    ]
+]

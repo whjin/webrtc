@@ -1,0 +1,18 @@
+{
+  "areaCode": "440182111",
+  "areaName": "检测监区",
+  "controlCode": "control3",
+  "controlId": "1711294721223032832",
+  "controlName": "检测主机",
+  "embeddedIp": "",
+  "masterSipAccount": "120",
+  "parentId": "1",
+  "roomId": "1143769914314608342",
+  "roomName": "检测监室1007",
+  "roomNo": "0107",
+  "sipAccount": "4",
+  "terminalCode": "terminal107",
+  "terminalId": "1696010563823337473",
+  "terminalIp": "192.168.20.107",
+  "terminalName": "A监区检测监室1007仓内分机"
+}

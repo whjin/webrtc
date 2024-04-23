@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="/js/axios.js"></script>
+</head>
+<body>
+  <textarea id="response" style="width: 60vw;height: 40vh;"></textarea>
+  <button id="btn">请求</button>
+  <script>
+    window.onload = function () {
+      let textarea = document.getElementById("response");
+      let btn = document.getElementById('btn');
+      btn.addEventListener('click', e => {
+        axios.get("/http/systemInitSetting").then(response => {
+          let data = response.data;
+          textarea.innerText = JSON.stringify(data);
+        }).catch(error => {
+          console.error("Error fetching data:", error);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
