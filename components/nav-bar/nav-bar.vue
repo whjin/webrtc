@@ -1,72 +1,75 @@
 <template>
-	<view class="uni-flex nav-bar-area">
-		<view class="uni-flex nav-bar-title">
-			<text @click="onClickInit" id="tdClick">{{title}}</text>
-		</view>
-    <div @click="onCenterDblclick" class="nav-bar-app-info">
-      <template v-if="isShowCenter">
-        <span v-if="authIP !== curIP" class="text red-color">认证IP：{{ authIP || '无' }}</span>
-        <span class="text">当前IP：{{ curIP || '无' }}</span>
-        <span class="text">版本号：{{ version ? 'V' + version : '无' }}</span>
-      </template>
+  <div class="nav-bar-container nav-bar-img">
+    <div class="nav-bar-title">
+      <text @click="onClickInit">{{ title }}</text>
     </div>
-	</view>
+    <div class="nav-bar-home">
+      <div v-if="homeState" class="operating" @touchstart.stop="onClickHome">
+        <common-icons iconType="iconhome" size="45" color="#fff" />
+      </div>
+      <div v-if="backState" class="operating" @touchstart.stop="onClickBack">
+        <common-icons iconType="iconback" size="38" color="#fff" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-	export default {
-		name: 'NavBar',
-		props: {
-			// 标题内容
-			title: {
-				type: String,
-				default: "监室智能管理终端系统"
-			}
-		},
-    data() {
-      return {
-        isShowCenter: false,
-        clickCount: 0,
-        startTime: 0,
-        endTime: 0,
-        version: '',
-        curIP: '',
-        authIP: ''
-      }
+export default {
+  name: "NavBar",
+  props: {
+    currentTab: {
+      type: Number,
+      default: 1,
     },
-		methods: {
-			onClickInit() {
-				this.$emit('click-init')
-			},
-      onCenterDblclick () {
-        if (this.isShowCenter) return;
-        this.clickCount = this.clickCount == 0 ? 1 : this.clickCount + 1;
-        if (this.clickCount == 1) {
-          this.startTime = new Date().getTime();
-          setTimeout(() => {
-            this.clickCount = this.startTime = this.endTime = 0;
-          }, 200);
-        } else if (this.clickCount == 2) {
-          this.endTime = new Date().getTime();
-          if (this.endTime - this.startTime < 300) {
-            this.getAppInfo();
-            this.isShowCenter = !this.isShowCenter;
-            setTimeout(() => {
-              this.isShowCenter = !this.isShowCenter;
-            }, 3000);
-          }
-          this.clickCount = this.startTime = this.endTime = 0;
-        }
-      },
-      getAppInfo () {
-        this.version = plus.runtime.version;
-        this.curIP = getApp().globalData.Base.getIpAddress().ip;
-        this.authIP = uni.getStorageSync('authControlIP');
-      }
-		}
-	}
+    title: {
+      type: String,
+      default: "监室智能交互终端系统",
+    },
+    homeState: {
+      type: Boolean,
+      default: true,
+    },
+    backState: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  methods: {
+    onClickInit () {
+      this.$emit("click-init");
+    },
+    // 返回首页
+    onClickHome () {
+      this.$emit("click-home");
+    },
+    // 页面回退
+    onClickBack () {
+      this.$emit("click-back");
+    },
+  },
+};
 </script>
 
-<style>
-
+<style lang="less">
+.nav-bar-container {
+  width: 100%;
+  height: 81.25upx;
+  box-sizing: border-box;
+  .nav-bar-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .nav-bar-home {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 32upx;
+    right: 32upx;
+    .operating {
+      padding-left: 20upx;
+    }
+  }
+}
 </style>

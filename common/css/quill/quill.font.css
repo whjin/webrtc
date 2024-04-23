@@ -1,0 +1,53 @@
+/* 自定义字体 */
+.ql-font-SimSun {
+  font-family: "SimSun";
+}
+
+.ql-font-SimHei {
+  font-family: "SimHei";
+}
+
+.ql-font-Microsoft-YaHei {
+  font-family: "Microsoft YaHei";
+}
+
+.ql-font-KaiTi {
+  font-family: "KaiTi";
+}
+
+.ql-font-FangSong {
+  font-family: "FangSong";
+}
+
+.ql-font-Arial {
+  font-family: "Arial";
+}
+
+.ql-font-Times-New-Roman {
+  font-family: "Times New Roman";
+}
+
+.ql-font-sans-serif {
+  font-family: "sans-serif";
+}
+
+/* 自定义字号 */
+.ql-size-16px {
+  font-size: 20upx;
+}
+
+.ql-size-20px {
+  font-size: 24upx;
+}
+
+.ql-size-24px {
+  font-size: 28upx;
+}
+
+.ql-size-28px {
+  font-size: 32upx;
+}
+
+.ql-size-32px {
+  font-size: 36upx;
+}

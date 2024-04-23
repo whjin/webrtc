@@ -1,0 +1,338 @@
+.illness-container {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  .illness-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    .illness-content {
+      display: flex;
+      flex-direction: column;
+      .illness-title {
+        padding: 0 0 13.88upx 45upx;
+        text {
+          color: #35fffa;
+          font-size: 27.77upx;
+          font-weight: bold;
+        }
+      }
+      .illness-box {
+        display: flex;
+        flex: 1;
+        .illness-menu-list {
+          width: 148upx;
+          height: 100%;
+          box-sizing: border-box;
+          margin-left: 27.77upx;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .illness-menu-item {
+            height: 120upx;
+            width: 120upx;
+            box-sizing: border-box;
+            margin-bottom: 32upx;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(93, 166, 222, 0.5);
+            border-radius: 3.88upx;
+            text {
+              margin-top: 6.88upx;
+              font-size: 18upx;
+              font-weight: 400;
+              color: #fff;
+            }
+          }
+          .illness-menu-active {
+            background: rgba(0, 122, 255, 0.9);
+          }
+        }
+        .illness-vertical-divider {
+          margin-right: 15upx;
+          width: 0.69upx;
+          background-image: linear-gradient(
+            to bottom,
+            rgba(0, 198, 255, 0),
+            rgba(0, 198, 255, 1),
+            rgba(0, 198, 255, 0)
+          );
+        }
+        .illness-reserve-container {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          margin-right: 27.77upx;
+          .illness-reserve-scroll {
+            height: 600upx;
+            .illness-symptom {
+              display: flex;
+              flex-direction: column;
+              margin-bottom: 10upx;
+              .title {
+                display: flex;
+                align-items: center;
+                color: #fff;
+                font-size: 20.83upx;
+                margin-bottom: 3.88upx;
+                .illness-date {
+                  width: 226upx;
+                  height: 40upx;
+                  font-size: 18.05upx;
+                  color: #fff;
+                  display: flex;
+                  align-items: center;
+                  padding-left: 13.88upx;
+                }
+              }
+              .illness-symptom-list {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                margin-bottom: 13.88upx;
+                .symptom-item {
+                  width: 108upx;
+                  height: 52.5upx;
+                  box-sizing: border-box;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  text {
+                    color: #fff;
+                    font-size: 16.88upx;
+                    white-space: pre-wrap;
+                    padding: 3.88upx 6.88upx;
+                    text-align: center;
+                  }
+                }
+                .mood-select-img {
+                  text {
+                    font-size: 14upx;
+                  }
+                }
+              }
+              .illness-bottom {
+                display: flex;
+                align-items: center;
+                .illness-tips {
+                  color: #fff;
+                  font-size: 16.88upx;
+                }
+                .illness-remark {
+                  display: flex;
+                  flex: 1;
+                  textarea {
+                    width: 650upx;
+                    height: 60upx;
+                    display: flex;
+                    flex: 1;
+                    font-size: 16upx;
+                    color: #fff;
+                    padding: 6.88upx;
+                    border: #1b92ef 1px solid;
+                    border-radius: 3.88upx;
+                    background: rgba(27, 146, 239, 0.25);
+                    box-shadow: 0px 0px 6px 2px rgba(27, 146, 239, 0.45) inset;
+                  }
+                }
+                .btn-submit {
+                  width: 112upx;
+                  height: 43.05upx;
+                  font-size: 18.05upx;
+                  font-weight: 500;
+                  margin: 0 60upx;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  color: #fff;
+                  background: rgba(0, 122, 255, 0.99);
+                  border: 0.69upx solid rgba(0, 122, 255, 0.99);
+                  border-radius: 2.77upx;
+                }
+                .btn-submit:hover {
+                  opacity: 0.65;
+                }
+              }
+            }
+          }
+        }
+        .illness-record-container {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          margin-right: 27.77upx;
+          .record-form-box {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            .record-select {
+              display: flex;
+              align-items: center;
+              label {
+                font-size: 30px;
+                font-family: Microsoft YaHei;
+                font-weight: 400;
+                color: #fff;
+              }
+              .illness-date {
+                width: 226upx;
+                height: 40upx;
+                font-size: 18.05upx;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                padding-left: 13.88upx;
+              }
+              .show-box {
+                width: 237upx;
+                position: relative;
+                padding-left: 13.88upx;
+                margin-left: 3.88upx;
+              }
+              .divider-line {
+                font-size: 24.88upx;
+                color: #fff;
+              }
+            }
+            .record-button {
+              display: flex;
+              margin-left: 36upx;
+              .btn-query {
+                width: 112upx;
+                height: 40upx;
+                font-size: 18.05upx;
+                font-weight: 500;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: rgba(0, 122, 255, 0.99);
+                border: 0.69upx solid rgba(0, 122, 255, 0.99);
+                border-radius: 2.77upx;
+              }
+              .btn-query:hover {
+                opacity: 0.65;
+              }
+            }
+          }
+          .record-table-box {
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            margin-top: 13.88upx;
+            .table-head {
+              display: flex;
+              .table-head-item {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 18.05upx;
+                font-weight: bold;
+                line-height: 43.75upx;
+                background: rgba(17, 62, 141, 0.5);
+              }
+            }
+            .record-table-scroll {
+              height: 500upx;
+              .table-content {
+                display: flex;
+                border-bottom: 1upx solid rgba(17, 62, 141, 0.9);
+                .record-table-item {
+                  height: 48.61upx;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  font-size: 18.05upx;
+                  font-weight: 400;
+                  white-space: nowrap;
+                  overflow: auto;
+                  .btn-query {
+                    margin: auto;
+                    width: 112upx;
+                    height: 40upx;
+                    font-size: 18.05upx;
+                    font-weight: 500;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background: rgba(0, 122, 255, 0.99);
+                    border: 0.69upx solid rgba(0, 122, 255, 0.99);
+                    border-radius: 2.77upx;
+
+                    &.disabled {
+                      opacity: 0.5;
+                      pointer-events: none;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .neil-modal-container {
+    .illness-modal-box {
+      width: 556upx;
+      height: 332upx;
+      display: flex;
+      flex-direction: column;
+      .modal-header {
+        height: 61.11upx;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 27.77upx;
+        .modal-title {
+          height: 100%;
+          display: flex;
+          align-items: center;
+          font-size: 22.22upx;
+          font-weight: 500;
+        }
+        .modal-close {
+          height: 100%;
+          width: 22upx;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          image {
+            height: 22upx;
+            width: 22upx;
+          }
+        }
+      }
+      .modal-horizontal-divider {
+        height: 1upx;
+        background-image: linear-gradient(
+          to right,
+          rgba(0, 198, 255, 0),
+          rgba(0, 198, 255, 1),
+          rgba(0, 198, 255, 0)
+        );
+      }
+      .illness-modal-content {
+        height: 100%;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .modal-talkInit {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+        .illness-tip {
+          font-size: 20.83upx;
+          font-weight: 400;
+          line-height: 34.72upx;
+          color: #35fffa;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+[
+    {
+        "name": "视频通话",
+        "image": "/static/images/index/home/spth.png",
+        "url": "VideoCall",
+        "isModal": true
+    },
+    {
+        "name": "应急报警",
+        "image": "/static/images/index/home/yjbj.png",
+        "url": "AlarmInit",
+        "isModal": true
+    },
+    {
+        "name": "在线点名",
+        "image": "/static/images/index/prisoner/zxdm.png",
+        "url": "OnlineCall",
+        "isModal": false
+    },
+    {
+        "name": "一日生活",
+        "image": "/static/images/index/home/yrsh.png",
+        "url": "",
+        "index": 3
+    },
+    {
+        "name": "一周菜谱",
+        "image": "/static/images/index/prisoner/yzcp.png",
+        "url": "",
+        "index": 4
+    },
+    {
+        "name": "监室公告",
+        "image": "/static/images/index/home/tzgg.png",
+        "url": "",
+        "index": 5
+    },
+    {
+        "name": "床位安排",
+        "image": "/static/images/index/home/cwap.png",
+        "url": "",
+        "index": 14
+    },
+    {
+        "name": "消息通知",
+        "image": "/static/images/index/home/fytx.png",
+        "url": "",
+        "index": 16
+    },
+    {
+        "name": "视频点播",
+        "image": "/static/images/index/home/videoplay.png",
+        "url": "",
+        "index": 18
+    },
+    {
+        "name": "",
+        "image": "",
+        "url": ""
+    },
+    {
+        "name": "",
+        "image": "",
+        "url": ""
+    },
+    {
+        "name": "",
+        "image": "",
+        "url": ""
+    }
+]

@@ -1,0 +1,62 @@
+<template>
+	<ijk-video-player ref="videoPlayer" id="videoPlayer" :style="playerStyle">
+	</ijk-video-player>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				playerStyle: {
+					width: '1px',
+					height: '1px',
+					left: '0',
+					top: '0'
+				}
+			};
+		},
+		created() {
+			uni.getSubNVueById('videoPlayer').hide();
+			const _this = this;
+			uni.$on('video-player', (type, status, url = '') => {
+				if (status == 'start') {
+					uni.getSubNVueById('videoPlayer').show();
+					if (type == 'video') {
+						_this.setPlayerStyle(1720, 1080);
+					} else {
+						_this.setPlayerStyle(1, 1);
+					}
+					_this.$refs.videoPlayer.start(url);
+				} else if (status == 'pause') {
+					_this.$refs.videoPlayer.pause();
+				} else if (status == 'resume') {
+					_this.$refs.videoPlayer.resume();
+				} else if (status == 'stop') {
+					if (type == 'video') {
+						_this.setPlayerStyle(1, 1);
+					}
+					_this.$refs.videoPlayer.stop();
+					uni.getSubNVueById('videoPlayer').hide();
+				}
+			});
+			// #ifdef APP-PLUS
+			plus.globalEvent.addEventListener('OnIjkVideoPlayerCompletionListener', function(e) {
+				uni.$emit('onEnded');
+			});
+			// #endif
+		},
+		methods: {
+			setPlayerStyle(width = 1, height = 1, left = 0, top = 0) {
+				this.playerStyle = {
+					width: width + 'px',
+					height: height + 'px',
+					left: left + 'px',
+					top: top + 'px',
+				};
+			}
+		}
+	};
+</script>
+
+<style>
+</style>

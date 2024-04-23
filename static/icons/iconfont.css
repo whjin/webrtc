@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2260063 */
-  src: url('./static/icons/iconfont.woff2?t=1675069336354') format('woff2'),
-       url('./static/icons/iconfont.woff?t=1675069336354') format('woff'),
-       url('./static/icons/iconfont.ttf?t=1675069336354') format('truetype');
+  src: url('./static/icons/iconfont.woff2?t=1629249834719') format('woff2'),
+       url('./static/icons/iconfont.woff?t=1629249834719') format('woff'),
+       url('./static/icons/iconfont.ttf?t=1629249834719') format('truetype');
 }
 
 .iconfont {
@@ -11,34 +11,6 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-.icondianbiao:before {
-  content: "\ec4d";
-}
-
-.iconshuibiao:before {
-  content: "\e652";
-}
-
-.iconwenshidu:before {
-  content: "\e653";
-}
-
-.iconprisonerinfo:before {
-  content: "\e6a9";
-}
-
-.icongoumaiqueren:before {
-  content: "\e6a5";
-}
-
-.iconweiguijilu:before {
-  content: "\e68d";
-}
-
-.iconweiguidengji:before {
-  content: "\e68e";
 }
 
 .iconxunzhenjilu:before {

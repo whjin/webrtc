@@ -1,3 +1,20 @@
+export const clear = (str) => {
+  str = str.replace(/,/g, "");
+  return str;
+};
+
+export const isEmpty = (obj) => {
+  if (obj == null) return true;
+  if (obj.length > 0) return false;
+  if (obj.length == 0) return true;
+  if (typeof obj !== "object") return true;
+  for (var key in obj) {
+    if (hasOwnProperty.call(obj, key)) return false;
+  }
+
+  return true;
+};
+
 /**
  * @description 判断字符串是否为空或者全部都是空格
  * @param {str} 要处理的字符串
@@ -47,7 +64,7 @@ export const dateFormat = (fmt, date) => {
   return fmt;
 };
 
-// 时间转换（秒数转时分秒）
+// 秒数转换为时分秒hh:mm:ss
 export const timeFormat = (sec) => {
   let minite =
     Math.floor((sec / 60) % 60) < 10
@@ -68,6 +85,70 @@ export const timeFormat = (sec) => {
   }
 };
 
+// 时钟倒计时
+export const countDown = (sec) => {
+  let hour = Math.floor((parseInt(sec) / 3600) % 24)
+    .toString()
+    .padStart(2, "0");
+  let minute = Math.floor((parseInt(sec) / 60) % 60)
+    .toString()
+    .padStart(2, "0");
+  let second = Math.floor(parseInt(sec) % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${hour}:${minute}:${second}`;
+};
+
+// 获取本周所有日期
+export const getWeekDate = () => {
+  let weekDateList = [];
+  let weeks = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+  for (let i = 0; i < 7; i++) {
+    let date = new Date();
+    let week = weeks[i];
+    let nowDate = date.setDate(date.getDate() - 1 + i);
+    let formatDate = dateFormat("MM-DD", new Date(nowDate));
+    let weekDate = `${formatDate}(${week})`;
+    weekDateList.push(weekDate);
+  }
+  return weekDateList;
+};
+
+// 时钟
+export const clock = () => {
+  let hour = dateFormat("hh", new Date());
+  let minute = dateFormat("mm", new Date());
+  let second = dateFormat("ss", new Date());
+  return `${hour}:${minute}:${second}`;
+};
+
+export const getDate = (timeStamp, startType) => {
+  if (timeStamp) {
+    return format(new Date(timeStamp), startType);
+  }
+};
+
+const getHandledValue = num => {
+  return num < 10 ? '0' + num : num;
+};
+
+export const format = (d, startType) => {
+  const year = d.getFullYear();
+  const month = getHandledValue(d.getMonth() + 1);
+  const date = getHandledValue(d.getDate());
+  const hours = getHandledValue(d.getHours());
+  const minutes = getHandledValue(d.getMinutes());
+  const second = getHandledValue(d.getSeconds());
+  let resStr = '';
+  if (startType === 'year') resStr = year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + second;
+  else if (startType === 'date') resStr = year + '-' + month + '-' + date;
+  else if (startType === 'time') resStr = year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + second + '.000+08:00';
+  else if (startType === 'mouth-day') resStr = month + '-' + date;
+  else if (startType === 'minutes') resStr = year + '-' + month + '-' + date + ' ' + hours + ':' + minutes;
+  else resStr = month + '-' + date + ' ' + hours + ':' + minutes;
+  return resStr;
+};
+
 // 数组去重
 export const unique = (arr) => {
   if (!Array.isArray(arr)) {
@@ -75,7 +156,7 @@ export const unique = (arr) => {
   }
   let result = [];
   for (let i = 0; i < arr.length; i++) {
-    if (result.indexOf(arr[i]) === -1) {
+    if (result.indexOf(arr[i]) == -1) {
       result.push(arr[i]);
     }
   }
@@ -83,33 +164,98 @@ export const unique = (arr) => {
 };
 
 // 数组对象去重
-export const uniqueArr = (arr) => {
+export const uniqueArr = (arr, key) => {
   if (!Array.isArray(arr)) {
     return;
   }
   let map = new Map();
   for (let i = 0, len = arr.length; i < len; i++) {
-    if (!map.has(arr[i].name)) {
-      map.set(arr[i].name, arr[i]);
+    if (!map.has(arr[i][key])) {
+      map.set(arr[i][key], arr[i]);
     }
   }
   return [...map.values()];
 };
 
-// 读取对讲录像信息
-export const readDirectory = (dirPath) => {
-  return new Promise((resolve, reject) => {
-    plus.io.resolveLocalFileSystemURL(
-      dirPath,
-      (entry) => {
-        let directoryReader = entry.createReader();
-        directoryReader.readEntries((entries) => {
-          resolve(entries);
-        });
-      },
-      (err) => {
-        reject(err);
-      }
-    );
-  });
+// 浮点数四舍五入保留2位小数
+export const formatFloat = (num, pos) => {
+  return Math.round(num * Math.pow(10, pos)) / Math.pow(10, pos);
+};
+
+// 字符串转整型数组
+export const str2Array = (str) => {
+  let result = [];
+  let arrList = str.split(",");
+  for (let i = 0; i < arrList.length; i++) {
+    result.push(parseInt(arrList[i]));
+  }
+  return result;
+};
+
+/**
+ * 函数防抖
+ * @param {Function} func 需要处理的函数
+ * @param {Number} wait 执行间隔(毫秒)
+ * @param {Boolean} immediate 是否立即执行一次
+ * @returns
+ */
+export const debounce = (func, wait = 1000, immediate = true) => {
+  let timer;
+  return function () {
+    let context = this,
+      args = arguments;
+
+    if (timer) clearTimeout(timer);
+    if (immediate) {
+      let callNow = !timer;
+      timer = setTimeout(() => {
+        timer = null;
+      }, wait);
+      if (callNow) func.apply(context, args);
+    } else {
+      timer = setTimeout(() => {
+        func.apply(context, args);
+      }, wait);
+    }
+  };
+};
+
+/**
+ * 函数节流
+ * @param {Function} fn 需要被处理的函数
+ * @param {Number} wait 执行间隔（毫秒）
+ * @returns
+ */
+export const throttle = (fn, wait = 3000) => {
+  let timer = null;
+  return function () {
+    let context = this;
+    let args = arguments;
+    if (!timer) {
+      timer = setTimeout(() => {
+        fn.apply(context, args);
+        timer = null;
+      }, wait);
+    }
+  };
+};
+
+/**
+ * 删除文件夹
+ */
+export const removePrivateDoc = () => {
+  // #ifdef APP-PLUS
+  plus.io.requestFileSystem(
+    plus.io.PRIVATE_DOC, // 应用私有文档目录常量
+    (fs) => {
+      // 创建或打开文件, fs.root是根目录操作对象,直接fs表示当前操作对象
+      fs.root.removeRecursively(
+        () => { },
+        (e) => {
+          console.log(`删除应用私有文档目录失败，${JSON.stringify(e)}`);
+        }
+      );
+    }
+  );
+  // #endif
 };

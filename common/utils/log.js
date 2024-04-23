@@ -65,7 +65,6 @@ function getLogFileName() {
  */
 function writeLog(params, encryption) {
   let text = JSON.stringify(params);
-
   plus.io.requestFileSystem(
     plus.io.PUBLIC_DOCUMENTS,
     function (fs) {
@@ -126,15 +125,16 @@ function writeLog(params, encryption) {
  * @param {*} fileDate 需要上传的log文件日期 xxxx-xx-xx
  */
 function uploadLogFile(fileDate) {
+  let date = fileDate || getTimeStampDatetime("yyyy-MM-dd");
   const baseUrl = uni.getStorageSync("baseUrl");
-  const { controlCode } = uni.getStorageSync("controlInfo");
+  const { terminalCode: terCode } = uni.getStorageSync("terminalInfo");
   uni.uploadFile({
     url: baseUrl + "terminal/testing/uploadTer", // 后端api接口
-    filePath: `file:///storage/emulated/0/Android/data/com.gksc.control/documents/app-log/${fileDate}log.text`, // log文件路径
+    filePath: `file:///storage/emulated/0/Android/data/com.gksc.terminal/documents/app-log/${date}log.text`, // log文件路径
     name: "files", // 后端通过'files'获取上传的文件对象
     formData: {
       fileType: "LOG_FILE",
-      terCode: controlCode,
+      terCode,
     },
     header: {
       "Content-Type": "multipart/form-data",

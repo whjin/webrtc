@@ -2,166 +2,250 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  position: relative;
   .home-wrapper {
     width: 100%;
     box-sizing: border-box;
-    display: flex;
-    .home-content-left {
-      width: 80%;
+    .home-tabs {
+      display: flex;
+      height: 55.55upx;
+      padding: 16upx 0 0 27.77upx;
+      text {
+        color: #fff;
+        margin-right: 27.77upx;
+        font-size: 27.77upx;
+        font-weight: bold;
+        line-height: 55.55upx;
+      }
+      .tab-active {
+        margin-right: 27.77upx;
+        font-size: 30.55upx;
+        font-weight: bold;
+        line-height: 55.55upx;
+        color: #35fffa;
+        border-bottom: #35fffa 4upx solid;
+      }
+    }
+    .prisoner-container {
+      width: 100%;
       height: 100%;
       box-sizing: border-box;
-      .home-content-wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        box-sizing: border-box;
-        .home-content-box {
-          width: 523upx;
-          height: 281.25upx;
-          margin-bottom: 12.33upx;
-          background: rgba(93, 166, 222, 0.12);
-          box-sizing: border-box;
-          margin-left: 13.88upx;
-          .home-content-header {
-            font-size: 23upx;
-            font-family: Microsoft YaHei, sans-serif;
-            font-weight: bold;
-            color: rgba(53, 255, 250, 1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 6.94upx 0 6.94upx 20.83upx;
-            .state-bar {
+      .prisoner-content {
+        margin-left: 13.88upx;
+        .prisoner-scroll {
+          height: 480upx;
+          .prisoner-item {
+            margin: 13.88upx 0;
+            width: 158upx !important;
+            .prisoner-list {
               display: flex;
-              .state-bar-item {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin-right: 26.56upx;
-                .point {
-                  width: 10.41upx;
-                  height: 10.41upx;
-                  margin-right: 6upx;
-                  border: 0.69upx solid #fff;
-                }
-                .text {
-                  font-size: 12.5upx;
-                  font-family: Microsoft YaHei, Arial, Helvetica, sans-serif;
-                  color: rgba(255, 255, 255, 1);
-                }
+              flex-direction: column;
+              align-items: center;
+              margin: 0 auto;
+              image {
+                width: 100%;
+                height: 100%;
               }
-            }
-          }
-          .content-text {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18.05upx;
-            font-family: Microsoft YaHei;
-            font-weight: bold;
-            color: rgba(255, 255, 255, 1);
-            line-height: 41.66upx;
-            white-space: nowrap;
-          }
-          .content-title {
-            text {
-              font-size: 14upx;
-              font-family: Microsoft YaHei, sans-serif;
-              color: rgba(255, 255, 255, 1);
-            }
-          }
-          .charts {
-            width: 500upx;
-            height: 200upx;
-          }
-          .home-content-one {
-            border-top: 0.69upx solid rgba(0, 111, 233, 1);
-            display: flex;
-            justify-content: center;
-            .content-one-list {
-              display: flex;
-              margin-top: 35.41upx;
-              .content-one-item:not(:last-child) {
-                margin-right: 13.88upx;
+              text {
+                font-size: 19.44upx;
+                position: absolute;
+                bottom: 30px;
               }
-              .content-one-item {
-                height: 41.66upx;
-                width: 143upx;
-                .content-num {
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  .content-num-one,
-                  .content-num-two {
-                    height: 76.38upx;
-                    font-size: 69.44upx;
-                    font-family: PangMenZhengDao, sans-serif;
-                    color: rgba(53, 255, 250, 1);
-                  }
-                  .content-num-two {
-                    height: 8upx;
-                    font-size: 34.72upx;
-                  }
-                }
-                .content-total {
-                  margin-top: 15.27upx;
-                  font-size: 13.11upx;
-                  font-family: Microsoft YaHei, Arial, Helvetica, sans-serif;
-
-                  color: rgba(255, 255, 255, 1);
-                  text-align: center;
-                }
-              }
-            }
-          }
-          .home-content-two {
-            border-top: 1px solid rgba(0, 111, 233, 1);
-            .content-two-list {
-              margin-left: 12.36upx;
-            }
-          }
-          .home-content-three {
-            width: 100%;
-            box-sizing: border-box;
-            border-top: 0.69upx solid rgba(0, 111, 233, 1);
-            display: flex;
-            flex-direction: column;
-            padding: 0 20.83upx;
-            .content-three-list {
-              display: flex;
-              margin-top: 10.88upx;
-              overflow: auto;
-              .content-three-item {
-                width: 200upx;
-                .charts-pie-box {
-                  width: 100%;
-                  overflow: auto;
-                  padding-top: 13.88upx;
-                  .canvas-pie {
-                    height: 180upx;
-                  }
-                }
-              }
-            }
-          }
-          .canvas-pie-center {
-            align-items: center;
-          }
-          .home-content-four {
-            height: 233.33upx;
-            border-top: 0.69upx solid rgba(0, 111, 233, 1);
-            .content-four-list {
-              margin-left: 17.36upx;
             }
           }
         }
       }
     }
-    .home-content-right {
-      width: 20%;
-      box-sizing: border-box;
-      .right-content-scroll {
-        height: 575upx;
-        padding-left: 13.88upx;
+    .home-content-wrapper {
+      display: flex;
+      padding-left: 27.77upx;
+      .home-content-box {
+        display: flex;
+        flex-direction: column;
+        flex: 2;
+        height: 100%;
+        margin: 13.88upx 18.05upx 0 0;
+        .home-content-top {
+          display: flex;
+          height: 194.44upx;
+          overflow: hidden;
+          .home-content-list {
+            display: flex;
+            flex: 1;
+            .home-police-item {
+              display: flex;
+              flex: 1;
+              .home-police-box {
+                display: flex;
+                flex: 1;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                margin-top: 38upx;
+                text-align: center;
+                .title {
+                  font-size: 18upx;
+                  color: #36fffa;
+                  font-weight: bold;
+                  font-family: Microsoft YaHei;
+                }
+                .room-box {
+                  display: flex;
+                  flex-direction: column;
+                  flex: 1;
+                  box-sizing: border-box;
+                  margin-top: 13.88upx;
+                }
+                .roomNo,
+                .civilized-room,
+                .strict-room,
+                .charge-name {
+                  width: 112upx;
+                  box-sizing: border-box;
+                  color: #fff;
+                  font-size: 25upx;
+                  white-space: nowrap;
+                  overflow: auto;
+                }
+                .roomNo {
+                  margin-bottom: 8upx;
+                }
+                .civilized-room,
+                .strict-room {
+                  background-color: #1bb690;
+                  padding: 2upx 4upx;
+                  border-radius: 8upx;
+                }
+                .strict-room {
+                  background-color: #811b13;
+                }
+                .charge-name {
+                  margin-top: 28upx;
+                }
+                .assist-police-box {
+                  height: 86upx;
+                  display: flex;
+                  flex-direction: column;
+                  overflow: auto;
+                  margin-top: 13.88upx;
+                  .assist-name {
+                    width: 112upx;
+                    box-sizing: border-box;
+                    color: #fff;
+                    font-size: 25upx;
+                    margin-bottom: 8upx;
+                  }
+                }
+              }
+            }
+            .home-prisoner-box {
+              display: flex;
+              flex: 1;
+              .home-prisoner-item {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                .title {
+                  font-size: 15.27upx;
+                  font-weight: bold;
+                  color: rgba(53, 255, 250, 1);
+                }
+                .count {
+                  color: #fff;
+                  font-size: 60upx;
+                  font-weight: bold;
+                  line-height: 60upx;
+                }
+              }
+            }
+          }
+        }
+        .home-content-bottom {
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+          margin-top: 13.88upx;
+          .home-bottom-scroll {
+            height: 380upx;
+            .home-bottom-item {
+              margin: 8upx 0;
+              .home-bottom-list {
+                display: flex;
+                margin: 0 4upx;
+                flex-direction: column;
+                align-items: center;
+                position: relative;
+                image {
+                  width: 100%;
+                  height: 100%;
+                }
+                text {
+                  font-size: 19.44upx;
+                  position: absolute;
+                  bottom: 30px;
+                }
+                .home-mark {
+                  width: 38upx;
+                  height: 38upx;
+                  line-height: 42upx;
+                  background-color: rgba(255, 51, 51, 1);
+                  border-radius: 50%;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+      .home-sidebar {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        padding-left: 16upx;
+        .home-sidebar-title {
+          height: 24.3upx;
+          color: rgba(53, 255, 250, 1);
+          font-size: 22.22upx;
+          font-weight: bold;
+        }
+        .home-sidebar-news {
+          margin-top: 24upx;
+          margin-right: 13.88upx;
+          height: 450upx;
+          .home-sidebar-scroll {
+            height: 100%;
+            overflow: auto;
+            .home-sidebar-item {
+              height: 38.88upx;
+              line-height: 38.88upx;
+              font-size: 19.44upx;
+              white-space: nowrap;
+              display: flex;
+              align-items: center;
+              text {
+                color: rgba(53, 255, 250, 1);
+              }
+              .content {
+                width: 200upx;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: #fff;
+              }
+              .date {
+                font-size: 16.66upx;
+              }
+            }
+          }
+        }
       }
     }
   }

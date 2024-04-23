@@ -1,0 +1,95 @@
+.question-container {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    .question-wrapper {
+      width: 100%;
+      box-sizing: border-box;
+      .question-header {
+        height: 45upx;
+        color: #fff;
+        font-size: 27.77upx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        .time-slot {
+          position: absolute;
+          left: 27.77upx;
+        }
+        span {
+          color: #35fffa;
+        }
+      }
+      .question-content {
+        .content-name,
+        .content-title {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 22upx;
+          color: #fff;
+          span {
+            color: #35fffa;
+          }
+        }
+        .content-name {
+          margin: 6upx 0;
+        }
+        .content-title {
+          margin-bottom: 8upx;
+          section {
+            margin-left: 12upx;
+            span {
+              padding: 0 4upx;
+            }
+          }
+        }
+        .content-box {
+          width: 100%;
+          height: 420upx;
+          box-sizing: border-box;
+          overflow: auto;
+          .content-list {
+            color: #fff;
+            font-size: 22upx;
+            padding-left: 40upx;
+            .content-item {
+              .list-option {
+                display: flex;
+                align-items: center;
+                line-height: 1.8;
+                span {
+                  padding-left: 8upx;
+                }
+              }
+            }
+          }
+        }
+        .button-group {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-top: 16upx;
+          .button {
+            width: 145upx;
+            height: 45upx;
+            font-size: 22upx;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            background: rgba(0, 122, 255, 0.99);
+            border: 0.69upx solid rgba(0, 122, 255, 0.99);
+            border-radius: 4upx;
+            margin: 0 16px;
+          }
+          .btn-submit {
+            opacity: 0.65;
+            pointer-events: none;
+          }
+        }
+      }
+    }
+  }
+  

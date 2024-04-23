@@ -40,7 +40,7 @@
 				this.inputValue = +val
 			},
 			inputValue(newVal, oldVal) {
-				if (+newVal != +oldVal) {
+				if (+newVal !== +oldVal) {
 					this.$emit('change', newVal)
 				}
 			}
@@ -69,7 +69,7 @@
 			_getDecimalScale() {
 				let scale = 1
 				// 浮点型
-				if (~~this.step != this.step) {
+				if (~~this.step !== this.step) {
 					scale = Math.pow(10, (this.step + '').split('.')[1].length)
 				}
 				return scale
@@ -134,7 +134,6 @@
 	}
 
 	.uni-numbox__value {
-		position: relative; 
 		background-color: #007AFF;
 		width: 80upx;
 		height: 100%;

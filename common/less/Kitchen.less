@@ -1,0 +1,162 @@
+.kitchen-container {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  .kitchen-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    .kitchen-content {
+      display: flex;
+      flex-direction: column;
+      .kitchen-title {
+        padding: 0 0 13.88upx 45upx;
+        text {
+          color: #35fffa;
+          font-size: 27.77upx;
+          font-weight: bold;
+        }
+      }
+      .kitchen-box {
+        display: flex;
+        flex: 1;
+        .kitchen-menu-list {
+          width: 148upx;
+          height: 100%;
+          box-sizing: border-box;
+          margin-left: 27.77upx;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .kitchen-menu-item {
+            height: 120upx;
+            width: 120upx;
+            box-sizing: border-box;
+            margin-bottom: 32upx;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(93, 166, 222, 0.5);
+            border-radius: 3.88upx;
+            text {
+              margin-top: 6.88upx;
+              font-size: 18upx;
+              font-weight: 400;
+              color: #fff;
+            }
+          }
+          .kitchen-menu-active {
+            background: rgba(0, 122, 255, 0.9);
+          }
+        }
+        .kitchen-vertical-divider {
+          margin-right: 15upx;
+          width: 0.69upx;
+          background-image: linear-gradient(
+            to bottom,
+            rgba(0, 198, 255, 0),
+            rgba(0, 198, 255, 1),
+            rgba(0, 198, 255, 0)
+          );
+        }
+        .kitchen-table-container {
+          height: 100%;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          .table-box {
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            margin-right: 13.88upx;
+            .table-head {
+              display: flex;
+              .weekmenu-head-item,
+              .food-head-item {
+                box-sizing: border-box;
+                display: flex;
+                flex: 1;
+                justify-content: center;
+                align-items: center;
+                font-size: 18upx;
+                font-weight: bold;
+                line-height: 43.75upx;
+                background: rgba(17, 62, 141, 0.5);
+              }
+              .food-head-item {
+                white-space: nowrap;
+              }
+            }
+            .kitchen-table-scroll {
+              height: 460upx;
+              .weekmenu-table-content {
+                height: 96upx;
+                display: flex;
+                flex: 1;
+                align-items: center;
+                border-bottom: 0.69upx solid rgba(0, 198, 255, 0.5);
+                padding: 24upx 0;
+                .weekmenu-table-item {
+                  height: 100%;
+                  box-sizing: border-box;
+                  display: flex;
+                  flex: 1;
+                  flex-wrap: wrap;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 16upx;
+                  text-align: justify;
+                  font-weight: 600;
+                  span {
+                    width: 125upx;
+                    height: 65upx;
+                    overflow: auto;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                  }
+                }
+              }
+              .food-table-content {
+                display: flex;
+                border-bottom: 1upx solid rgba(17, 62, 141, 0.9);
+                .food-table-item {
+                  display: inline-block;
+                  text-align: center;
+                  font-size: 18.05upx;
+                  font-weight: 400;
+                  line-height: 48.61upx;
+                  white-space: nowrap;
+                  overflow: auto;
+                }
+              }
+              .food-table-total {
+                display: flex;
+                font-size: 18.05upx;
+                line-height: 48.61upx;
+                justify-content: space-between;
+                border-bottom: 1upx solid rgba(17, 62, 141, 0.9);
+                span {
+                  width: 225upx;
+                  display: flex;
+                  justify-content: center;
+                }
+              }
+            }
+            .current-date {
+              color: #35fffa;
+            }
+          }
+        }
+      }
+      .kitchen-tips {
+        color: #35fffa;
+        font-size: 20upx;
+        padding: 3.88upx 45upx;
+      }
+    }
+  }
+}

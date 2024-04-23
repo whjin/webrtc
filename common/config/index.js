@@ -4,10 +4,7 @@ export default {
   // dev
   baseUrl: "http://192.168.20.187:8100/",
 
-  controlIP: "192.168.20.103",
-
-  // socket连接地址
-  socketUrl: "https://192.168.20.222:3000/",
+  terminalIP: "192.168.20.105",
 
   controlType: {
     HEARTBEAT: "000",
@@ -16,8 +13,17 @@ export default {
     AUDIO: "300",
     VIDEO: "400",
     ALARM: "500",
-    CALL: "600",
+    ROLLCALL: "600",
     DEVICE: "700",
+    DUTY: "800",
+    CONVERSATION: "900",
+    EVALUATION: "1000",
     WEBRTC: "1100"
+  },
+  // 管理员账号
+  admin: {
+    name: "管理员",
+    dabh: "099",
+    rybh: "0999",
   },
 };

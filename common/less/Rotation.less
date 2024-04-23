@@ -1,0 +1,137 @@
+.rotation-container {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  .rotation-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    .rotation-content {
+      display: flex;
+      flex-direction: column;
+      .rotation-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 42upx;
+        margin: 8upx 27.77upx;
+        text {
+          color: #35fffa;
+          font-size: 27.77upx;
+          font-weight: bold;
+        }
+      }
+      .rotation-box {
+        display: flex;
+        flex: 1;
+        .rotation-menu-list {
+          width: 148upx;
+          height: 100%;
+          box-sizing: border-box;
+          margin-left: 27.77upx;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .rotation-menu-item {
+            height: 120upx;
+            width: 120upx;
+            box-sizing: border-box;
+            margin-bottom: 32upx;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(93, 166, 222, 0.5);
+            border-radius: 3.88upx;
+            text {
+              margin-top: 6.88upx;
+              font-size: 18upx;
+              font-weight: 400;
+              color: #fff;
+            }
+          }
+          .rotation-menu-active {
+            background: rgba(0, 122, 255, 0.9);
+          }
+        }
+        .register-container {
+          display: flex;
+          flex: 1;
+          flex-direction: column;
+          .register-item {
+            display: flex;
+            align-items: center;
+            font-size: 30px;
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            color: #fff;
+            margin: 0 27.77upx 32upx 16upx;
+            label {
+              width: 104upx;
+              display: flex;
+              justify-content: flex-end;
+              font-size: 20.83upx;
+              font-family: Microsoft YaHei;
+              font-weight: 400;
+              color: #fff;
+            }
+          }
+          .show-box {
+            width: 237.32upx;
+            position: relative;
+            padding-left: 13.88upx;
+          }
+          .register-remark {
+            display: flex;
+            align-items: flex-start;
+            textarea {
+              height: 128upx;
+              display: flex;
+              flex: 1;
+              border-radius: 3.88upx;
+              border: #1b92ef 1px solid;
+              background: rgba(27, 146, 239, 0.25);
+              box-shadow: 0px 0px 6px 2px rgba(27, 146, 239, 0.45) inset;
+              color: #fff;
+              padding: 13.88upx;
+              font-size: 17.36upx;
+              text-align: justify;
+            }
+          }
+          .register-button {
+            display: flex;
+            margin: 27.77upx 27.77upx 0 0;
+            justify-content: flex-end;
+            align-items: center;
+            color: #fff;
+            .btn-cancel,
+            .btn-submit {
+              width: 112upx;
+              height: 43.05upx;
+              font-size: 18.05upx;
+              font-weight: 500;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              background: rgba(55, 151, 255, 0.16);
+              border: 0.69upx solid rgba(0, 122, 255, 0.99);
+              border-radius: 2.77upx;
+            }
+            .btn-submit {
+              background: rgba(0, 122, 255, 0.99);
+              margin-left: 30upx;
+            }
+            .btn-cancel:hover,
+            .btn-submit:hover {
+              font-weight: bold;
+              opacity: 0.65;
+            }
+            .btn-disabled {
+              pointer-events: none;
+              opacity: 0.65;
+            }
+          }
+        }
+      }
+    }
+  }
+}

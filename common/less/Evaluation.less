@@ -1,0 +1,97 @@
+.evaluation-container {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  .evaluation-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+    .evaluation-header {
+      height: 45upx;
+      color: #fff;
+      font-size: 27.77upx;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      .time-slot {
+        position: absolute;
+        left: 27.77upx;
+        span {
+          color: #35fffa;
+        }
+      }
+    }
+    .evaluation-content {
+      .content-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22upx;
+        color: #fff;
+        section {
+          margin: 0 12upx;
+          margin-bottom: 12upx;
+        }
+        span {
+          color: #35fffa;
+          padding: 0 4upx;
+        }
+      }
+      .content-box {
+        height: 460upx;
+        overflow: auto;
+        display: flex;
+        flex-wrap: wrap;
+        border-radius: 6upx;
+        padding-left: 20upx;
+        .content-item {
+          width: 143upx;
+          height: 120upx;
+          box-sizing: border-box;
+          color: #fff;
+          padding: 6upx;
+          background-color: rgba(0, 122, 255, 0.99);
+          border-radius: 6upx;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          font-size: 22upx;
+          margin-bottom: 18upx;
+          margin-right: 18upx;
+          span {
+            width: 90%;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+        .content-item-select {
+          background-color: #0d3972;
+        }
+        .content-item-done {
+          background-color: #1e2a47;
+        }
+      }
+      .content-button {
+        width: 245upx;
+        height: 45upx;
+        margin: 0 auto;
+        margin-top: 16upx;
+        font-size: 22upx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        background: rgba(0, 122, 255, 0.99);
+        border: 0.69upx solid rgba(0, 122, 255, 0.99);
+        border-radius: 4upx;
+      }
+      .button-disabled {
+        opacity: 0.65;
+        pointer-events: none;
+      }
+    }
+  }
+}

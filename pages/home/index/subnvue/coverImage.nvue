@@ -1,0 +1,39 @@
+<template>
+	<image :src="imgSrc" :style="imgStyle"></image>
+</template>
+
+<script>
+export default {
+	data() {
+		return {
+			imgStyle: {
+				width: '383px',
+				height: '473px'
+			},
+			imgSrc: '../../../../static/images/temperatureMonitor/recognition-tips.png'
+		};
+	},
+	created() {
+		uni.getSubNVueById('coverImage').hide();
+		uni.$on('set-img-style', (w, h) => {
+			this.setImgStyle(w, h);
+		});
+		uni.$on('set-img-src', src => {
+			this.setImgSrc(src);
+		});
+	},
+	methods: {
+		setImgStyle(w, h) {
+			this.imgStyle = {
+				width: w + 'px',
+				height: h + 'px'
+			};
+		},
+		setImgSrc(src) {
+			this.imgSrc = src;
+		}
+	}
+};
+</script>
+
+<style></style>
