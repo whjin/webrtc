@@ -6,3 +6,5 @@
 !.vscode/extensions.json
 unpackage/dist/
 unpackage/resources/
+node_modules
+package-lock.json

@@ -17,26 +17,26 @@
           <view :class="['circle', { blackC: password.length >= 6 }]"></view>
         </view>
         <view class="bottom-row">
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('1')">1</Button>
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('2')">2</Button>
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('3')">3</Button>
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('1')">1</Button>
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('2')">2</Button>
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('3')">3</Button>
         </view>
         <view class="bottom-row">
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('4')">4</Button>
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('5')">5</Button>
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('6')">6</Button>
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('4')">4</Button>
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('5')">5</Button>
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('6')">6</Button>
         </view>
         <view class="bottom-row">
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('7')">7</Button>
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('8')">8</Button>
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('9')">9</Button>
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('7')">7</Button>
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('8')">8</Button>
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('9')">9</Button>
         </view>
         <view class="bottom-row">
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('clear')">
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('clear')">
             <text>清空</text>
           </Button>
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('0')">0</Button>
-          <Button :color="'#fff'" class="btn-class" @touchend.native="handleKey('backspace')">
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('0')">0</Button>
+          <Button :color="'#fff'" class="btn-class" @click.native="handleKey('backspace')">
             <text>删除</text>
           </Button>
         </view>

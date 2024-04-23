@@ -2,19 +2,24 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+
   .radio-wrapper {
     display: flex;
     flex: 1;
+
     .radio-left {
       width: 254.86upx;
       height: 100%;
       box-sizing: border-box;
+
       .radio-left-box {
         padding-top: 13.88upx;
+
         .left-tab {
           width: 100%;
           display: flex;
           justify-content: space-around;
+
           .tab-active {
             color: #35fffa;
             font-size: 20.83upx;
@@ -22,14 +27,17 @@
             padding-bottom: 1.88upx;
             border-bottom: 2.88upx solid #35fffa;
           }
+
           .tab {
             color: #fff;
             font-size: 20.83upx;
             font-weight: bold;
           }
         }
+
         .left-content {
           margin-top: 13.88upx;
+
           .terminal-list,
           .groups-list {
             width: 100%;
@@ -38,22 +46,26 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+
             .terminal-search {
               width: 216.72upx;
               height: 41.66upx;
               display: flex;
               justify-content: center;
               align-items: center;
+
               .input-search {
                 width: 168.82upx;
                 height: 41.66upx;
                 font-size: 16upx;
               }
+
               .search-btn {
                 display: flex;
                 align-items: center;
               }
             }
+
             .terminal-room-box {
               width: 100%;
               height: 478upx;
@@ -61,21 +73,28 @@
               overflow: auto;
               box-sizing: border-box;
             }
+
+            ::-webkit-scrollbar {
+              display: none;
+            }
           }
         }
       }
     }
+
     .radio-center {
       width: 812.5upx;
       height: 100%;
       background-color: rgba(93, 166, 222, 0.12);
       border: 0.69upx solid rgba(0, 111, 233, 0.48);
       box-sizing: border-box;
+
       .radio-center-head {
         width: 100%;
         height: 48upx;
         box-sizing: border-box;
         border-bottom: 0.69upx solid rgba(0, 111, 233, 0.48);
+
         .center-head-box {
           width: 100%;
           height: 100%;
@@ -84,21 +103,26 @@
           align-items: center;
           justify-content: space-between;
           padding: 0 20upx;
+
           .head-label {
             font-family: Microsoft YaHei, Arial, Helvetica, sans-serif;
             font-size: 20upx;
             font-weight: bold;
             color: rgba(53, 255, 250, 1);
           }
+
           .head-content {
             display: flex;
             align-items: center;
+
             div:not(:first-child) {
               margin-left: 28upx;
             }
+
             div {
               display: flex;
               font-size: 16.67upx;
+
               text {
                 padding-left: 6.88upx;
               }
@@ -106,21 +130,25 @@
           }
         }
       }
+
       .radio-center-table {
         width: 100%;
         height: 100%;
         box-sizing: border-box;
+
         .radio-center-content {
           height: 540upx;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
+
           .center-btn-box {
             width: 100%;
             box-sizing: border-box;
             display: flex;
             align-items: center;
             padding: 3.88upx 14upx;
+
             .btn-left,
             .btn-right {
               width: 102upx;
@@ -128,27 +156,33 @@
               display: flex;
               align-items: center;
               justify-content: center;
+
               text {
                 font-size: 18upx;
               }
             }
+
             .center-btn-left {
               display: flex;
               flex: 1;
             }
+
             .center-btn-right {
               display: flex;
               width: 132upx;
+
               .btn-right {
                 width: 100%;
               }
             }
           }
+
           .center-table-box {
             width: 100%;
             height: 100%;
             box-sizing: border-box;
             padding: 0 20upx;
+
             .table-head {
               background: url(../../static/images/table/title-tr.png);
               background-size: 100% 100%;
@@ -156,37 +190,46 @@
               align-items: center;
               font-size: 16upx;
               line-height: 43.06upx;
+
               .head-checkbox {
                 padding-left: 14upx;
               }
+
               .radio-head-item {
                 width: 100%;
                 display: flex;
                 justify-content: center;
               }
             }
+
             .center-table-scroll {
               width: 100%;
               height: 438upx;
+
               .radio-table-main {
                 display: flex;
                 flex-direction: column;
+
                 .table-content {
                   display: flex;
                   align-items: center;
                   line-height: 45.83upx;
+
                   .content-checkbox {
                     padding-left: 14upx;
                   }
+
                   .radio-table-item {
                     display: flex;
                     justify-content: center;
                     font-size: 14upx;
+
                     .control-button,
                     .delete-button {
                       display: flex;
                       align-items: center;
                       justify-content: center;
+
                       .image-button {
                         width: 22upx;
                         height: 22upx;
@@ -194,6 +237,7 @@
                     }
                   }
                 }
+
                 .table-line {
                   display: flex;
                   width: 100%;
@@ -201,10 +245,12 @@
                 }
               }
             }
+
             /deep/ .uni-checkbox-input {
               width: 15upx;
               height: 15upx;
             }
+
             .sound-wave-box {
               width: 100%;
               height: 62.5upx;
@@ -212,22 +258,26 @@
               display: flex;
               align-items: center;
               justify-content: space-between;
+
               .sound-wave-image {
                 width: 618upx;
                 height: 100%;
                 box-sizing: border-box;
                 display: flex;
+
                 .wave-img {
                   width: 100%;
                   height: 100%;
                 }
               }
+
               .sound-wave-button {
                 width: 105upx;
                 height: 46upx;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
                 text {
                   font-size: 18upx;
                 }
@@ -237,16 +287,19 @@
         }
       }
     }
+
     .radio-right {
       display: flex;
       flex: 1;
       box-sizing: border-box;
+
       .right-dynamic-scroll {
         height: 588.88upx;
         padding-left: 13.88upx;
       }
     }
   }
+
   .neil-modal-container {
     .radio-modal-container {
       width: 332upx;
@@ -254,24 +307,29 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+
       .neil-modal-label {
         display: flex;
         justify-content: center;
         font-size: 20.83upx;
         color: #fff;
       }
+
       .group-name-box {
         margin: 0 auto;
+
         .group-modal-label {
           font-size: 20.83upx;
           color: #fff;
           margin-bottom: 13.88upx;
         }
+
         .group-content {
           width: 256upx;
           display: flex;
           justify-content: center;
           align-items: center;
+
           .group-name {
             width: 100%;
             height: 41.66upx;
@@ -282,11 +340,13 @@
           }
         }
       }
+
       .neil-modal-btn,
       .group-modal-btn {
         display: flex;
         justify-content: center;
         margin-top: 87upx;
+
         .cancel-btn,
         .confirm-btn {
           width: 112upx;
@@ -298,16 +358,19 @@
           display: flex;
           justify-content: center;
           align-items: center;
+
           span {
             font-size: 18upx;
           }
         }
+
         .confirm-btn {
           margin-left: 24upx;
           background-color: #007aff;
           border: none;
         }
       }
+
       .group-modal-btn {
         margin-top: 56upx;
       }

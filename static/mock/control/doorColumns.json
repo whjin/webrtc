@@ -1,0 +1,22 @@
+[
+    {
+        "title": "监室",
+        "key": "site"
+    },
+    {
+        "title": "设备状态",
+        "key": "status"
+    },
+    {
+        "title": "定时开启时间",
+        "key": "startTime"
+    },
+    {
+        "title": "定时关闭时间",
+        "key": "endTime"
+    },
+    {
+        "title": "操作",
+        "key": "operate"
+    }
+]

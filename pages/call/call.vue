@@ -15,14 +15,17 @@
 						<div v-show="page == 0" class="terminal-list">
 							<div class="terminal-search rectangle-img">
 								<input class="input-search" v-model="searchTerminal" @input="searchTerminalChange" />
-								<common-icons type="iconsearch" color="#fff" size="20" @click="searchTerminalRoom"></common-icons>
+								<common-icons type="iconsearch" color="#fff" size="20"
+									@click="searchTerminalRoom"></common-icons>
 							</div>
 							<div class="terminal-room-box">
 								<scroll-view scroll-y="true">
 									<!-- 点名任务 -->
-									<v-tree v-if="currentPage == 0" showCheckbox :root="terminalList" :changeHandler="terminalSelect"></v-tree>
+									<v-tree v-if="currentPage == 0" showCheckbox :root="terminalList"
+										:changeHandler="terminalSelect"></v-tree>
 									<!-- 点名记录 -->
-									<v-tree v-else showRadio leaf-only :root="terminalList" :changeHandler="terminalRadioSelect"></v-tree>
+									<v-tree v-else showRadio leaf-only :root="terminalList"
+										:changeHandler="terminalRadioSelect"></v-tree>
 								</scroll-view>
 							</div>
 						</div>
@@ -35,8 +38,9 @@
 							</div>
 							<div class="terminal-room-box">
 								<scroll-view scroll-y="true">
-									<v-tree ref="vTree" showCheckbox :showGroup="true" :root="groupList" :changeHandler="groupSelect"
-										@group-change="openModifyGroup" @group-delete="openDeleteGroup"></v-tree>
+									<v-tree ref="vTree" showCheckbox :showGroup="true" :root="groupList"
+										:changeHandler="groupSelect" @group-change="openModifyGroup"
+										@group-delete="openDeleteGroup"></v-tree>
 								</scroll-view>
 							</div>
 						</div>
@@ -71,7 +75,8 @@
 					<div class="call-center-content">
 						<div class="center-btn-box" v-if="currentPage == 0">
 							<div class="center-btn-left">
-								<div class="btn-left" v-if="!callState" :class="isRoomAll ? 'btn-active-img' : 'btn-img'" @click="handleSelectAll">
+								<div class="btn-left" v-if="!callState" :class="isRoomAll ? 'btn-active-img' : 'btn-img'"
+									@click="handleSelectAll">
 									<text>全选</text>
 								</div>
 								<div class="btn-left btn-img" v-if="!callState" @click="handleRemoveAll">
@@ -90,31 +95,21 @@
 						<div class="center-record-box" v-if="currentPage == 1">
 							<div class="record-head-left" v-if="callRecordList.length">
 								<section>
-									日期:<text style="color: #21cdc5">{{
-                    callRecordInfo.callDate
-                  }}</text>
+									日期:<text style="color: #21cdc5">{{ callRecordInfo.callDate }}</text>
 								</section>
 								<section>
-									时间:<text style="color: #21cdc5">{{
-                    callRecordInfo.callTime
-                  }}</text>
+									时间:<text style="color: #21cdc5">{{ callRecordInfo.callTime }}</text>
 								</section>
 							</div>
 							<div class="record-head-right">
 								<section>
-									总人数:<text style="color: #21cdc5">{{
-                    callRecordInfo.allCount || 0
-                  }}</text>人
+									总人数:<text style="color: #21cdc5">{{ callRecordInfo.allCount || 0 }}</text>人
 								</section>
 								<section>
-									已签到:<text style="color: #0267df">{{
-                    callRecordInfo.calledCount || 0
-                  }}</text>人
+									已签到:<text style="color: #0267df">{{ callRecordInfo.calledCount || 0 }}</text>人
 								</section>
 								<section>
-									未签到:<text style="color: #e30c12">{{
-                    callRecordInfo.unCallCount || 0
-                  }}</text>人
+									未签到:<text style="color: #e30c12">{{ callRecordInfo.unCallCount || 0 }}</text>人
 								</section>
 							</div>
 						</div>
@@ -123,9 +118,8 @@
 								<div class="call-table-box">
 									<div class="table-head">
 										<div class="head-checkbox" @click="checkRoomAll">
-											<common-icons :type="
-                          isRoomAll ? 'iconcheckbox' : 'iconcheck-unselect'
-                        " color="#2a4273" size="24"></common-icons>
+											<common-icons :type="isRoomAll ? 'iconcheckbox' : 'iconcheck-unselect'
+												" color="#2a4273" size="24"></common-icons>
 										</div>
 										<div class="call-head-item" v-for="(item, index) in callColumns" :key="index">
 											{{ item.title }}
@@ -135,11 +129,10 @@
 										<div class="call-table-main" v-for="(item, index) in roomTableList" :key="index">
 											<div class="table-content">
 												<div class="content-checkbox" @click="checkRoomChange(item, index)">
-													<common-icons :type="
-                              item.isSelectRoom
-                                ? 'iconcheckbox'
-                                : 'iconcheck-unselect'
-                            " color="#2a4273" size="24"></common-icons>
+													<common-icons :type="item.isSelectRoom
+														? 'iconcheckbox'
+														: 'iconcheck-unselect'
+														" color="#2a4273" size="24"></common-icons>
 												</div>
 												<div class="call-table-item" style="flex: 1">
 													{{ item.name }}
@@ -164,22 +157,22 @@
 										</div>
 									</div>
 									<scroll-view scroll-y="true" class="center-table-scroll" v-if="callRecordList.length">
-										<div class="call-table-main" v-for="(item, index) in callRecordList" :key="item.rybh">
+										<div class="call-table-main" v-for="(item) in callRecordList" :key="item.rybh">
 											<div class="table-content">
 												<div class="call-table-item" style="flex: 1">
 													{{ item.xm }}
 												</div>
 												<div class="call-table-item" style="flex: 1" :style="{
-                            color: item.status == '1' ? '#02e605' : '#fff',
-                          }">
+													color: item.status == '1' ? '#02e605' : '#fff',
+												}">
 													{{ item.status == "1" ? "已签到" : "未签到" }}
 												</div>
 												<div class="call-table-item" style="flex: 1" :style="{
-                            color:
-                              item.isAbnormalTemperature == '1'
-                                ? '#e30c12'
-                                : '#fff',
-                          }">
+													color:
+														item.isAbnormalTemperature == '1'
+															? '#e30c12'
+															: '#fff',
+												}">
 													{{ item.temperature }}
 												</div>
 												<div class="call-table-item" style="flex: 1">
@@ -228,7 +221,8 @@
 						<div class="config-section">
 							<div class="config-label">点名间隔</div>
 							<div class="config-content">
-								<xfl-select :list="spaceList" :initValue="0" :clearable="false" @change="selectSpaceChange" :widthStyle="150"></xfl-select>
+								<xfl-select :list="spaceList" :initValue="0" :clearable="false" @change="selectSpaceChange"
+									:widthStyle="150"></xfl-select>
 							</div>
 						</div>
 						<div class="config-button">
@@ -298,7 +292,7 @@ import vtimeLine from "@/components/v-timeLine/v-timeLine.vue";
 import vTree from "@/components/v-tree/v-tree.vue";
 import xflSelect from "@/components/xfl-select/xfl-select.vue";
 import Api from "@/common/api.js";
-import { hasKey, unique, uniqueArr, dateFormat } from "@/common/utils/util.js";
+import { hasKey, unique, uniqueArr, dateFormat, currentPages } from "@/common/utils/util.js";
 import callColumns from "@/static/mock/callColumns.json";
 import callRecordColumns from "@/static/mock/callRecordColumns.json";
 import spaceList from "@/static/mock/spaceList.json";
@@ -310,7 +304,7 @@ export default {
 		vTree,
 		xflSelect,
 	},
-	data () {
+	data() {
 		return {
 			// 0分机列表，1分组列表
 			page: 0,
@@ -377,7 +371,7 @@ export default {
 			isRepeatState: false,
 		};
 	},
-	created () {
+	created() {
 		// 获取分机列表
 		this.getTerminalInfo();
 		// 获取分组列表信息
@@ -385,13 +379,13 @@ export default {
 		// 获取动态信息
 		this.getDynamicInfo();
 	},
-	mounted () {
+	mounted() {
 		// 获取点名状态信息
 		this.getCallStatusInfo("600");
 	},
 	methods: {
 		// 切换分机、分组列表
-		handleTabChange (tab) {
+		handleTabChange(tab) {
 			this.page = tab;
 			this.$nextTick(() => {
 				// 获取点名状态信息
@@ -399,7 +393,7 @@ export default {
 			});
 		},
 		// 获取分机列表
-		async getTerminalInfo () {
+		async getTerminalInfo() {
 			const { areaId } = uni.getStorageSync("controlInfo");
 			let res = await Api.apiCall("get", Api.index.getRoomByAreaId, {
 				id: areaId,
@@ -416,7 +410,7 @@ export default {
 			}
 		},
 		// 获取分组列表
-		async getGroupList () {
+		async getGroupList() {
 			let controlId = uni.getStorageSync("controlInfo").id;
 			let res = await Api.apiCall("get", Api.index.getGroupList, {
 				controlId: controlId,
@@ -433,7 +427,7 @@ export default {
 			}
 		},
 		// 获取点名动态列表
-		async getDynamicInfo () {
+		async getDynamicInfo() {
 			let controlId = uni.getStorageSync("controlInfo").id;
 			let params = {
 				controlId: controlId,
@@ -445,12 +439,12 @@ export default {
 			}
 		},
 		// 选择分机列表-点名记录
-		terminalRadioSelect (item) {
+		terminalRadioSelect(item) {
 			this.searchTerminal = "";
 			this.getCheckedTerminal(item);
 		},
 		// 选择主分机列表
-		getCheckedTerminal (selected) {
+		getCheckedTerminal(selected) {
 			selected.forEach((item) => {
 				if (hasKey(item, "children")) {
 					this.getCheckedTerminal(item.children);
@@ -461,7 +455,7 @@ export default {
 			this.getRollCallDetail(this.checked.roomId);
 		},
 		// 获取点名记录列表
-		async getRollCallDetail (roomId) {
+		async getRollCallDetail(roomId) {
 			this.callRecordList = [];
 			let params = {
 				data: {
@@ -498,7 +492,7 @@ export default {
 			}
 		},
 		// 切换监室|音频列表
-		handlePageChange (page) {
+		handlePageChange(page) {
 			this.currentPage = page;
 			this.$nextTick(() => {
 				if (page == 0) {
@@ -514,13 +508,13 @@ export default {
 			});
 		},
 		// 搜索分机监室
-		searchTerminalChange (e) {
+		searchTerminalChange(e) {
 			this.searchTerminal = e.detail.value;
 		},
 		// 搜索分机监室
-		searchTerminalRoom () {
+		searchTerminalRoom() {
 			if (!this.searchTerminal) {
-				this.$parent.handleShowToast("请输入搜索内容", "center");
+				currentPages().handleShowToast("请输入搜索内容", "center");
 				return;
 			}
 			let reg = new RegExp(this.searchTerminal);
@@ -563,13 +557,13 @@ export default {
 			this.selectedNum = this.roomSelectList.length;
 		},
 		// 搜索分组监室
-		searchGroupChange (e) {
+		searchGroupChange(e) {
 			this.searchGroup = e.detail.value;
 		},
 		// 搜索分组监室
-		searchGroupRoom () {
+		searchGroupRoom() {
 			if (!this.searchGroup) {
-				this.$parent.handleShowToast("请输入搜索内容", "center");
+				currentPages().handleShowToast("请输入搜索内容", "center");
 				return;
 			}
 			let reg = new RegExp(this.searchGroup);
@@ -622,7 +616,7 @@ export default {
 			this.selectedNum = this.roomSelectList.length;
 		},
 		// 选择分机列表-点名任务
-		terminalSelect (list) {
+		terminalSelect(list) {
 			if (this.callState) {
 				list.map((item, index) => {
 					item.status = "1";
@@ -658,7 +652,7 @@ export default {
 			this.selectedNum = this.roomSelectList.length;
 		},
 		// 选择分组列表-点名任务
-		groupSelect (list) {
+		groupSelect(list) {
 			if (this.callState) {
 				list.map((item, index) => {
 					item.status = "1";
@@ -674,7 +668,7 @@ export default {
 				});
 			}
 			this.roomTableList = list;
-			this.roomTableList = uniqueArr(this.roomTableList);
+			this.roomTableList = uniqueArr(this.roomTableList, "name");
 			if (this.roomTableList.length) {
 				this.isRoomAll = true;
 			} else {
@@ -694,7 +688,7 @@ export default {
 			this.selectedNum = this.roomSelectList.length;
 		},
 		// 全选监室
-		handleSelectAll () {
+		handleSelectAll() {
 			if (!this.roomTableList.length) {
 				return;
 			}
@@ -713,7 +707,7 @@ export default {
 			this.selectedNum = this.roomSelectList.length;
 		},
 		// 移除已选择监室
-		handleRemoveAll () {
+		handleRemoveAll() {
 			this.isRoomAll = false;
 			this.roomTableList = [];
 			this.roomSelectList = [];
@@ -738,7 +732,7 @@ export default {
 			}
 		},
 		// 全选监室表格行
-		checkRoomAll () {
+		checkRoomAll() {
 			if (!this.roomTableList.length) {
 				return;
 			}
@@ -757,7 +751,7 @@ export default {
 			this.selectedNum = this.roomSelectList.length;
 		},
 		// 选择监室表格行
-		checkRoomChange (room, index) {
+		checkRoomChange(room, index) {
 			this.roomSelectList = [];
 			if (room.isSelectRoom) {
 				room.isSelectRoom = false;
@@ -779,17 +773,17 @@ export default {
 			this.selectedNum = this.roomSelectList.length;
 		},
 		// 打开点名弹框
-		handleCallModal () {
+		handleCallModal() {
 			if (!this.roomSelectList.length) {
-				this.$parent.handleShowToast("请先选择监室", "center");
+				currentPages().handleShowToast("请先选择监室", "center");
 				return;
 			}
 			this.showCallConfirm = true;
 		},
 		// 开始点名
-		startCall () {
+		startCall() {
 			if (this.duration < 30) {
-				this.$parent.handleShowToast("点名时长至少30分钟", "center");
+				currentPages().handleShowToast("点名时长至少30分钟", "center");
 				return;
 			}
 			if (!this.isRepeatState) {
@@ -800,7 +794,7 @@ export default {
 				this.startTempRollCall();
 			}
 		},
-		async startTempRollCall () {
+		async startTempRollCall() {
 			let controlId = uni.getStorageSync("controlInfo").id;
 			let ids = this.roomSelectList.map((item) => item.roomId).toString();
 			let params = {
@@ -824,12 +818,12 @@ export default {
 					this.saveCallPlayStatus("start");
 				}, 1500);
 			} else {
-				this.$parent.handleShowToast(res.state.msg || "临时点名发起失败", "center");
+				currentPages().handleShowToast(res.state.msg || "临时点名发起失败", "center");
 			}
 			this.showCallConfirm = false;
 		},
 		// 保存点名状态
-		async saveCallPlayStatus (status) {
+		async saveCallPlayStatus(status) {
 			const { controlCode } = uni.getStorageSync("controlInfo");
 			let params = {
 				data: {
@@ -846,11 +840,11 @@ export default {
 				params
 			);
 			if (res.state.code == 200) {
-				this.$parent.handleShowToast("保存状态成功");
+				currentPages().handleShowToast("保存状态成功");
 			}
 		},
 		// 获取点名状态信息
-		async getCallStatusInfo (type) {
+		async getCallStatusInfo(type) {
 			const { controlCode } = uni.getStorageSync("controlInfo");
 			let params = {
 				controlCode,
@@ -907,7 +901,7 @@ export default {
 			}
 		},
 		// 分机连接状态
-		getConnectInfo (data) {
+		getConnectInfo(data) {
 			this.connectedNum = 0;
 			this.disconnectNum = 0;
 			this.roomTableList.map((item, index) => {
@@ -930,15 +924,15 @@ export default {
 			}, 3000);
 		},
 		// 点名时长
-		durationChange (e) {
+		durationChange(e) {
 			this.duration = e.detail.value;
 		},
 		// 选择点名间隔
-		selectSpaceChange (e) {
+		selectSpaceChange(e) {
 			this.callSpace = e.originItem.spacing;
 		},
 		// 新增点名操作动态
-		async setDynamicInfo (type, content) {
+		async setDynamicInfo(type, content) {
 			let controlId = uni.getStorageSync("controlInfo").id;
 			let operationTime = dateFormat("YYYY-MM-DD", new Date());
 			let params = { controlId, type, content, operationTime };
@@ -951,33 +945,33 @@ export default {
 				// 刷新动态信息
 				this.getDynamicInfo();
 			} else {
-				this.$parent.handleShowToast("请求错误", "center");
+				currentPages().handleShowToast("请求错误", "center");
 			}
 		},
 		// 添加分组弹框
-		handleAddGroup () {
+		handleAddGroup() {
 			if (!this.roomSelectList.length) {
-				this.$parent.handleShowToast("请先选择监室", "center");
+				currentPages().handleShowToast("请先选择监室", "center");
 				return;
 			}
 			this.addGroupName = "";
 			this.showAddGroup = true;
 		},
 		// 获取添加分组名称
-		addGroupChange (e) {
+		addGroupChange(e) {
 			this.addGroupName = e.detail.value;
 		},
 		// 确认添加分组
-		addGroupConfirm () {
+		addGroupConfirm() {
 			if (!this.addGroupName) {
-				this.$parent.handleShowToast("请输入分组名称", "center");
+				currentPages().handleShowToast("请输入分组名称", "center");
 				return;
 			}
 			this.addGroup();
 			this.closeModal("AddGroup");
 		},
 		// 添加分组
-		async addGroup () {
+		async addGroup() {
 			let controlId = uni.getStorageSync("controlInfo").id;
 			let children = [];
 			this.roomSelectList.map((item) => {
@@ -1000,19 +994,19 @@ export default {
 			}
 		},
 		// 修改分组弹框
-		openModifyGroup (list) {
+		openModifyGroup(list) {
 			this.groupId = list.id;
 			this.modifyGroupName = list.name;
 			this.showModifyGroup = true;
 		},
 		// 获取修改分组名称
-		modifyGroupChange (e) {
+		modifyGroupChange(e) {
 			this.modifyGroupName = e.detail.value;
 		},
 		// 确认修改分组名称
-		modifyGroupConfirm () {
+		modifyGroupConfirm() {
 			if (!this.modifyGroupName) {
-				this.$parent.handleShowToast("请输入分组名称", "center");
+				currentPages().handleShowToast("请输入分组名称", "center");
 				return;
 			}
 			this.$refs.vTree.groupChange = false;
@@ -1020,7 +1014,7 @@ export default {
 			this.closeModal("ModifyGroup");
 		},
 		// 修改分组名称
-		async updateGroup () {
+		async updateGroup() {
 			let params = {
 				name: this.modifyGroupName,
 				id: this.groupId,
@@ -1032,18 +1026,18 @@ export default {
 			}
 		},
 		// 删除分组弹框
-		openDeleteGroup (list) {
+		openDeleteGroup(list) {
 			this.groupId = list.id;
 			this.showDeleteGroup = true;
 		},
 		// 确认删除分组
-		handleDeleteConfirm () {
+		handleDeleteConfirm() {
 			this.$refs.vTree.groupChange = false;
 			this.deleteGroup();
 			this.closeModal("DeleteGroup");
 		},
 		// 删除分组
-		async deleteGroup () {
+		async deleteGroup() {
 			let params = {
 				data: {
 					id: this.groupId,
@@ -1055,10 +1049,10 @@ export default {
 				this.getGroupList();
 			}
 		},
-		openModal (type) {
+		openModal(type) {
 			this[`show${type}`] = true;
 		},
-		closeModal (type) {
+		closeModal(type) {
 			this[`show${type}`] = false;
 			if (type == "ModifyGroup") {
 				this.$refs.vTree.groupChange = false;

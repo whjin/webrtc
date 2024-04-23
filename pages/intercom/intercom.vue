@@ -116,30 +116,29 @@
             </div>
             <div class="intercom-control-box">
               <!-- 静音 -->
-              <div v-show="openIntercom" class="intercom-control" @touchstart.stop="handleVideoMute">
+              <div v-show="openIntercom" class="intercom-control" @click="handleVideoMute">
                 <common-icons type="iconaudio" size="24" :color="isMute ? '#35FFFA' : '#fff'"></common-icons>
                 <text :style="{ color: isMute ? '#35FFFA' : '#fff' }">静音</text>
               </div>
               <!-- 音量 -->
-              <div class="intercom-control" :class="{ 'control-disabled': !openIntercom }"
-                @touchstart.stop="volumeControl">
+              <div class="intercom-control" :class="{ 'control-disabled': !openIntercom }" @click="volumeControl">
                 <common-icons type="iconvolume" size="24" :color="isVolume ? '#35FFFA' : '#fff'"></common-icons>
                 <text :style="{ color: isVolume ? '#35FFFA' : '#fff' }">音量</text>
               </div>
               <!-- 录像 -->
-              <div v-show="!openIntercom" class="intercom-control" @touchstart.stop="openRecordModal">
+              <div v-show="!openIntercom" class="intercom-control" @click="openRecordModal">
                 <common-icons type="iconvideorecord" size="24" color="#fff"></common-icons>
                 <text>录像</text>
               </div>
               <!-- 轮巡 -->
               <div v-show="!page" class="intercom-control" :class="{ 'control-disabled': openIntercom }"
-                @touchstart.stop="togglePolling">
+                @click="togglePolling">
                 <common-icons type="iconxunhuanbofang" size="24" :color="isPolling ? '#35FFFA' : '#fff'"></common-icons>
                 <text :style="{ color: isPolling ? '#35FFFA' : '#fff' }">轮巡</text>
               </div>
               <!-- 挂断 -->
               <div class="intercom-control" :class="{ 'control-disabled': !openIntercom || !hangupState }"
-                @touchstart.stop="hangupIntercom()">
+                @click="hangupIntercom()">
                 <common-icons type="iconhangup" size="24"
                   :color="openIntercom && hangupState ? '#f33' : '#fff'"></common-icons>
                 <text :style="{
@@ -149,8 +148,11 @@
             </div>
           </div>
           <div class="center-content-box">
-            <div v-if="openIntercom" class="content-intercom"></div>
-            <div v-else class="intercom-icon">
+            <div v-show="openIntercom" class="content-intercom">
+              <video ref="localVideo" id="localVideo" autoplay playsinline object-fit="fill" :controls="false"
+                codec="sofeware" :enable-progress-gesture="false" :show-center-play-btn="false"></video>
+            </div>
+            <div v-show="!openIntercom" class="intercom-icon">
               <common-icons type="iconmonitor" size="168" color="#fff"></common-icons>
             </div>
           </div>
@@ -196,13 +198,13 @@
       <div class="intercom-notice" v-if="noticeList.length">
         <div class="notice-content">{{ missCallName }}</div>
         <div class="notice-btn-box">
-          <div class="btn-item btn-img" :class="{ 'btn-disabled': disableAnswerBtn }" @touchstart.stop="handleAnswerCall">
+          <div class="btn-item btn-img" :class="{ 'btn-disabled': disableAnswerBtn }" @click="handleAnswerCall">
             <text>接听</text>
           </div>
-          <div class="btn-item btn-img" @touchstart.stop="missCallHandler(0)">
+          <div class="btn-item btn-img" @click="missCallHandler(0)">
             <text class="btn-refuse">拒绝</text>
           </div>
-          <div class="btn-item btn-img" @touchstart.stop="missCallHandler(1)">
+          <div class="btn-item btn-img" @click="missCallHandler(1)">
             <text class="btn-divert">转移</text>
           </div>
         </div>
@@ -219,7 +221,7 @@
             <div class="cancel-btn" @click="closeModal('TerminalMonitor')">
               <span>取消</span>
             </div>
-            <div class="confirm-btn" @touchstart.stop="terminalChatConfirm">
+            <div class="confirm-btn" @click="terminalChatConfirm">
               <span>确认</span>
             </div>
           </div>
@@ -235,7 +237,7 @@
             <div class="cancel-btn" @click="closeModal('ControlMonitor')">
               <span>取消</span>
             </div>
-            <div class="confirm-btn" @touchstart.stop="controlChatConfirm">
+            <div class="confirm-btn" @click="controlChatConfirm">
               <span>确认</span>
             </div>
           </div>
@@ -251,7 +253,7 @@
             <div class="cancel-btn" @click="closeModal('ManageMonitor')">
               <span>取消</span>
             </div>
-            <div class="confirm-btn" @touchstart.stop="managerChatConfirm">
+            <div class="confirm-btn" @click="managerChatConfirm">
               <span>确认</span>
             </div>
           </div>
@@ -265,7 +267,7 @@
             <div class="cancel-btn" @click="closeModal('VideoCallModal')">
               <span>取消</span>
             </div>
-            <div class="confirm-btn" @touchstart.stop="videoChatConfirm">
+            <div class="confirm-btn" @click="videoChatConfirm">
               <span>确认</span>
             </div>
           </div>
@@ -302,7 +304,7 @@
             <div class="cancel-btn" @click="closeModal('VolumeModal')">
               <span>取消</span>
             </div>
-            <div class="confirm-btn" @touchstart.stop="intercomVolume">
+            <div class="confirm-btn" @click="intercomVolume">
               <span>确认</span>
             </div>
           </div>
@@ -416,7 +418,7 @@
                 <div class="misscall-table-main" v-for="(item, index) in recordList" :key="index">
                   <div class="table-content">
                     <div class="misscall-table-item" style="flex: 1">
-                      {{ item.roomName }}
+                      {{ item.roomNo }}
                     </div>
                     <div class="misscall-table-item" style="flex: 1">
                       {{ item.time }}
@@ -455,7 +457,9 @@ import {
   dateFormat,
   readDirectory,
   uniqueArr,
+  currentPages
 } from "@/common/utils/util.js";
+import { startRtcVideo, stopRtcVideo } from "@/static/js/webrtc.js";
 import vtimeLine from "@/components/v-timeLine/v-timeLine.vue";
 import monitorList from "@/static/mock/monitorList.json";
 import missCallColumns from "@/static/mock/missCallColumns.json";
@@ -560,7 +564,8 @@ export default {
       // 轮巡索引
       pollingIndex: 0,
       // 禁止频繁点击接听
-      disableAnswerBtn: false
+      disableAnswerBtn: false,
+      videoNode: null,
     };
   },
   computed: {
@@ -585,8 +590,6 @@ export default {
       alarmList: (state) => state.app.alarmList,
       // 未接来电监室名
       missCallName: (state) => state.app.missCallName,
-      // 来邦服务状态
-      IPCState: (state) => state.app.IPCState,
       // 禁止Tab切换
       disableTab: (state) => state.app.disableTab,
     }),
@@ -606,7 +609,6 @@ export default {
     this.getControlInfo();
     // 获取动态信息
     this.getDynamicInfo();
-    this.$parent.stopLivePusher();
   },
   beforeDestroy() {
     clearTimeout(this.timer);
@@ -693,11 +695,13 @@ export default {
       let res = await Api.apiCall("post", Api.index.getPrisonerInfo, params);
       if (res.state.code == 200) {
         this.loadState = false;
-        this.totalPage = res.page.totalPage;
-        res.data.map((item) => {
-          item.pdabh = (item.dabh && item.dabh.slice(-4)) || "";
-        });
-        this.prisonerList = this.prisonerList.concat(res.data);
+        if (res.data.length) {
+          this.totalPage = res.page.totalPage;
+          res.data.map((item) => {
+            item.pdabh = (item.dabh && item.dabh.slice(-4)) || "";
+          });
+          this.prisonerList = this.prisonerList.concat(res.data);
+        }
       }
     },
     // 人员图片加载完毕
@@ -745,14 +749,14 @@ export default {
           // 刷新动态信息
           this.getDynamicInfo();
         } else {
-          this.$parent.handleShowToast("请求错误", "center");
+          currentPages().handleShowToast("请求错误", "center");
         }
       }
     },
     // 切换主分机列表
     handleTabChange(page) {
       if (this.openIntercom) {
-        this.$parent.handleShowToast("请先挂断视频", "center", 5000);
+        currentPages().handleShowToast("请先挂断视频", "center", 5000);
         return;
       }
       this.page = page;
@@ -776,7 +780,7 @@ export default {
     // 搜索分机监室
     searchTerminalRoom() {
       if (!this.searchTerminal) {
-        this.$parent.handleShowToast("请输入搜索内容", "center");
+        currentPages().handleShowToast("请输入搜索内容", "center");
         return;
       }
       let reg = new RegExp(this.searchTerminal);
@@ -817,7 +821,7 @@ export default {
     // 搜索主机监室
     searchControlRoom() {
       if (!this.searchControl) {
-        this.$parent.handleShowToast("请输入搜索内容", "center");
+        currentPages().handleShowToast("请输入搜索内容", "center");
         return;
       }
       let reg = new RegExp(this.searchControl);
@@ -888,6 +892,7 @@ export default {
             this.pollingTimer();
           }
         } else {
+          res.data.status = 1;
           switch (res.data.status) {
             case 0:
               this.intercomState = true;
@@ -967,17 +972,17 @@ export default {
     monitorControl(obj) {
       if (this.isPolling) {
         if (!this.roomSelectList.length) {
-          this.$parent.handleShowToast("请先选择监室", "center");
+          currentPages().handleShowToast("请先选择监室", "center");
           return;
         }
       } else {
         if (!Object.keys(this.checked).length) {
-          this.$parent.handleShowToast("请先选择监室", "center");
+          currentPages().handleShowToast("请先选择监室", "center");
           return;
         }
       }
       if (this.openIntercom) {
-        this.$parent.handleShowToast("请先挂断视频", "center", 5000);
+        currentPages().handleShowToast("请先挂断视频", "center", 5000);
         return;
       }
       this.monitorSelect = obj;
@@ -1118,7 +1123,7 @@ export default {
         }, 1000);
         // 初始化主分机列表
         uni.$emit("init-select");
-        getApp().globalData.Base.speechStop();
+        // getApp().globalData.Base.speechStop();
         let roomList = [];
         this.monitorSelect = this.videoChatObj;
         this.setIsOpenModal(false);
@@ -1191,9 +1196,9 @@ export default {
         // 视频对讲已打开
         this.setIsOpenModal(false);
         this.showControlMonitor = false;
-        this.$parent.voiceBroadcast("正在发起视频通话");
+        currentPages().voiceBroadcast("正在发起视频通话");
         const { controlCode } = uni.getStorageSync("controlInfo");
-        this.$parent.sendWebsocket(
+        currentPages().sendWebsocket(
           `{maindevno:"${this.checked.controlCode}",devno:"${controlCode}",type:"100",msg:"16"}`
         );
       }
@@ -1289,62 +1294,23 @@ export default {
       if (!this.offlineState) {
         this.getRadioStatusInfo("200");
         this.setDisableTab(true);
-        if (this.IPCState) {
-          let masterNum = this.checked.masterSipAccount;
-          let slaveNum = this.checked.sipAccount;
-          let devRegType = this.checked.managerType ? 8 : 0;
-          if (Reflect.has(this.checked, "controlCode")) {
-            masterNum = this.checked.sipAccount;
-            slaveNum = 0;
-          }
-          let textType = this.monitorSelect.id == "0" ? "监视监听" : "视频对讲";
-          this.operateContent = `开启${this.checked.name}${textType}`;
-          switch (this.monitorSelect.id) {
-            // 监视监听
-            case "0":
-              this.setCallState(false);
-              console.log("开始监听：", 0, masterNum, slaveNum, 0);
-              getApp().globalData.FloatUniModule.deviceClick(
-                0,
-                masterNum,
-                slaveNum,
-                0
-              );
-              break;
-            // 视频对讲
-            case "1":
-              this.setCallState(true);
-              // console.log("开始对讲分机：", 0, masterNum, slaveNum, devRegType);
-              // getApp().globalData.FloatUniModule.deviceClick(
-              //   0,
-              //   masterNum,
-              //   slaveNum,
-              //   devRegType
-              // );
-
-              const { controlCode } = uni.getStorageSync("controlInfo");
-              let webrtcServerUrl = uni.getStorageSync("webrtcServerUrl");
-              this.$parent.sendWebsocket(
-                `{maindevno:"${controlCode}",devno:"${this.checked.terminalCode}",type:"1100",msg:"0"}`,
-                () => {
-                  let reqJson = {
-                    position: { width: 1156, height: 760, left: 364, top: 178 },
-                    data: Object.assign({}, this.checked, {
-                      controlCode,
-                    }),
-                    url: `${webrtcServerUrl}/web-control`,
-                  };
-                  getApp().globalData.Base.gotoNativePage(reqJson);
-                  this.setOpenIntercom(true);
-                  this.setHangupState(true);
-                }
-              );
-              break;
-          }
-        } else {
-          this.setOpenIntercom(false);
-          this.setDisableTab(false);
-          this.$parent.handleShowToast("对讲服务已离线", "center", 5000);
+        let textType = this.monitorSelect.id == "0" ? "监视监听" : "视频对讲";
+        this.operateContent = `开启${this.checked.name}${textType}`;
+        const { controlCode } = uni.getStorageSync("controlInfo");
+        this.setOpenIntercom(true);
+        this.setHangupState(true);
+        this.videoNode = this.$refs.localVideo.$refs.video;
+        switch (this.monitorSelect.id) {
+          // 监视监听
+          case "0":
+            this.setCallState(false);
+            startRtcVideo(this.videoNode, controlCode, this.checked.terminalCode, 0);
+            break;
+          // 视频对讲
+          case "1":
+            this.setCallState(true);
+            startRtcVideo(this.videoNode, controlCode, this.checked.terminalCode, 1);
+            break;
         }
         setTimeout(() => {
           if (!this.openIntercom) {
@@ -1366,60 +1332,28 @@ export default {
               this.stopMonitor();
             });
           } else {
-            let masterNum = this.checked.masterSipAccount;
-            let slaveNum = this.checked.sipAccount;
-            let devRegType = this.checked.managerType ? 8 : 0;
-            if (Reflect.has(this.checked, "controlCode")) {
-              masterNum = this.checked.sipAccount;
-              slaveNum = 0;
-            }
+
             switch (this.monitorSelect.id) {
               // 挂断监视监听
               case "0":
                 this.setMonitorState(false);
                 this.setCallState(false);
                 this.operateContent = `停止${this.checked.name}监视监听`;
-                console.log("挂断监听：", 0, masterNum, slaveNum, 0);
-                getApp().globalData.FloatUniModule.nativeHangup(
-                  0,
-                  masterNum,
-                  slaveNum,
-                  0
-                );
+                stopRtcVideo();
                 break;
               // 挂断视频对讲
               case "1":
-                // const { controlCode } = uni.getStorageSync("controlInfo");
-                // this.operateContent = `挂断${this.checked.name}视频对讲`;
-
                 const { controlCode } = uni.getStorageSync("controlInfo");
+                this.operateContent = `挂断${this.checked.name}视频对讲`;
                 if (this.page == 0) {
                   // 挂断分机|仓外屏
-                  // this.$parent.sendWebsocket(
-                  //   `{maindevno:"${controlCode}",devno:"${this.checked.terminalCode}",type:"100",msg:"1"}`, () => {
-                  //     console.log("挂断分机：", 0, masterNum, slaveNum, devRegType);
-                  //     getApp().globalData.FloatUniModule.nativeHangup(
-                  //       0,
-                  //       masterNum,
-                  //       slaveNum,
-                  //       devRegType
-                  //     );
-                  //   }
-                  // );
-
-                  this.$parent.sendWebsocket(
-                    `{maindevno:"${controlCode}",devno:"${this.checked.terminalCode}",type:"1100",msg:"1"}`,
-                    () => {
-                      getApp().globalData.Base.toggleCommonBtn("buttonControlExit");
-                      this.setOpenIntercom(false);
-                      this.isMute = false;
-                      getApp().globalData.FloatUniModule.setExtMicEna(true);
-                      console.log("关闭静音");
-                    }
+                  currentPages().sendWebsocket(
+                    `{maindevno:"${controlCode}",devno:"${this.checked.terminalCode}",type:"100",msg:"1"}`
                   );
+                  stopRtcVideo();
                 } else {
                   // 挂断主机
-                  this.$parent.sendWebsocket(
+                  currentPages().sendWebsocket(
                     `{maindevno:"${controlCode}",devno:"${this.checked.controlCode}",type:"100",msg:"26"}`, () => {
                       console.log("挂断主机：", 0, masterNum, slaveNum, 0);
                       getApp().globalData.FloatUniModule.nativeHangup(
@@ -1433,7 +1367,7 @@ export default {
                 }
                 break;
             }
-            await this.stopIntercomHandler(devRegType == 8 ? false : true);
+            await this.stopIntercomHandler();
           }
           this.setCallState(false);
           this.setHangupState(false);
@@ -1443,10 +1377,10 @@ export default {
       }
     },
     // 挂断视频通话处理
-    stopIntercomHandler(state = false) {
-      this.$parent.voiceBroadcast("对讲已挂断");
+    stopIntercomHandler() {
+      // currentPages().voiceBroadcast("对讲已挂断");
       this.clearCallTimer();
-      this.hangupDinamicInfo(state);
+      this.hangupDinamicInfo(true);
       this.setOpenIntercom(false);
     },
     // 挂断视频对讲动态
@@ -1470,7 +1404,7 @@ export default {
         // 取消分机视频通话
         terminalCode = this.intercomInfo.devno;
       }
-      this.$parent.sendWebsocket(
+      currentPages().sendWebsocket(
         `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"100",msg:"6"}`
       );
       this.terminalList.children.forEach((list) => {
@@ -1503,7 +1437,7 @@ export default {
         // 取消主机视频通话
         terminalCode = this.intercomInfo.devno;
       }
-      this.$parent.sendWebsocket(
+      currentPages().sendWebsocket(
         `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"100",msg:"6",extend:"${controlName}"}`
       );
       this.controlList.children.map((list) => {
@@ -1528,7 +1462,7 @@ export default {
           this.setMuted(false);
           let terminalCode = roomList.map((item) => item.terminalCode);
           let terminalName = roomList.map((item) => item.name);
-          this.$parent.sendWebsocket(
+          currentPages().sendWebsocket(
             `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"200",msg:"1"}`
           );
           this.setDynamicInfo("200", `停止${terminalName}广播`);
@@ -1552,19 +1486,19 @@ export default {
         params
       );
       if (res.state.code == 200) {
-        this.$parent.handleShowToast("保存状态成功", "bottom");
+        currentPages().handleShowToast("保存状态成功", "bottom");
       }
     },
     // 关闭对讲语音播报定时器
     clearCallTimer() {
-      getApp().globalData.Base.speechStop();
+      // getApp().globalData.Base.speechStop();
       clearInterval(this.callTimer);
     },
     // 开启对讲播报定时器
     startCallTimer(content) {
-      this.$parent.voiceBroadcast(content);
+      currentPages().voiceBroadcast(content);
       this.callTimer = setInterval(() => {
-        this.$parent.voiceBroadcast(content);
+        currentPages().voiceBroadcast(content);
       }, 5000);
     },
     // 关闭视频通话弹框
@@ -1603,10 +1537,10 @@ export default {
           });
           this.answerCallHandler();
         } else {
-          this.$parent.handleShowToast("请先挂断当前对讲", "center");
+          currentPages().handleShowToast("请先挂断当前对讲", "center");
         }
       } else {
-        if (!this.$parent.isAlarmRepeat && !this.isHangupRepeat && !this.isRepeatState) {
+        if (!currentPages().isAlarmRepeat && !this.isHangupRepeat && !this.isRepeatState) {
           this.answerCallHandler();
         }
       }
@@ -1619,7 +1553,7 @@ export default {
         this.isRepeatState = false;
         if (this.alarmList.length) {
           const { controlCode } = uni.getStorageSync("controlInfo");
-          this.$parent.sendWebsocket(
+          currentPages().sendWebsocket(
             `{maindevno:"${controlCode}",devno:"${this.alarmList[0].devno}",type:"500",msg:"5"}`
           );
         }
@@ -1651,14 +1585,14 @@ export default {
           if (type == 0) {
             // 拒绝未接来电
             terminalName = this.alarmList[0].name;
-            this.$parent.sendWebsocket(
+            currentPages().sendWebsocket(
               `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"500",msg:"2"}`
             );
             this.setDynamicInfo("500", `取消${terminalName}应急报警`);
           } else {
             // 转移未接来电
             let extend = JSON.parse(this.alarmList[0].extend);
-            this.$parent.sendWebsocket(
+            currentPages().sendWebsocket(
               `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"500",msg:"6",extend:{'roomName':'${extend.roomName}', 'alarmId':'${extend.alarmId}'}}`
             );
           }
@@ -1669,13 +1603,13 @@ export default {
           if (type == 0) {
             // 拒绝未接来电
             terminalName = this.chatList[0].name;
-            this.$parent.sendWebsocket(
+            currentPages().sendWebsocket(
               `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"100",msg:"6"}`
             );
             this.setDynamicInfo("100", `取消${terminalName}视频对讲`);
           } else {
             // 转移未接来电
-            this.$parent.sendWebsocket(
+            currentPages().sendWebsocket(
               `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"100",msg:"14"}`
             );
           }
@@ -1722,10 +1656,10 @@ export default {
           });
           this.callBackHandler(item, index);
         } else {
-          this.$parent.handleShowToast("请先挂断当前对讲", "center");
+          currentPages().handleShowToast("请先挂断当前对讲", "center");
         }
       } else {
-        if (!this.$parent.isAlarmRepeat && !this.isHangupRepeat && !this.isRepeatState) {
+        if (!currentPages().isAlarmRepeat && !this.isHangupRepeat && !this.isRepeatState) {
           this.callBackHandler(item, index);
         }
       }
@@ -1816,7 +1750,7 @@ export default {
         // 获取分机音量
         terminalCode = this.checked.terminalCode;
       }
-      this.$parent.sendWebsocket(
+      currentPages().sendWebsocket(
         `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"100",msg:"8",extend:""}`
       );
       // 隐藏视频画面
@@ -1830,9 +1764,9 @@ export default {
         Number(this.controlVolume)
       );
       // 分机音量调节
-      if (Object.keys(this.$parent.terminalInfo).length) {
-        const { maindevno, devno } = this.$parent.terminalInfo;
-        this.$parent.sendWebsocket(
+      if (Object.keys(currentPages().terminalInfo).length) {
+        const { maindevno, devno } = currentPages().terminalInfo;
+        currentPages().sendWebsocket(
           `{maindevno:"${maindevno}",devno:"${devno}",type:"100",msg:"8",extend:"${this.terminalVolume}"}`
         );
         this.closeModal("VolumeModal");
@@ -1851,9 +1785,8 @@ export default {
     // 查询录像记录
     videoRecordSearch() {
       this.recordList = [];
-      let dir = uni.getStorageSync("videoRecordDir");
       let date = dateFormat("YYYYMMDD", new Date(this.recordDate));
-      let dirPath = `${dir}${date}/`;
+      let dirPath = `/storage/1AB6-BDFF/Rec/${date}/`;
       this.openModal("RecordModal");
       readDirectory(dirPath).then(
         (res) => {
@@ -1885,31 +1818,24 @@ export default {
     },
     // 查询录像记录数据处理
     videoRecordHandler(res) {
-      let videolist = [];
-      let terminalMap = {};
-      this.terminalList.children.map((list) => {
-        list.children.map((item) => {
-          terminalMap = Object.assign(terminalMap, { [item.sipAccount]: item.name });
-        });
-      });
+      let list = [];
       res.forEach((item) => {
         let record = item.name.slice(0, item.name.indexOf(".")).split("_");
-        let account = parseInt(record[1].slice(3));
-        let roomName = terminalMap[account] || account;
+        let roomNo = parseInt(record[1].slice(3));
         let date1 = record[3].replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
         let date2 = record[4].replace(/(\d{2})(\d{2})(\d{2})/, "$1:$2:$3");
         let time = `${date1} ${date2}`;
         let name = item.name;
         let path = item.fullPath;
-        videolist.push({ roomName, time, name, path });
+        list.push({ roomNo, time, name, path });
       });
-      videolist.sort((a, b) => {
+      list.sort((a, b) => {
         return b.time.localeCompare(a.time);
       });
-      this.recordList = videolist;
+      this.recordList = list;
       if (!!this.recordRoomNo) {
         this.recordList = this.recordList.filter(
-          (item) => item.roomName.includes(this.recordRoomNo)
+          (item) => item.roomNo == parseInt(this.recordRoomNo)
         );
       }
     },
@@ -1989,7 +1915,7 @@ export default {
         this.clearCallTimer();
         const { controlCode } = uni.getStorageSync("controlInfo");
         let managerCode = this.intercomInfo.terminalCode;
-        this.$parent.sendWebsocket(
+        currentPages().sendWebsocket(
           `{maindevno:"${controlCode}",devno:"${managerCode}",type:"100",msg:"6"}`
         );
         this.setDynamicInfo("100", `取消${this.intercomInfo.name}视频对讲`);

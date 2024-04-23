@@ -49,7 +49,7 @@
         } else if (this.clickCount == 2) {
           this.endTime = new Date().getTime();
           if (this.endTime - this.startTime < 300) {
-            this.getAppInfo();
+            // this.getAppInfo();
             this.isShowCenter = !this.isShowCenter;
             setTimeout(() => {
               this.isShowCenter = !this.isShowCenter;
@@ -60,7 +60,7 @@
       },
       getAppInfo () {
         this.version = plus.runtime.version;
-        this.curIP = getApp().globalData.Base.getIpAddress().ip;
+        this.curIP = this.$config.controlIP;
         this.authIP = uni.getStorageSync('authControlIP');
       }
 		}

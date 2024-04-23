@@ -4,70 +4,36 @@
       <div class="manager-left">
         <div class="manager-left-box">
           <div class="left-tab">
-            <div
-              :class="page == 0 ? 'tab-active' : 'tab'"
-              @click="handleTabChange(0)"
-            >
+            <div :class="page == 0 ? 'tab-active' : 'tab'" @click="handleTabChange(0)">
               分机列表
             </div>
-            <div
-              :class="page == 1 ? 'tab-active' : 'tab'"
-              @click="handleTabChange(1)"
-            >
+            <div :class="page == 1 ? 'tab-active' : 'tab'" @click="handleTabChange(1)">
               分组列表
             </div>
           </div>
           <div class="left-content">
             <div v-if="page == 0" class="terminal-list">
               <div class="terminal-search rectangle-img">
-                <input
-                  class="input-search"
-                  v-model="searchTerminal"
-                  @input="searchTerminalChange"
-                />
-                <common-icons
-                  type="iconsearch"
-                  color="#fff"
-                  size="20"
-                  @click="searchTerminalRoom"
-                ></common-icons>
+                <input class="input-search" v-model="searchTerminal" @input="searchTerminalChange" />
+                <common-icons type="iconsearch" color="#fff" size="20" @click="searchTerminalRoom"></common-icons>
               </div>
               <div class="terminal-room-box">
                 <scroll-view scroll-y="true">
-                  <v-tree
-                    showCheckbox
-                    :root="terminalList"
-                    :changeHandler="terminalSelect"
-                  ></v-tree>
+                  <v-tree showCheckbox :root="terminalList" :changeHandler="terminalSelect"></v-tree>
                 </scroll-view>
               </div>
             </div>
             <div v-if="page == 1" class="groups-list">
               <div class="terminal-search rectangle-img">
-                <input
-                  class="input-search"
-                  v-model="searchGroup"
-                  @input="searchGroupChange"
-                />
+                <input class="input-search" v-model="searchGroup" @input="searchGroupChange" />
                 <div class="search-btn" @click="searchGroupRoom">
-                  <common-icons
-                    type="iconsearch"
-                    color="#fff"
-                    size="20"
-                  ></common-icons>
+                  <common-icons type="iconsearch" color="#fff" size="20"></common-icons>
                 </div>
               </div>
               <div class="terminal-room-box">
                 <scroll-view scroll-y="true">
-                  <v-tree
-                    ref="vTree"
-                    showCheckbox
-                    :showGroup="true"
-                    :root="groupList"
-                    :changeHandler="groupSelect"
-                    @group-change="openModifyGroup"
-                    @group-delete="openDeleteGroup"
-                  ></v-tree>
+                  <v-tree ref="vTree" showCheckbox :showGroup="true" :root="groupList" :changeHandler="groupSelect"
+                    @group-change="openModifyGroup" @group-delete="openDeleteGroup"></v-tree>
                 </scroll-view>
               </div>
             </div>
@@ -77,24 +43,13 @@
       <div class="manager-center">
         <div class="manager-center-head">
           <div class="center-head-box">
-            <div
-              class="head-tabs"
-              v-for="item in managerList"
-              :key="item.index"
-            >
-              <div
-                :class="
-                  currentPage == item.index
-                    ? 'tab-active bottom-tab-active'
-                    : 'tab'
-                "
-                @click="handlePageChange(item.index)"
-              >
-                <common-icons
-                  :type="item.type"
-                  :color="currentPage == item.index ? '#35fffa' : '#fff'"
-                  size="24"
-                ></common-icons>
+            <div class="head-tabs" v-for="item in managerList" :key="item.index">
+              <div :class="currentPage == item.index
+                ? 'tab-active bottom-tab-active'
+                : 'tab'
+                " @click="handlePageChange(item.index)">
+                <common-icons :type="item.type" :color="currentPage == item.index ? '#35fffa' : '#fff'"
+                  size="24"></common-icons>
                 {{ item.name }}
               </div>
             </div>
@@ -104,43 +59,23 @@
           <div class="manager-center-content">
             <div class="center-btn-box">
               <div class="center-btn-left">
-                <div
-                  class="btn-left"
-                  :class="isAudioAll ? 'btn-active-img' : 'btn-img'"
-                  @click="handleSelectAll"
-                >
+                <div class="btn-left" :class="isAudioAll ? 'btn-active-img' : 'btn-img'" @click="handleSelectAll">
                   <text>全选</text>
                 </div>
-                <div
-                  v-if="currentPage !== 2"
-                  class="btn-left btn-img"
-                  @click="handleAddGroup(true)"
-                >
+                <div v-if="currentPage !== 2" class="btn-left btn-img" @click="handleAddGroup(true)">
                   <text>{{ currentPage >= 5 ? "一键读取" : "一键开启" }}</text>
                 </div>
                 <div class="btn-left btn-img" @click="handleAddGroup(false)">
                   <text>{{ currentPage >= 5 ? "一键上传" : "一键关闭" }}</text>
                 </div>
-                <div
-                  v-if="currentPage === 0"
-                  class="btn-left btn-img"
-                  @click="openModifyGroup"
-                >
+                <div v-if="currentPage === 0" class="btn-left btn-img" @click="openModifyGroup">
                   <text>{{ "一键布防" }}</text>
                 </div>
-                <div
-                  v-if="currentPage === 0"
-                  class="btn-left btn-img"
-                  @click="closeModifyGroup"
-                >
+                <div v-if="currentPage === 0" class="btn-left btn-img" @click="closeModifyGroup">
                   <text>{{ "一键撤防" }}</text>
                 </div>
               </div>
-              <div
-                class="center-btn-right"
-                style="font-size: 18upx"
-                @click="showAlarmModal"
-              >
+              <div class="center-btn-right" style="font-size: 18upx" @click="showAlarmModal">
                 已选中：<text style="color: #21cdc5; font-size: 18upx">{{
                   selectSongNum
                 }}</text>
@@ -151,57 +86,33 @@
                 <div class="manager-table-box">
                   <div class="table-head">
                     <div class="head-checkbox" @click="checkAudioAll">
-                      <common-icons
-                        :type="
-                          isAudioAll ? 'iconcheckbox' : 'iconcheck-unselect'
-                        "
-                        color="#2A4273"
-                        size="24"
-                      ></common-icons>
+                      <common-icons :type="isAudioAll ? 'iconcheckbox' : 'iconcheck-unselect'
+                        " color="#2A4273" size="24"></common-icons>
                     </div>
-                    <div
-                      class="manager-head-item"
-                      v-for="(item, index) in columns"
-                      :key="index"
-                    >
+                    <div class="manager-head-item" v-for="(item, index) in columns" :key="index">
                       {{ item.title }}
                     </div>
                   </div>
                   <scroll-view scroll-y="true" class="manager-table-scroll">
-                    <div
-                      class="manager-table-main"
-                      v-for="(item, index) in audioTableList"
-                      :key="index"
-                    >
+                    <div class="manager-table-main" v-for="(item, index) in audioTableList" :key="index">
                       <div class="table-content">
-                        <div
-                          class="content-checkbox"
-                          @click="checkAudioChange(item, index)"
-                        >
-                          <common-icons
-                            :type="
-                              item.isSelectAudio
-                                ? 'iconcheckbox'
-                                : 'iconcheck-unselect'
-                            "
-                            color="#2A4273"
-                            size="24"
-                          ></common-icons>
+                        <div class="content-checkbox" @click="checkAudioChange(item, index)">
+                          <common-icons :type="item.isSelectAudio
+                            ? 'iconcheckbox'
+                            : 'iconcheck-unselect'
+                            " color="#2A4273" size="24"></common-icons>
                         </div>
                         <div class="manager-table-item" style="flex: 1">
                           {{ item.site }}
                         </div>
-                        <div
-                          class="manager-table-item"
-                          style="flex: 1"
-                          :class="{ red: currentPage === 2 && item.status }"
-                        >
+                        <div class="manager-table-item" style="flex: 1"
+                          :class="{ red: currentPage === 2 && item.status }">
                           {{
                             currentPage > 4
-                              ? item.status
-                                ? "在线"
-                                : "离线"
-                              : item.status
+                            ? item.status
+                              ? "在线"
+                              : "离线"
+                            : item.status
                               ? currentPage === 2
                                 ? "报警中"
                                 : "已开启"
@@ -226,46 +137,29 @@
                         </template>
                         <template v-if="currentPage > 5">
                           <div class="manager-table-item" style="flex: 1">
-                            {{ item.value
-                            }}{{ currentPage === 6 ? "kWh" : "m³" }}
+                            {{ item.value }}{{ currentPage === 6 ? "kWh" : "m³" }}
                           </div>
                         </template>
                         <div class="manager-table-item" style="flex: 1">
-                          <common-icons
-                            v-if="currentPage <= 4"
-                            :type="type"
-                            :color="
-                              item.status
-                                ? currentPage === 2
-                                  ? 'red'
-                                  : '#21cdc5'
-                                : '#ccc'
-                            "
-                            size="24"
-                            @click="handleItemChange(item, !item.status)"
-                          ></common-icons>
+                          <common-icons v-if="currentPage <= 4" :type="type" :color="item.status
+                            ? currentPage === 2
+                              ? 'red'
+                              : '#21cdc5'
+                            : '#ccc'
+                            " size="24" @click="handleItemChange(item, !item.status)"></common-icons>
                           <template v-else>
-                            <button
-                              type="primary"
-                              style="margin-left: 5upx; margin-right: 5upx"
-                              @click="readingDate(index)"
-                            >
+                            <button type="primary" style="margin-left: 5upx; margin-right: 5upx"
+                              @click="readingDate(index)">
                               读取
                             </button>
-                            <button
-                              type="primary"
-                              style="margin-left: 5upx; margin-right: 5upx"
-                              @click="handleItemChange"
-                            >
+                            <button type="primary" style="margin-left: 5upx; margin-right: 5upx"
+                              @click="handleItemChange">
                               上传
                             </button>
                           </template>
                         </div>
                       </div>
-                      <image
-                        class="table-line"
-                        src="@/static/images/table/bottom.png"
-                      ></image>
+                      <image class="table-line" src="@/static/images/table/bottom.png"></image>
                     </div>
                   </scroll-view>
                 </div>
@@ -277,28 +171,13 @@
       <div class="manager-right" @click="changeStatus">
         <div class="manager-right-title">人员信息</div>
         <div class="right-personel-box">
-          <scroll-view
-            class="right-personel-scroll"
-            scroll-y
-            @scrolltolower="scrollToLower"
-          >
+          <scroll-view class="right-personel-scroll" scroll-y @scrolltolower="scrollToLower">
             <div class="right-info-list">
               <div v-for="(pitem, pindex) in prisonerList" :key="pitem.id">
-                <div
-                  class="right-info-item"
-                  :style="pindex % 2 ? 'margin-left: 16.66upx' : ''"
-                >
+                <div class="right-info-item" :style="pindex % 2 ? 'margin-left: 16.66upx' : ''">
                   <div class="info-img prisoner-img">
-                    <image
-                      v-if="loadState"
-                      :src="pitem.imgUrl"
-                      @load="handleLoadImage"
-                    ></image>
-                    <image
-                      v-else
-                      src="/static/images/intercom/default.jpg"
-                      @load="handleLoadImage"
-                    ></image>
+                    <image v-if="loadState" :src="pitem.imgUrl" @load="handleLoadImage"></image>
+                    <image v-else src="/static/images/intercom/default.jpg" @load="handleLoadImage"></image>
                   </div>
                   <div class="info-img">
                     <div class="content">
@@ -322,10 +201,7 @@
         </div>
         <div class="right-dynamic-box">
           <scroll-view scroll-y="true" class="right-dynamic-scroll">
-            <vtimeLine
-              title="对讲动态信息"
-              :messageList="messageList"
-            ></vtimeLine>
+            <vtimeLine title="对讲动态信息" :messageList="messageList"></vtimeLine>
           </scroll-view>
         </div>
       </div>
@@ -349,17 +225,14 @@
       </neil-modal>
       <!-- 添加分组弹框 -->
       <neil-modal :show="showAddGroup" @close="closeModal('AddGroup')">
-        <div
-          class="manager-modal-container"
-          style="width: 480upx; height: 320upx"
-        >
+        <div class="manager-modal-container" style="width: 480upx; height: 320upx">
           <div class="neil-modal-label">
             确认{{
               currentPage > 4
-                ? isRead
-                  ? "读取"
-                  : "上传"
-                : addGroupName
+              ? isRead
+                ? "读取"
+                : "上传"
+              : addGroupName
                 ? "开启"
                 : "关闭"
             }}？
@@ -411,11 +284,7 @@
             <div class="label-wrapper">
               <div class="group-modal-label">定时开启时间：</div>
               <div class="group-content rectangle-img">
-                <e-picker
-                  mode="dateTime"
-                  class="picker-img"
-                  @change="handleSelectStartDate"
-                >
+                <e-picker mode="dateTime" class="picker-img" @change="handleSelectStartDate">
                   <div class="group-name">{{ startTime || "-" }}</div>
                 </e-picker>
               </div>
@@ -423,11 +292,7 @@
             <div class="label-wrapper">
               <div class="group-modal-label">定时关闭时间：</div>
               <div class="group-content rectangle-img">
-                <e-picker
-                  mode="dateTime"
-                  class="picker-img"
-                  @change="handleSelectEndDate"
-                >
+                <e-picker mode="dateTime" class="picker-img" @change="handleSelectEndDate">
                   <div class="group-name">{{ endTime || "-" }}</div>
                 </e-picker>
               </div>
@@ -472,7 +337,7 @@ import vtimeLine from "@/components/v-timeLine/v-timeLine.vue";
 import vTree from "@/components/v-tree/v-tree.vue";
 import commonIcons from "@/components/common-icons/common-icons.vue";
 import Api from "@/common/api.js";
-import { unique, uniqueArr, dateFormat } from "@/common/utils/util.js";
+import { unique, uniqueArr, dateFormat, currentPages } from "@/common/utils/util.js";
 import managerList from "@/static/mock/manager/managerList.json";
 import managerColumns from "@/static/mock/manager/managerColumns.json";
 import roomColumns from "@/static/mock/roomColumns.json";
@@ -739,7 +604,7 @@ export default {
     // 搜索分机监室
     searchTerminalRoom() {
       if (!this.searchTerminal) {
-        this.$parent.handleShowToast("请输入搜索内容", "center");
+        currentPages().handleShowToast("请输入搜索内容", "center");
         return;
       }
       let reg = new RegExp(this.searchTerminal);
@@ -788,7 +653,7 @@ export default {
     // 搜索分组监室
     searchGroupRoom() {
       if (!this.searchGroup) {
-        this.$parent.handleShowToast("请输入搜索内容", "center");
+        currentPages().handleShowToast("请输入搜索内容", "center");
         return;
       }
       let reg = new RegExp(this.searchGroup);
@@ -889,7 +754,7 @@ export default {
         });
       }
       this.roomTableList = list;
-      this.roomTableList = uniqueArr(this.roomTableList);
+      this.roomTableList = uniqueArr(this.roomTableList, "name");
       if (!list.length) {
         this.isRoomAll = false;
       } else {
@@ -923,7 +788,7 @@ export default {
     // 全选音频表格行
     checkAudioAll() {
       if (this.audioState) {
-        this.$parent.handleShowToast("请先停止分机播放", "center");
+        currentPages().handleShowToast("请先停止分机播放", "center");
         return;
       }
       if (!this.audioTableList.length) {
@@ -969,7 +834,7 @@ export default {
     // 选择音频表格行
     checkAudioChange(audio, index) {
       if (this.audioState) {
-        this.$parent.handleShowToast("请先停止分机播放", "center");
+        currentPages().handleShowToast("请先停止分机播放", "center");
         return;
       }
       this.audioSelectList = [];
@@ -1068,16 +933,10 @@ export default {
       this.audioState = !this.audioState;
       const { controlCode } = uni.getStorageSync("controlInfo");
       let terminalCode = this.roomSelectList
-        .map((item) => {
-          return item.terminalCode;
-        })
-        .join(",");
+        .map((item) => item.terminalCode)
+        .toString();
       this.rootName = this.roomSelectList[0].rootName;
-      this.prisonName = this.roomSelectList
-        .map((item) => {
-          return item.name;
-        })
-        .join(",");
+      this.prisonName = this.roomSelectList.map((item) => item.name).toString();
       let audioList = [];
       this.audioSelectList.map((item) => {
         let obj = {
@@ -1097,7 +956,7 @@ export default {
             audioList: audioList,
           },
         };
-        this.$parent.sendWebsocket(JSON.stringify(controlObj));
+        currentPages().sendWebsocket(JSON.stringify(controlObj));
         let params = {
           controlId: uni.getStorageSync("controlInfo").id,
           type: "300",
@@ -1114,11 +973,9 @@ export default {
     hanleStopAudio() {
       const { controlCode } = uni.getStorageSync("controlInfo");
       let terminalCode = this.roomSelectList
-        .map((item) => {
-          return item.terminalCode;
-        })
-        .join(",");
-      this.$parent.sendWebsocket(
+        .map((item) => item.terminalCode)
+        .toString();
+      currentPages().sendWebsocket(
         `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"300",msg:"1"}`
       );
       let params = {
@@ -1140,7 +997,7 @@ export default {
         // 刷新动态信息
         this.getDynamicInfo();
       } else {
-        this.$parent.handleShowToast("请求错误", "center");
+        currentPages().handleShowToast("请求错误", "center");
       }
     },
     // 分机连接状态
@@ -1174,7 +1031,7 @@ export default {
             this.roomTableList.splice(index, 1, data);
           }
         });
-        this.$parent.sendWebsocket(
+        currentPages().sendWebsocket(
           `{maindevno:"${controlCode}",devno:"${data.terminalCode}",type:"300",msg:"4",extend:"0"}`
         );
       } else {
@@ -1185,7 +1042,7 @@ export default {
             this.roomTableList.splice(index, 1, data);
           }
         });
-        this.$parent.sendWebsocket(
+        currentPages().sendWebsocket(
           `{maindevno:"${controlCode}",devno:"${data.terminalCode}",type:"300",msg:"4",extend:"1"}`
         );
       }
@@ -1193,7 +1050,7 @@ export default {
     // 添加分组弹框
     handleAddGroup(status) {
       if (!this.selectSongNum) {
-        this.$parent.handleShowToast("请先选择监室", "center");
+        currentPages().handleShowToast("请先选择监室", "center");
         return;
       }
       this.isRead = status;
@@ -1220,7 +1077,7 @@ export default {
       if (this.currentPage < 5) {
         this.addGroup();
       } else {
-        this.$parent.handleShowToast("上传成功！", "center");
+        currentPages().handleShowToast("上传成功！", "center");
       }
       this.closeModal("AddGroup");
       let status = this.currentInfo.status ? 1 : 0;
@@ -1252,7 +1109,7 @@ export default {
     async controlHandler(uri) {
       let res = await Api.apiCall("get", Api.test.controlOut + uri, null);
       if (res.state.code == 200) {
-        this.$parent.handleShowToast("指令下发成功！");
+        currentPages().handleShowToast("指令下发成功！");
       }
     },
     addGroup() {
@@ -1296,14 +1153,14 @@ export default {
     // 修改分组弹框
     openModifyGroup(list) {
       if (!this.selectSongNum) {
-        this.$parent.handleShowToast("请先选择监室", "center");
+        currentPages().handleShowToast("请先选择监室", "center");
         return;
       }
       this.showModifyGroup = true;
     },
     closeModifyGroup() {
       if (!this.selectSongNum) {
-        this.$parent.handleShowToast("请先选择监室", "center");
+        currentPages().handleShowToast("请先选择监室", "center");
         return;
       }
       this.audioTableList.map((i) => {
@@ -1322,7 +1179,7 @@ export default {
           return i;
         });
       });
-      this.$parent.handleShowToast("一键撤防成功！", "center");
+      currentPages().handleShowToast("一键撤防成功！", "center");
     },
     // 获取修改分组名称
     modifyGroupChange(e) {
@@ -1341,7 +1198,7 @@ export default {
       });
       this.selectSongNum = 0;
       this.isAudioAll = false;
-      this.$parent.handleShowToast("一键布防成功！", "center");
+      currentPages().handleShowToast("一键布防成功！", "center");
       this.closeModal("ModifyGroup");
     },
     // 修改分组名称

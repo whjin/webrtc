@@ -1,6 +1,6 @@
+import { uniqueArr } from "@/common/utils/util.js";
+
 const state = {
-  // 分机WS数据
-  terminalInfo: {},
   // 对讲信息
   intercomInfo: {},
   // 视频对讲状态
@@ -9,8 +9,6 @@ const state = {
   hangupState: false,
   // 监视监听轮巡状态
   isPolling: false,
-  // 主机视频通话状态
-  controlCallState: false,
   // 监视监听状态
   monitorState: false,
   // 监室离线状态
@@ -35,20 +33,16 @@ const state = {
   missCallNum: 0,
   // 未接来电监室名
   missCallName: "",
-  // 应急报警信息
-  alarmInfo: {},
   // 视频通话列表
   chatList: [],
   // 应急报警列表
   alarmList: [],
-  // 呼叫方状态
+  // 呼叫方状态（控制监听|对讲切换，重要）
   callState: false,
   // Tab状态列表
   tabList: [],
   // 菜单列表
   menuList: [],
-  // 来邦服务状态
-  IPCState: false,
   // 禁止Tab切换
   disableTab: false,
 };
@@ -61,10 +55,6 @@ const mutations = {
   // 菜单列表
   SET_MENULIST(state, list) {
     state.menuList = list;
-  },
-  // 保存分机WS数据
-  SET_TERMINALINFO(state, info) {
-    state.terminalInfo = info;
   },
   // 保存对讲信息
   SET_INTERCOMINFO(state, info) {
@@ -81,10 +71,6 @@ const mutations = {
   // 设置监视监听轮巡状态
   SET_ISPOLLING(state, bool) {
     state.isPolling = bool;
-  },
-  // 设置主机视频通话状态
-  SET_CONTROLCALLSTATE(state, bool) {
-    state.controlCallState = bool;
   },
   // 设置监视监听状态
   SET_MONITORSTATE(state, bool) {
@@ -128,7 +114,9 @@ const mutations = {
       state.isOpenAlarm ||
       state.isOpenModal ||
       state.openIntercom ||
-      state.alarmList.concat(state.chatList).length;
+      state.disableTab ||
+      !!state.chatList.length ||
+      !!state.alarmList.length;
   },
   // 未接来电数
   SET_MISSCALLNUM(state, num) {
@@ -144,23 +132,22 @@ const mutations = {
       state.missCallName = "";
     }
   },
-  // 应急报警信息
-  SET_ALARMINFO(state, info) {
-    state.alarmInfo = info;
-  },
   // 新增应急报警信息
   ADD_ALARMLIST(state, info) {
     state.alarmList.push(info);
+    state.alarmList = uniqueArr(state.alarmList, "devno");
   },
   // 新增视频通话信息
   ADD_CHATLIST(state, info) {
     state.chatList.push(info);
+    state.chatList = uniqueArr(state.chatList, "devno");
   },
   // 删除未接来电信息
   DELETE_MISSCALLINFO(state) {
     if (state.alarmList.length) {
       state.alarmList.shift();
-    } else if (state.chatList.length) {
+    }
+    if (state.chatList.length) {
       state.chatList.shift();
     }
   },
@@ -172,7 +159,8 @@ const mutations = {
           state.alarmList.splice(index, 1);
         }
       });
-    } else if (state.chatList.length) {
+    }
+    if (state.chatList.length) {
       state.chatList.map((item, index) => {
         if (info.devno == item.devno) {
           state.chatList.splice(index, 1);
@@ -188,10 +176,6 @@ const mutations = {
   SET_CALLSTATE(state, bool) {
     state.callState = bool;
   },
-  // 来邦服务状态
-  SET_IPCSTATE(state, bool) {
-    state.IPCState = bool;
-  },
   // 设置Tab切换状态
   SET_DISABLETAB(state, bool) {
     state.disableTab = bool;
@@ -204,6 +188,7 @@ const actions = {
     return new Promise(() => {
       commit("ADD_ALARMLIST", info);
       commit("GET_MISSCALLNAME");
+      commit("SET_MISSCALLSTATE");
     });
   },
   // 新增未接来电信息
@@ -211,6 +196,7 @@ const actions = {
     return new Promise(() => {
       commit("ADD_CHATLIST", info);
       commit("GET_MISSCALLNAME");
+      commit("SET_MISSCALLSTATE");
     });
   },
   // 删除未接来电信息
@@ -218,13 +204,15 @@ const actions = {
     return new Promise(() => {
       commit("DELETE_MISSCALLINFO");
       commit("GET_MISSCALLNAME");
+      commit("SET_MISSCALLSTATE");
     });
   },
   // 删除超时请求信息
-  deleteOvertimeInfo({ commit }, info) {
+  deleteOvertimeCall({ commit }, info) {
     return new Promise(() => {
       commit("DELETE_OVERTIMEINFO", info);
       commit("GET_MISSCALLNAME");
+      commit("SET_MISSCALLSTATE");
     });
   },
 };

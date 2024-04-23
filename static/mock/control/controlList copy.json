@@ -1,0 +1,42 @@
+[
+    {
+        "index": 0,
+        "type": "iconmen",
+        "name": "门禁"
+    },
+    {
+        "index": 1,
+        "type": "iconlamp",
+        "name": "灯光"
+    },
+    {
+        "index": 2,
+        "type": "iconalarmbtn",
+        "name": "报警按钮"
+    },
+    {
+        "index": 3,
+        "type": "iconfancontrol",
+        "name": "风扇"
+    },
+    {
+        "index": 4,
+        "type": "icondianshi",
+        "name": "电视"
+    },
+    {
+        "index": 5,
+        "type": "iconwenshidu",
+        "name": "温湿度"
+    },
+    {
+        "index": 6,
+        "type": "icondianbiao",
+        "name": "电表"
+    },
+    {
+        "index": 7,
+        "type": "iconshuibiao",
+        "name": "水表"
+    }
+]

@@ -5,7 +5,7 @@ import { Base64 } from "./base64.js";
  * @param {Object} timeStamp 时间戳参数 非必传
  * @param {Object} format 格式化样式 非必传
  */
-function getTimeStampDatetime(format = "yyyy-MM-dd HH:mm:ss", timeStamp) {
+function getTimeStampDatetime (format = "yyyy-MM-dd HH:mm:ss", timeStamp) {
   let nowDatetime = new Date();
   timeStamp ? (nowDatetime = new Date(timeStamp)) : (nowDatetime = new Date());
   return nowDatetime.Format(format);
@@ -35,7 +35,7 @@ Date.prototype.Format = function (fmt) {
 };
 
 // 获取日志文件名称
-function getLogFileName() {
+function getLogFileName () {
   // 今日日期
   let nowDate = getTimeStampDatetime("yyyy-MM-dd");
   // 当前时间精确到秒
@@ -63,7 +63,7 @@ function getLogFileName() {
  * @param {Object} params 写入内容
  * @param {Object} encryption 是否加密
  */
-function writeLog(params, encryption) {
+function writeLog (params, encryption) {
   let text = JSON.stringify(params);
 
   plus.io.requestFileSystem(
@@ -125,7 +125,7 @@ function writeLog(params, encryption) {
  * 日志文件上传
  * @param {*} fileDate 需要上传的log文件日期 xxxx-xx-xx
  */
-function uploadLogFile(fileDate) {
+function uploadLogFile (fileDate) {
   const baseUrl = uni.getStorageSync("baseUrl");
   const { controlCode } = uni.getStorageSync("controlInfo");
   uni.uploadFile({

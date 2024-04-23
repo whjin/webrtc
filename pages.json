@@ -3,7 +3,7 @@
 		{
 			"path": "pages/bgMain/bgMain",
 			"style": {
-				"navigationBarTitleText": "主页",
+				"navigationBarTitleText": "管控主机",
 				"app-plus": {
 					"bounce": "none",
 					"subNVues": [
@@ -29,66 +29,12 @@
 					]
 				}
 			}
-		},
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "首页",
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-		},
-		{
-			"path": "pages/intercom/intercom",
-			"style": {
-				"navigationBarTitleText": "视频对讲",
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-		},
-		{
-			"path": "pages/radio/radio",
-			"style": {
-				"navigationBarTitleText": "语音广播",
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-		},
-		{
-			"path": "pages/audio/audio",
-			"style": {
-				"navigationBarTitleText": "音频广播",
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-		},
-		{
-			"path": "pages/video/video",
-			"style": {
-				"navigationBarTitleText": "点播直播",
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
-		},
-		{
-			"path": "pages/setting/setting",
-			"style": {
-				"navigationBarTitleText": "系统设置",
-				"app-plus": {
-					"bounce": "none"
-				}
-			}
 		}
 	],
 	"globalStyle": {
 		"navigationStyle": "custom",
 		"pageOrientation": "landscape",
-		"rpxCalcBaseDeviceWidth": 1140
+		"rpxCalcBaseDeviceWidth": 1060
 	},
 	"condition": {
 		"current": 0,

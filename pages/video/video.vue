@@ -4,72 +4,37 @@
       <div class="video-left">
         <div class="video-left-box">
           <div class="left-tab">
-            <div
-              :class="page == 0 ? 'tab-active' : 'tab'"
-              @click="handleTabChange(0)"
-            >
+            <div :class="page == 0 ? 'tab-active' : 'tab'" @click="handleTabChange(0)">
               分机列表
             </div>
-            <div
-              :class="page == 1 ? 'tab-active' : 'tab'"
-              @click="handleTabChange(1)"
-            >
+            <div :class="page == 1 ? 'tab-active' : 'tab'" @click="handleTabChange(1)">
               分组列表
             </div>
           </div>
           <div class="left-content">
             <div v-if="page == 0" class="terminal-list">
               <div class="terminal-search rectangle-img">
-                <input
-                  class="input-search"
-                  v-model="searchTerminal"
-                  @input="searchTerminalChange"
-                />
-                <common-icons
-                  type="iconsearch"
-                  color="#fff"
-                  size="20"
-                  @click="searchTerminalRoom"
-                ></common-icons>
+                <input class="input-search" v-model="searchTerminal" @input="searchTerminalChange" />
+                <common-icons type="iconsearch" color="#fff" size="20" @click="searchTerminalRoom"></common-icons>
               </div>
               <div class="terminal-room-box">
                 <scroll-view scroll-y="true">
-                  <v-tree
-                    showCheckbox
-                    :disabledSelect="videoState"
-                    :root="terminalList"
-                    :changeHandler="terminalSelect"
-                  ></v-tree>
+                  <v-tree showCheckbox :disabledSelect="videoState" :root="terminalList"
+                    :changeHandler="terminalSelect"></v-tree>
                 </scroll-view>
               </div>
             </div>
             <div v-if="page == 1" class="groups-list">
               <div class="terminal-search rectangle-img">
-                <input
-                  class="input-search"
-                  v-model="searchGroup"
-                  @input="searchGroupChange"
-                />
+                <input class="input-search" v-model="searchGroup" @input="searchGroupChange" />
                 <div class="search-btn" @click="searchGroupRoom">
-                  <common-icons
-                    type="iconsearch"
-                    color="#fff"
-                    size="20"
-                  ></common-icons>
+                  <common-icons type="iconsearch" color="#fff" size="20"></common-icons>
                 </div>
               </div>
               <div class="terminal-room-box">
                 <scroll-view scroll-y="true">
-                  <v-tree
-                    ref="vTree"
-                    showCheckbox
-                    :disabledSelect="videoState"
-                    :showGroup="true"
-                    :root="groupList"
-                    :changeHandler="groupSelect"
-                    @group-change="openModifyGroup"
-                    @group-delete="openDeleteGroup"
-                  ></v-tree>
+                  <v-tree ref="vTree" showCheckbox :disabledSelect="videoState" :showGroup="true" :root="groupList"
+                    :changeHandler="groupSelect" @group-change="openModifyGroup" @group-delete="openDeleteGroup"></v-tree>
                 </scroll-view>
               </div>
             </div>
@@ -80,16 +45,10 @@
         <div class="video-center-head">
           <div class="center-head-box">
             <div class="head-tabs">
-              <div
-                :class="currentPage == 0 ? 'tab-active' : 'tab'"
-                @click="handlePageChange(0)"
-              >
+              <div :class="currentPage == 0 ? 'tab-active' : 'tab'" @click="handlePageChange(0)">
                 视频播放
               </div>
-              <div
-                :class="currentPage == 1 ? 'tab-active' : 'tab'"
-                @click="handlePageChange(1)"
-              >
+              <div :class="currentPage == 1 ? 'tab-active' : 'tab'" @click="handlePageChange(1)">
                 监室列表
               </div>
             </div>
@@ -99,40 +58,20 @@
           <div class="video-center-content">
             <div class="center-btn-box">
               <div class="center-btn-left">
-                <div
-                  class="btn-left"
-                  v-show="!videoState && currentPage == 1"
-                  :class="isRoomAll ? 'btn-active-img' : 'btn-img'"
-                  @click="handleSelectAll"
-                >
+                <div class="btn-left" v-show="!videoState && currentPage == 1"
+                  :class="isRoomAll ? 'btn-active-img' : 'btn-img'" @click="handleSelectAll">
                   <text>全选</text>
                 </div>
-                <div
-                  class="btn-left btn-img"
-                  v-show="!videoState && currentPage == 1"
-                  @click="handleRemoveAll"
-                >
+                <div class="btn-left btn-img" v-show="!videoState && currentPage == 1" @click="handleRemoveAll">
                   <text>移除</text>
                 </div>
-                <div
-                  class="btn-left btn-img"
-                  v-show="currentPage == 1"
-                  @click="handleAddGroup"
-                >
+                <div class="btn-left btn-img" v-show="currentPage == 1" @click="handleAddGroup">
                   <text>添加分组</text>
                 </div>
-                <div
-                  class="btn-left btn-img"
-                  v-show="videoState && currentPage == 1"
-                  @click="decreaseVolume"
-                >
+                <div class="btn-left btn-img" v-show="videoState && currentPage == 1" @click="decreaseVolume">
                   <text>音量－</text>
                 </div>
-                <div
-                  class="btn-left btn-img"
-                  v-show="videoState && currentPage == 1"
-                  @click="increaseVolume"
-                >
+                <div class="btn-left btn-img" v-show="videoState && currentPage == 1" @click="increaseVolume">
                   <text>音量＋</text>
                 </div>
               </div>
@@ -145,32 +84,14 @@
             <div class="center-table-container">
               <div v-if="currentPage == 0">
                 <div class="center-video-box">
-                  <scroll-view
-                    scroll-y="true"
-                    class="center-video-scroll"
-                    @scrolltolower="scrollToLower"
-                  >
+                  <scroll-view scroll-y="true" class="center-video-scroll" @scrolltolower="scrollToLower">
                     <div class="video-list">
-                      <div
-                        class="video-item"
-                        :class="
-                          videoId == item.id ? 'video-select-img' : 'video-img'
-                        "
-                        v-for="(item, index) in videoTableList"
-                        :key="index"
-                        @click="selectVideoChange(item)"
-                      >
+                      <div class="video-item" :class="videoId == item.id ? 'video-select-img' : 'video-img'
+                        " v-for="(item, index) in videoTableList" :key="index" @click="selectVideoChange(item)">
                         <image :src="item.imgUrl"></image>
                         <text>{{ item.name }}</text>
-                        <div
-                          class="video-playing"
-                          v-if="videoPlayId == item.id && videoState"
-                        >
-                          <common-icons
-                            type="iconplaying"
-                            size="28"
-                            color="#35FFFA"
-                          />
+                        <div class="video-playing" v-if="videoPlayId == item.id && videoState">
+                          <common-icons type="iconplaying" size="28" color="#35FFFA" />
                           <text>播放中...</text>
                         </div>
                       </div>
@@ -182,48 +103,27 @@
                 <div class="room-table-box">
                   <div class="table-head">
                     <div class="head-checkbox" @click="checkRoomAll">
-                      <common-icons
-                        :type="
-                          isRoomAll ? 'iconcheckbox' : 'iconcheck-unselect'
-                        "
-                        color="#2A4273"
-                        size="24"
-                      ></common-icons>
+                      <common-icons :type="isRoomAll ? 'iconcheckbox' : 'iconcheck-unselect'
+                        " color="#2A4273" size="24"></common-icons>
                     </div>
-                    <div
-                      class="video-head-item"
-                      v-for="(item, index) in videoColumns"
-                      :key="index"
-                    >
+                    <div class="video-head-item" v-for="(item, index) in videoColumns" :key="index">
                       {{ item.title }}
                     </div>
                   </div>
                   <scroll-view scroll-y="true" class="video-table-scroll">
-                    <div
-                      class="video-table-main"
-                      v-for="(item, index) in roomTableList"
-                      :key="index"
-                    >
+                    <div class="video-table-main" v-for="(item, index) in roomTableList" :key="index">
                       <div class="table-content">
-                        <div
-                          class="content-checkbox"
-                          @click="checkRoomChange(item, index)"
-                        >
-                          <common-icons
-                            :type="
-                              item.isSelectRoom
-                                ? 'iconcheckbox'
-                                : 'iconcheck-unselect'
-                            "
-                            color="#2A4273"
-                            size="24"
-                          ></common-icons>
+                        <div class="content-checkbox" @click="checkRoomChange(item, index)">
+                          <common-icons :type="item.isSelectRoom
+                            ? 'iconcheckbox'
+                            : 'iconcheck-unselect'
+                            " color="#2A4273" size="24"></common-icons>
                         </div>
                         <div class="video-table-item" style="flex: 1">
                           {{ item.name }}
                         </div>
                         <div class="video-table-item" style="flex: 1">
-                          {{ item.status == "0" ? "已连接" : "未连接" }}
+                          {{ item.status == "0" ? "连接成功" : "连接失败" }}
                         </div>
                         <div class="video-table-item" style="flex: 1">
                           {{ item.video }}
@@ -233,32 +133,18 @@
                         </div>
                         <div class="video-table-item" style="flex: 1">
                           <div class="control-button" v-if="videoState">
-                            <image
-                              class="image-button"
-                              v-if="item.pause"
-                              src="@/static/images/common/button/stoped.png"
-                              @click="handlePauseChange(item)"
-                            ></image>
-                            <image
-                              class="image-button"
-                              v-else
-                              src="@/static/images/common/button/started.png"
-                              @click="handlePauseChange(item)"
-                            ></image>
+                            <image class="image-button" v-if="item.pause" src="@/static/images/common/button/stoped.png"
+                              @click="handlePauseChange(item)"></image>
+                            <image class="image-button" v-else src="@/static/images/common/button/started.png"
+                              @click="handlePauseChange(item)"></image>
                           </div>
                           <div class="delete-button" v-else>
-                            <image
-                              class="image-button"
-                              src="@/static/images/common/button/removed.png"
-                              @click="handleDeleteRoom(item, index)"
-                            ></image>
+                            <image class="image-button" src="@/static/images/common/button/removed.png"
+                              @click="handleDeleteRoom(item, index)"></image>
                           </div>
                         </div>
                       </div>
-                      <image
-                        class="table-line"
-                        src="@/static/images/table/bottom.png"
-                      ></image>
+                      <image class="table-line" src="@/static/images/table/bottom.png"></image>
                     </div>
                   </scroll-view>
                 </div>
@@ -292,39 +178,23 @@
               </div>
             </scroll-view>
             <div v-if="isPlay" class="video-right-box">
-              <!-- <video
-                class="preview-video"
-                :src="videoUrl"
-                codec="software"
-                autoplay
-                @ended="videoPlayEnded"
-              ></video> -->
+              <video class="preview-video" :src="videoUrl" codec="software" autoplay @ended="videoPlayEnded"></video>
             </div>
             <div class="video-right-btn">
-              <div
-                class="video-btn"
-                :class="isPlay ? 'btn-active-img' : 'btn-img'"
-                @click="previewVideo"
-              >
+              <div class="video-btn" :class="isPlay ? 'btn-active-img' : 'btn-img'" @click="previewVideo">
                 <text>{{ isPlay ? "关闭" : "预览" }}</text>
               </div>
             </div>
           </div>
           <div class="video-dynamic-box">
             <scroll-view scroll-y="true" class="video-dynamic-scroll">
-              <vtimeLine
-                title="视频动态信息"
-                :messageList="messageList"
-              ></vtimeLine>
+              <vtimeLine title="视频动态信息" :messageList="messageList"></vtimeLine>
             </scroll-view>
           </div>
         </div>
         <div v-if="currentPage == 1" class="room-right-container">
           <scroll-view scroll-y="true" class="room-dynamic-scroll">
-            <vtimeLine
-              title="视频动态信息"
-              :messageList="messageList"
-            ></vtimeLine>
+            <vtimeLine title="视频动态信息" :messageList="messageList"></vtimeLine>
           </scroll-view>
         </div>
       </div>
@@ -352,11 +222,7 @@
           <div class="group-name-box">
             <div class="group-modal-label">请输入添加分组名称：</div>
             <div class="group-content rectangle-img">
-              <input
-                class="group-name"
-                v-model="addGroupName"
-                @input="addGroupChange"
-              />
+              <input class="group-name" v-model="addGroupName" @input="addGroupChange" />
             </div>
           </div>
           <div class="group-modal-btn">
@@ -375,11 +241,7 @@
           <div class="group-name-box">
             <div class="group-modal-label">请输入修改分组名称：</div>
             <div class="group-content rectangle-img">
-              <input
-                class="group-name"
-                v-model="modifyGroupName"
-                @input="modifyGroupChange"
-              />
+              <input class="group-name" v-model="modifyGroupName" @input="modifyGroupChange" />
             </div>
           </div>
           <div class="group-modal-btn">
@@ -420,6 +282,7 @@ import {
   uniqueArr,
   timeFormat,
   dateFormat,
+  currentPages
 } from "@/common/utils/util.js";
 import videoColumns from "@/static/mock/videoColumns.json";
 
@@ -512,7 +375,7 @@ export default {
     // 切换分机|分组列表
     handleTabChange(page) {
       if (this.videoState) {
-        this.$parent.handleShowToast("请先停止播放视频", "center", 5000);
+        currentPages().handleShowToast("请先停止播放视频", "center", 5000);
         return;
       }
       this.page = page;
@@ -601,7 +464,7 @@ export default {
     // 搜索分机监室
     searchTerminalRoom() {
       if (!this.searchTerminal) {
-        this.$parent.handleShowToast("请输入搜索内容", "center");
+        currentPages().handleShowToast("请输入搜索内容", "center");
         return;
       }
       let reg = new RegExp(this.searchTerminal);
@@ -650,7 +513,7 @@ export default {
     // 搜索分组监室
     searchGroupRoom() {
       if (!this.searchGroup) {
-        this.$parent.handleShowToast("请输入搜索内容", "center");
+        currentPages().handleShowToast("请输入搜索内容", "center");
         return;
       }
       let reg = new RegExp(this.searchGroup);
@@ -751,7 +614,7 @@ export default {
         });
       }
       this.roomTableList = list;
-      this.roomTableList = uniqueArr(this.roomTableList);
+      this.roomTableList = uniqueArr(this.roomTableList, "name");
       if (!list.length) {
         this.isRoomAll = false;
       } else {
@@ -770,7 +633,7 @@ export default {
     // 预览视频
     previewVideo(e) {
       if (!Object.keys(this.videoInfo).length) {
-        this.$parent.handleShowToast("请先选择视频", "center");
+        currentPages().handleShowToast("请先选择视频", "center");
         return;
       }
       this.isPlay = !this.isPlay;
@@ -893,11 +756,11 @@ export default {
     // 打开分机弹框
     handleVideoModal() {
       if (!Object.keys(this.videoInfo).length) {
-        this.$parent.handleShowToast("请先选择视频", "center");
+        currentPages().handleShowToast("请先选择视频", "center");
         return;
       }
       if (!this.roomSelectList.length) {
-        this.$parent.handleShowToast("请先选择监室", "center");
+        currentPages().handleShowToast("请先选择监室", "center");
         return;
       }
       this.showVideoConfirm = true;
@@ -908,16 +771,10 @@ export default {
       this.videoState = !this.videoState;
       const { controlCode } = uni.getStorageSync("controlInfo");
       let terminalCode = this.roomSelectList
-        .map((item) => {
-          return item.terminalCode;
-        })
-        .join(",");
+        .map((item) => item.terminalCode)
+        .toString();
       this.rootName = this.roomSelectList[0].rootName;
-      this.prisonName = this.roomSelectList
-        .map((item) => {
-          return item.name;
-        })
-        .join(",");
+      this.prisonName = this.roomSelectList.map((item) => item.name).toString();
       let videoTableList = [];
       let obj = {
         name: this.videoInfo.name,
@@ -939,14 +796,14 @@ export default {
         this.getVideoStatusInfo("200");
         this.getVideoStatusInfo("300");
         setTimeout(() => {
-          this.$parent.sendWebsocket(JSON.stringify(controlObj));
+          currentPages().sendWebsocket(JSON.stringify(controlObj));
           this.setDynamicInfo("400", `开始播放${this.prisonName}视频`);
         }, 0);
         setTimeout(() => {
           // 保存视频播放状态
           this.saveVideoPlayStatus("start");
         }, 1500);
-        this.$parent.stopLivePusher();
+        currentPages().stopLivePusher();
       } else {
         // 停止播放视频
         this.hanleStopVideo();
@@ -956,11 +813,9 @@ export default {
     hanleStopVideo() {
       const { controlCode } = uni.getStorageSync("controlInfo");
       let terminalCode = this.roomSelectList
-        .map((item) => {
-          return item.terminalCode;
-        })
-        .join(",");
-      this.$parent.sendWebsocket(
+        .map((item) => item.terminalCode)
+        .toString();
+      currentPages().sendWebsocket(
         `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"400",msg:"1"}`
       );
       this.setDynamicInfo("400", `停止播放${this.prisonName}视频`);
@@ -981,7 +836,7 @@ export default {
         // 刷新动态信息
         this.getDynamicInfo();
       } else {
-        this.$parent.handleShowToast("请求错误", "center");
+        currentPages().handleShowToast("请求错误", "center");
       }
     },
     // 保存视频播放状态
@@ -1007,7 +862,7 @@ export default {
         params
       );
       if (res.state.code == 200) {
-        this.$parent.handleShowToast("保存状态成功", "bottom");
+        currentPages().handleShowToast("保存状态成功", "bottom");
       }
     },
     // 获取视频播放状态信息
@@ -1023,18 +878,14 @@ export default {
           switch (type) {
             case "200":
               let radioRoomName = res.data.roomList
-                .map((item) => {
-                  return item.name;
-                })
-                .join(",");
+                .map((item) => item.name)
+                .toString();
               this.setDynamicInfo("200", `停止${radioRoomName}广播`);
               break;
             case "300":
               let audioRoomName = res.data.roomList
-                .map((item) => {
-                  return item.name;
-                })
-                .join(",");
+                .map((item) => item.name)
+                .toString();
               this.setDynamicInfo("300", `停止播放${audioRoomName}音频`);
               break;
             case "400":
@@ -1050,8 +901,7 @@ export default {
                   list._checked = true;
                 }
                 list.children.map((item) => {
-                  item._checked = false;
-                  this.roomTableList.map((room) => {
+                  this.roomTableList.forEach((room) => {
                     if (item.terminalCode == room.terminalCode) {
                       item._checked = true;
                     }
@@ -1104,7 +954,7 @@ export default {
             this.roomTableList.splice(index, 1, data);
           }
         });
-        this.$parent.sendWebsocket(
+        currentPages().sendWebsocket(
           `{maindevno:"${controlCode}",devno:"${data.terminalCode}",type:"400",msg:"4",extend:"0"}`
         );
       } else {
@@ -1115,7 +965,7 @@ export default {
             this.roomTableList.splice(index, 1, data);
           }
         });
-        this.$parent.sendWebsocket(
+        currentPages().sendWebsocket(
           `{maindevno:"${controlCode}",devno:"${data.terminalCode}",type:"400",msg:"4",extend:"1"}`
         );
       }
@@ -1123,7 +973,7 @@ export default {
     // 添加分组弹框
     handleAddGroup() {
       if (!this.roomSelectList.length) {
-        this.$parent.handleShowToast("请先选择监室", "center");
+        currentPages().handleShowToast("请先选择监室", "center");
         return;
       }
       this.addGroupName = "";
@@ -1136,7 +986,7 @@ export default {
     // 确认添加分组
     addGroupConfirm() {
       if (!this.addGroupName) {
-        this.$parent.handleShowToast("请输入分组名称", "center");
+        currentPages().handleShowToast("请输入分组名称", "center");
         return;
       }
       this.addGroup();
@@ -1178,7 +1028,7 @@ export default {
     // 确认修改分组名称
     modifyGroupConfirm() {
       if (!this.modifyGroupName) {
-        this.$parent.handleShowToast("请输入分组名称", "center");
+        currentPages().handleShowToast("请输入分组名称", "center");
         return;
       }
       this.$refs.vTree.groupChange = false;
@@ -1272,7 +1122,7 @@ export default {
         msg: "6",
         extend: { volumeList },
       };
-      this.$parent.sendWebsocket(JSON.stringify(controlObj));
+      currentPages().sendWebsocket(JSON.stringify(controlObj));
     },
     openModal(type) {
       this[`show${type}`] = true;

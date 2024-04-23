@@ -1,36 +1,46 @@
 <template>
 	<div class="uni-tree-container">
-		<div v-for="(item, index) in treeDataList">
+		<div v-for="(item, index) in treeDataList" :key="index">
 			<div class="uni-tree-item" :key="getId(item.id)">
 				<div class="item-wrapper">
-					<div class="item-name-box" :class="
-              level == 0 && titleIndex == index
-                ? 'rectangle-active-img'
-                : level == 0
-                ? 'rectangle-img'
-                : ''
-            ">
-						<common-icons class="item-icon" v-if="item._hasChildren" :type="item._expand ? `iconarrowup` : `iconarrowdown`" color="#35FFFA" size="26" @click="toggleExpand(index)"></common-icons>
-						<div class="select-box" :class="{ 'select-box-disabled': disabledSelect }" v-if="isShowCheckbox(item)" @click="toggleCheck(currentLevelData[index])">
-							<common-icons :type="item._checked ? 'iconcheckbox' : 'iconcheck-unselect'" color="#2A4273" size="24"></common-icons>
+					<div class="item-name-box" :class="level == 0 && titleIndex == index
+						? 'rectangle-active-img'
+						: level == 0
+							? 'rectangle-img'
+							: ''
+						">
+						<common-icons class="item-icon" v-if="item._hasChildren"
+							:type="item._expand ? `iconarrowup` : `iconarrowdown`" color="#35FFFA" size="26"
+							@click="toggleExpand(index)"></common-icons>
+						<div class="select-box" :class="{ 'select-box-disabled': disabledSelect }"
+							v-if="isShowCheckbox(item)" @click="toggleCheck(currentLevelData[index])">
+							<common-icons :type="item._checked ? 'iconcheckbox' : 'iconcheck-unselect'" color="#2A4273"
+								size="24"></common-icons>
 						</div>
-						<div class="select-box" :class="{ 'select-box-disabled': disabledSelect }" v-if="isShowRadio(item)" @click="toggleSelect(currentLevelData[index])">
-							<common-icons :type="item._selected ? 'iconcheckbox' : 'iconcheck-unselect'" color="#2A4273" size="24"></common-icons>
+						<div class="select-box" :class="{ 'select-box-disabled': disabledSelect }" v-if="isShowRadio(item)"
+							@click="toggleSelect(currentLevelData[index])">
+							<common-icons :type="item._selected ? 'iconcheckbox' : 'iconcheck-unselect'" color="#2A4273"
+								size="24"></common-icons>
 						</div>
 						<div class="item-title" :class="[
-                level == 0 ? 'item-name-active' : 'item-title',
-                { 'select-box-disabled': disabledSelect && level != 0 },
-              ]" @click="selectLabel(currentLevelData[index], index)">
+							level == 0 ? 'item-name-active' : 'item-title',
+							{ 'select-box-disabled': disabledSelect && level != 0 },
+						]" @click="selectLabel(currentLevelData[index], index)">
 							{{ item.name }}
 						</div>
 						<div class="group-control" v-if="showRadio ? false : showGroup ? true : false">
-							<common-icons v-if="item._hasChildren" type="iconedit" color="#fff" size="20" @click="onGroupChange(item)"></common-icons>
-							<common-icons v-if="item._hasChildren" type="icondelete" color="#f00" size="20" @click="onGroupDelete(item)"></common-icons>
+							<common-icons v-if="item._hasChildren" type="iconedit" color="#fff" size="20"
+								@click="onGroupChange(item)"></common-icons>
+							<common-icons v-if="item._hasChildren" type="icondelete" color="#f00" size="20"
+								@click="onGroupDelete(item)"></common-icons>
 						</div>
 					</div>
 				</div>
 				<div class="item-children" v-if="hasChildren(item)">
-					<v-tree v-if="item._expand" :root="root" :parent="item" :level="level + 1" :has-children="hasChildren" :get-children="getChildren" :get-id="getId" :get-name="getName" :show-radio="showRadio" :leaf-only="leafOnly" :show-checkbox="showCheckbox" :disabled-select="disabledSelect" @on-change="onSelectChange" @on-toggle-expand="onToggleExpand"></v-tree>
+					<v-tree v-if="item._expand" :root="root" :parent="item" :level="level + 1" :has-children="hasChildren"
+						:get-children="getChildren" :get-id="getId" :get-name="getName" :show-radio="showRadio"
+						:leaf-only="leafOnly" :show-checkbox="showCheckbox" :disabled-select="disabledSelect"
+						@on-change="onSelectChange" @on-toggle-expand="onToggleExpand"></v-tree>
 				</div>
 			</div>
 		</div>
@@ -185,7 +195,7 @@ export default {
 			type: Function,
 		},
 	},
-	data () {
+	data() {
 		return {
 			currentLevelData: [],
 			innerExpand: [],
@@ -196,11 +206,11 @@ export default {
 		};
 	},
 	computed: {
-		treeDataList () {
+		treeDataList() {
 			return this.getChildren(this.parent || this.root);
 		},
 	},
-	created () {
+	created() {
 		if (this.level == 0) {
 			this.$on("on-change", ({ item, handler }) => {
 				handler.call(this, item);
@@ -221,7 +231,7 @@ export default {
 			});
 		}
 	},
-	onUnload () {
+	onUnload() {
 		if (this.level == 0) {
 			this.$off("on-change");
 			this.$off("on-toggle-expand");
@@ -229,7 +239,7 @@ export default {
 		}
 	},
 	methods: {
-		initTree ({ expand, checked, selected }) {
+		initTree({ expand, checked, selected }) {
 			if (this.level == 0) {
 				this.syncState({
 					checked,
@@ -240,10 +250,10 @@ export default {
 			this.setCurrentLevelData();
 		},
 		// 保存当前数据
-		setCurrentLevelData () {
+		setCurrentLevelData() {
 			this.currentLevelData = this.treeDataList;
 		},
-		selectLabel (item, index) {
+		selectLabel(item, index) {
 			if (item.children) {
 				// 选择父级
 				this.toggleExpand(index);
@@ -255,7 +265,7 @@ export default {
 				this.toggleCheck(item);
 			}
 		},
-		onSelectChange (args) {
+		onSelectChange(args) {
 			let item = args.item;
 			let handler = args.handler;
 			if (this.level == 0) {
@@ -271,7 +281,7 @@ export default {
 			}
 		},
 		// 选择父级
-		toggleExpand (index) {
+		toggleExpand(index) {
 			let item = this.currentLevelData[index];
 			let self = this;
 			this.titleIndex = index;
@@ -287,7 +297,7 @@ export default {
 				});
 			}
 		},
-		onToggleExpand (args) {
+		onToggleExpand(args) {
 			let item = args.item;
 			let handler = args.handler;
 			if (this.level == 0) {
@@ -302,7 +312,7 @@ export default {
 				});
 			}
 		},
-		syncState ({ expand, checked, selected }) {
+		syncState({ expand, checked, selected }) {
 			if (checked) {
 				this.syncStateChecked();
 			}
@@ -313,7 +323,7 @@ export default {
 				this.syncStateExpand();
 			}
 		},
-		syncStateChecked () {
+		syncStateChecked() {
 			if (!this.checked) {
 				return;
 			}
@@ -334,7 +344,7 @@ export default {
 			});
 			return parent;
 		},
-		syncStateSelected () {
+		syncStateSelected() {
 			if (!this.selected) {
 				return;
 			}
@@ -354,13 +364,13 @@ export default {
 			});
 			return parent;
 		},
-		syncStateExpand () {
+		syncStateExpand() {
 			this.setInnerExpand();
 			this.forEachTree(this.root, (item, parent) => {
 				this.$set(item, "_expand", this.isExpand(item));
 			});
 		},
-		setInnerExpand () {
+		setInnerExpand() {
 			if (this.autoExpand) {
 				this.forEachTree(this.root, (item, parent) => {
 					if (!this.hasChildren(item)) {
@@ -374,7 +384,7 @@ export default {
 				this.innerExpand = this.expand;
 			}
 		},
-		forEachTree (tree, handler) {
+		forEachTree(tree, handler) {
 			if (!tree) {
 				return;
 			}
@@ -388,13 +398,13 @@ export default {
 				}
 			}
 		},
-		clearSelect () {
+		clearSelect() {
 			this.forEachTree(this.root, (item) => {
 				this.$set(item, "_indeterminate", false);
 				this.$set(item, "_selected", false);
 			});
 		},
-		upStreamSelect (node) {
+		upStreamSelect(node) {
 			if (node) {
 				let parent = this.getItemById(node._parent);
 				if (!parent) {
@@ -404,7 +414,7 @@ export default {
 				this.upStreamCheck(parent);
 			}
 		},
-		upStreamCheck (node) {
+		upStreamCheck(node) {
 			if (node) {
 				let parent = this.getItemById(node._parent);
 				if (!parent) {
@@ -422,7 +432,7 @@ export default {
 				this.upStreamCheck(parent);
 			}
 		},
-		downStreamCheck (node) {
+		downStreamCheck(node) {
 			if (this.hasChildren(node)) {
 				for (let item of this.getChildren(node)) {
 					this.$set(item, "_checked", node._checked);
@@ -431,26 +441,26 @@ export default {
 				}
 			}
 		},
-		isChecked (item) {
+		isChecked(item) {
 			return !!this.checked.find((it) => this.isSame(item, it));
 		},
-		isSelected (item) {
+		isSelected(item) {
 			return this.isSame(item, this.selected);
 		},
-		isExpand (item) {
+		isExpand(item) {
 			return !!this.innerExpand.find((it) => this.isSame(item, it));
 		},
-		isChildrenAllCheck (item) {
+		isChildrenAllCheck(item) {
 			if (this.hasChildren(item)) {
 				let children = this.getChildren(item);
 				return children.every((it) => it._checked);
 			}
 			return item._checked;
 		},
-		isSame (itemA, itemB) {
+		isSame(itemA, itemB) {
 			return this.getId(itemA) == this.getId(itemB);
 		},
-		isShowCheckbox (item) {
+		isShowCheckbox(item) {
 			if (this.showCheckbox) {
 				if (this.leafOnly) {
 					return !this.hasChildren(item);
@@ -458,7 +468,7 @@ export default {
 				return true;
 			}
 		},
-		isShowRadio (item) {
+		isShowRadio(item) {
 			if (this.showRadio) {
 				if (this.leafOnly) {
 					return !this.hasChildren(item);
@@ -466,7 +476,7 @@ export default {
 				return true;
 			}
 		},
-		getItemById (id) {
+		getItemById(id) {
 			let target = null;
 			this.forEachTree(this.root, (item) => {
 				if (this.getId(item) == id) {
@@ -477,17 +487,17 @@ export default {
 			return target;
 		},
 		// 修改分组名称
-		onGroupChange (item) {
+		onGroupChange(item) {
 			this.groupChange = true;
 			this.$emit("group-change", item);
 		},
 		// 删除分组
-		onGroupDelete (item) {
+		onGroupDelete(item) {
 			this.groupChange = true;
 			this.$emit("group-delete", item);
 		},
 		// 复选框
-		toggleCheck (item) {
+		toggleCheck(item) {
 			let self = this;
 			this.$emit("on-change", {
 				item,
@@ -504,7 +514,7 @@ export default {
 			});
 		},
 		// 单选框
-		toggleSelect (item) {
+		toggleSelect(item) {
 			let self = this;
 			this.$emit("on-change", {
 				item,
@@ -520,7 +530,7 @@ export default {
 			});
 		},
 		// 返回选中的节点数组, 单选时返回只包含一个选中节点的数组
-		getChecked (all = false) {
+		getChecked(all = false) {
 			let checked = [];
 			if (this.showCheckbox) {
 				this.forEachTree(this.root, (item) => {
@@ -569,7 +579,7 @@ export default {
 	},
 	watch: {
 		root: {
-			handler () {
+			handler() {
 				this.initTree({
 					checked: true,
 					selected: true,
@@ -579,7 +589,7 @@ export default {
 			immediate: true,
 		},
 		checked: {
-			handler () {
+			handler() {
 				this.initTree({
 					checked: true,
 					expand: true,
@@ -588,7 +598,7 @@ export default {
 			immediate: true,
 		},
 		expand: {
-			handler () {
+			handler() {
 				this.initTree({
 					expand: true,
 				});
@@ -596,7 +606,7 @@ export default {
 			immediate: true,
 		},
 		selected: {
-			handler () {
+			handler() {
 				this.initTree({
 					selected: true,
 					expand: true,
@@ -613,13 +623,16 @@ export default {
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
+
 	.uni-tree-item {
 		margin-bottom: 6.88upx;
 		box-sizing: border-box;
+
 		.item-wrapper {
 			display: flex;
 			justify-content: center;
 			align-items: center;
+
 			.item-name-box {
 				width: 216.72upx;
 				height: 41.66upx;
@@ -627,12 +640,14 @@ export default {
 				box-sizing: border-box;
 				display: flex;
 				align-items: center;
+
 				.item-icon {
 					display: flex;
 					width: 24upx;
 					margin: 0 8.36upx;
 					color: #fff;
 				}
+
 				.item-title {
 					width: 155upx;
 					height: 100%;
@@ -644,15 +659,18 @@ export default {
 					color: #fff;
 					padding: 0 6.88upx;
 				}
+
 				.item-name-active {
 					width: 200upx;
 					box-sizing: border-box;
 					color: #35fffa;
 					font-size: 19.44upx;
 				}
+
 				.select-box-disabled {
 					pointer-events: none;
 				}
+
 				.group-control {
 					width: 120upx;
 					margin-right: 6.88upx;
@@ -662,6 +680,7 @@ export default {
 				}
 			}
 		}
+
 		.item-children {
 			width: 216.72upx;
 			box-sizing: border-box;

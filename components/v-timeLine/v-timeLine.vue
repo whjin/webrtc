@@ -97,7 +97,6 @@ export default {
         .timeline-content {
           margin-left: 10upx;
           line-height: 24upx;
-          overflow: auto;
           .timeline-title {
             width: 200upx;
             white-space: nowrap;
@@ -105,6 +104,10 @@ export default {
             font-family: Microsoft YaHei;
             font-weight: bold;
             color: #35fffa;
+            overflow: auto;
+          }
+          ::-webkit-scrollbar {
+            display: none;
           }
           .timeline-date {
             display: flex;

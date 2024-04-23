@@ -1,13 +1,17 @@
 export default {
   // pro
-  // baseUrl: "http://192.168.20.214:8100/",
+  // baseUrl: "http://192.168.1.17:8100/",
   // dev
-  baseUrl: "http://192.168.20.187:8100/",
+  baseUrl: "http://192.168.20.214:8100/",
 
-  controlIP: "192.168.20.103",
+  controlIP: "192.168.20.168",
 
-  // socket连接地址
-  socketUrl: "https://192.168.20.222:3000/",
+  // pro
+  // socketUrl: "http://192.168.20.214:3000/",
+  // dev
+  socketUrl: "http://192.168.20.222:3000/",
+  // dev
+  // socketUrl: "http://localhost:3000/",
 
   controlType: {
     HEARTBEAT: "000",
@@ -18,6 +22,5 @@ export default {
     ALARM: "500",
     CALL: "600",
     DEVICE: "700",
-    WEBRTC: "1100"
   },
 };
