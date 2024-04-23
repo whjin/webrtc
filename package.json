@@ -1,27 +1,25 @@
 {
-  "name": "webrtc-server",
+  "name": "vue-webrtc",
   "version": "1.0.0",
-  "description": "webrtc,nodejs,express,socket.io",
-  "main": "server.js",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node server.js"
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host"
   },
-  "repository": {
-    "type": "git",
-    "url": "Administrator@192.168.1.72:SmartTerminal/WebRTC-Server.git"
-  },
-  "keywords": [
-    "webrtc",
-    "nodejs",
-    "express",
-    "socket.io"
-  ],
-  "author": "whjin",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "jsdom": "^23.0.1",
-    "socket.io": "^4.5.3"
+    "element-plus": "^2.7.0",
+    "pinia": "^2.1.7",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "less": "^4.2.0",
+    "unplugin-auto-import": "^0.17.5",
+    "unplugin-vue-components": "^0.26.0",
+    "vite": "^5.2.8"
   }
 }
