@@ -259,3 +259,15 @@ export const removePrivateDoc = () => {
   );
   // #endif
 };
+
+// 计算两个时间相差的秒数
+export const convertTimeToSeconds = time => {
+  let nowTime = new Date().getTime();
+  let date = new Date();
+  let arr = time.split(":");
+  date.setHours(parseInt(arr[0]));
+  date.setMinutes(parseInt(arr[1]));
+  let endTime = new Date(date).getTime();
+  let ret = Math.ceil((endTime - nowTime) / 1000);
+  return (typeof ret == "number") && ret > 0 ? ret : false;
+}; 

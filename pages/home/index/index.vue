@@ -85,7 +85,7 @@
         </div>
         <div class="page-vertical-divider"></div>
         <div class="home-sidebar">
-          <view class="home-sidebar-title" @click="gotoNativePage">监室动态</view>
+          <view class="home-sidebar-title">监室动态</view>
           <view class="home-sidebar-news">
             <scroll-view scroll-y="true" class="home-sidebar-scroll">
               <view class="home-sidebar-item" v-for="(item, index) in dynamicInfos" :key="index">
@@ -493,7 +493,7 @@ import commonIcons from "@/components/common-icons/common-icons.vue";
 import keyboard from "@/components/dt-keyboard/dt-keyboard.vue";
 import recognitionDialogs from "@/components/recognition-dialogs/recognition-dialogs.vue";
 import screenSaver from "@/components/screen-saver/screen-saver.vue";
-import { isNullStr, dateFormat } from "@/common/utils/util.js";
+import { isNullStr, dateFormat, convertTimeToSeconds } from "@/common/utils/util.js";
 import { pathToBase64 } from "@/common/utils/imageTools.js";
 import Api from "@/common/api.js";
 import Log from "@/common/utils/log.js";
@@ -706,6 +706,8 @@ export default {
       },
       // 抓拍状态
       isTakingPic: false,
+      webrtcObj: {},
+      base64Str: "",
     };
   },
   computed: {
@@ -797,214 +799,207 @@ export default {
       // 来邦初始化对讲服务
       getApp().globalData.FloatUniModule.initIPCManager((e) => {
         if (e.code == 0) {
-          // 获取设备信息
-          getApp().globalData.FloatUniModule.getCurrentDeviceInfo((info) => {
-            console.log(info);
-            // 设备校时
-            if (this.timing) {
-              getApp().globalData.FloatUniModule.setSystemTime(this.timing);
-            }
+          // 设备校时
+          if (this.timing) {
+            getApp().globalData.FloatUniModule.setSystemTime(this.timing);
+          }
+          getApp().globalData.FloatUniModule.hideTalkView(true);
+          // 来邦监听对讲事件
+          getApp().globalData.FloatUniModule.talkEventCallback((res) => {
+            console.log("对讲服务事件：" + JSON.stringify(res));
             getApp().globalData.FloatUniModule.hideTalkView(true);
-            // 来邦监听对讲事件
-            getApp().globalData.FloatUniModule.talkEventCallback((res) => {
-              console.log("对讲服务事件：" + JSON.stringify(res));
-              getApp().globalData.FloatUniModule.hideTalkView(true);
-              if (res.eventID == 1) {
-                // 呼出处理中
-              } else if (res.eventID == 2) {
-                // 呼出振铃
-              } else if (res.eventID == 3 || res.eventID == 4) {
-                // 3-监听接通 4-对讲接通
-                this.intercomType = 0;
-                if (res.eventID == 4) {
-                  // 对讲接通
-                  this.intercomType = 1;
-                  // 结束人脸拍照
-                  this.stopTakePicture();
-                  if (this.showRecognitionDialogs) {
-                    this.closeRecognitionDialogs();
-                  }
-                  this.voiceBroadcast("请注意，已经开启视频对讲");
-                  if (this.audioPlayState) {
-                    // 暂停播放音频
-                    uni.$emit("video-player", "audio", "pause");
-                  }
-                  if (this.videoPlayState) {
-                    // 暂停播放视频
-                    uni.$emit("video-player", "video", "pause");
-                  }
-                  if (this.isCalling && this.currentTab == 6) {
-                    this.$refs.call.discontinueCall(true);
-                  }
-                  if (res.devRegType == 8) {
-                    const { masterNum, slaveNum, devRegType } = res;
-                    console.log(masterNum, slaveNum, devRegType);
-                    getApp().globalData.FloatUniModule.openLocalCamera(true);
-                    getApp().globalData.FloatUniModule.nativeAnswer(
-                      0,
-                      masterNum,
-                      slaveNum,
-                      devRegType
-                    );
-                  }
-                  // 停止播放电教
-                  this.stopEduPlay();
+            if (res.eventID == 1) {
+              // 呼出处理中
+            } else if (res.eventID == 2) {
+              // 呼出振铃
+            } else if (res.eventID == 3 || res.eventID == 4) {
+              // 3-监听接通 4-对讲接通
+              this.intercomType = 0;
+              this.intercomHandler();
+              if (res.eventID == 4) {
+                // 对讲接通
+                this.intercomType = 1;
+                if (this.showRecognitionDialogs) {
+                  this.closeRecognitionDialogs();
+                }
+                this.voiceBroadcast("请注意，已经开启视频对讲");
+                if (this.audioPlayState) {
+                  // 暂停播放音频
+                  uni.$emit("video-player", "audio", "pause");
+                }
+                if (this.videoPlayState) {
+                  // 暂停播放视频
+                  uni.$emit("video-player", "video", "pause");
+                }
+                if (this.isCalling && this.currentTab == 6) {
+                  this.$refs.call.discontinueCall(true);
+                }
+                if (res.devRegType == 8) {
+                  let { masterNum, slaveNum, devRegType } = res;
+                  console.log(masterNum, slaveNum, devRegType);
+                  getApp().globalData.FloatUniModule.openLocalCamera(true);
+                  getApp().globalData.FloatUniModule.nativeAnswer(
+                    0,
+                    masterNum,
+                    slaveNum,
+                    devRegType
+                  );
+                }
+                // 停止播放电教
+                this.stopEduPlay();
+                this.disabledState = true;
+              }
+            } else if (res.eventID == 5) {
+              this.disabledState = false;
+              if (this.intercomType == 1) {
+                this.voiceBroadcast("对讲已挂断！");
+                // 通话或呼叫挂断
+                if (this.audioPlayState) {
+                  // 继续播放音频
+                  uni.$emit("video-player", "audio", "resume");
+                  this.disabledState = false;
+                }
+                if (this.videoPlayState) {
+                  // 继续播放视频
+                  uni.$emit("video-player", "video", "resume");
                   this.disabledState = true;
                 }
-              } else if (res.eventID == 5) {
-                this.disabledState = false;
-                if (this.intercomType == 1) {
-                  this.voiceBroadcast("对讲已挂断");
-                  // 通话或呼叫挂断
-                  if (this.audioPlayState) {
-                    // 继续播放音频
-                    uni.$emit("video-player", "audio", "resume");
-                    this.disabledState = false;
-                  }
-                  if (this.videoPlayState) {
-                    // 继续播放视频
-                    uni.$emit("video-player", "video", "resume");
-                    this.disabledState = true;
-                  }
-                  // 继续播放电教
-                  this.startEduPlay();
-                }
-              } else if (res.eventID == 7) {
-                this.voiceBroadcast("对方正忙，请稍后再拨");
+                // 开始播放电教
+                this.startEduPlay();
               }
-            });
-            // 来邦监听指纹事件
-            getApp().globalData.FloatUniModule.setCompareFingerprintCallBack(
-              (res) => {
-                console.log("指纹状态：" + JSON.stringify(res));
-                if (!this.isFingerRepeat) {
-                  this.isFingerRepeat = true;
-                  setTimeout(() => {
-                    this.isFingerRepeat = false;
-                  }, 1500);
-                  if ([7, 34].includes(this.currentTab)) {
-                    if (this.currentTab == 7) {
-                      // 在押人员指纹录入
-                      this.$refs.fingerprint.handleFingerprint(res);
-                    }
-                    if (this.currentTab == 34) {
-                      // 民警指纹录入
-                      this.$refs.policeFingerprint.handleFingerprint(res);
-                    }
-                  } else {
-                    if (res.code == "0") {
-                      let params = {
-                        mKey: res.id,
-                        temperature: this.temperature,
-                      };
-                      switch (this.currentTab) {
-                        case 6:
-                          this.$refs.call &&
-                            this.$refs.call.fingerRecognitionSuccess(params);
-                          break;
-                        case 8:
-                          this.$refs.shopping &&
-                            this.$refs.shopping.fingerRecognitionSuccess(
-                              params
-                            );
-                          break;
-                        case 9:
-                          this.$refs.dutyCall &&
-                            this.$refs.dutyCall.fingerRecognitionSuccess(
-                              params
-                            );
-                          break;
-                        case 19:
-                          this.$refs.conversation &&
-                            this.$refs.conversation.fingerRecognitionSuccess(
-                              params
-                            );
-                          break;
-                        case 21:
-                          this.$refs.evaluation &&
-                            this.$refs.evaluation.fingerRecognitionSuccess(
-                              params
-                            );
-                          break;
-                        case 27:
-                          this.$refs.outroom &&
-                            this.$refs.outroom.fingerRecognitionSuccess(params);
-                          break;
-                        default:
-                          this.fingerRecognitionSuccess(params);
-                          break;
-                      }
-                    } else {
-                      this.voiceBroadcast("识别失败，指纹不匹配!");
-                    }
+            } else if (res.eventID == 7) {
+              this.voiceBroadcast("对方正忙，请稍后再拨！");
+            }
+          });
+          // 来邦监听指纹事件
+          getApp().globalData.FloatUniModule.setCompareFingerprintCallBack(
+            (res) => {
+              if (!this.isFingerRepeat) {
+                this.isFingerRepeat = true;
+                setTimeout(() => {
+                  this.isFingerRepeat = false;
+                }, 1500);
+                if ([7, 34].includes(this.currentTab)) {
+                  if (this.currentTab == 7) {
+                    // 在押人员指纹录入
+                    this.$refs.fingerprint.handleFingerprint(res);
                   }
-                }
-              }
-            );
-            // 来邦监听测温事件
-            getApp().globalData.FloatUniModule.syncStopTemperature();
-            getApp().globalData.FloatUniModule.setTemperatureDataCallBack(
-              (res) => {
-                if (res.code == "0") {
-                  this.temperature = res.temperature;
-                  switch (this.currentTab) {
-                    case 6:
-                      this.$refs.call &&
-                        this.$refs.call.setTemperature(res.temperature);
-                      break;
-                    case 11:
-                      this.$refs.illness &&
-                        this.$refs.illness.setTemperature(res.temperature);
-                      break;
-                    case 15:
-                      this.$refs.temperatureMonitor &&
-                        this.$refs.temperatureMonitor.setTemperature(
-                          res.temperature
-                        );
-                      break;
+                  if (this.currentTab == 34) {
+                    // 民警指纹录入
+                    this.$refs.policeFingerprint.handleFingerprint(res);
                   }
                 } else {
-                  console.log("测温失败");
+                  if (res.code == "0") {
+                    let params = {
+                      mKey: res.id,
+                      temperature: this.temperature,
+                    };
+                    switch (this.currentTab) {
+                      case 6:
+                        this.$refs.call &&
+                          this.$refs.call.fingerRecognitionSuccess(params);
+                        break;
+                      case 8:
+                        this.$refs.shopping &&
+                          this.$refs.shopping.fingerRecognitionSuccess(params);
+                        break;
+                      case 9:
+                        this.$refs.rotation &&
+                          this.$refs.rotation.fingerRecognitionSuccess(params);
+                        break;
+                      case 19:
+                        this.$refs.conversation &&
+                          this.$refs.conversation.fingerRecognitionSuccess(
+                            params
+                          );
+                        break;
+                      case 21:
+                        this.$refs.evaluation &&
+                          this.$refs.evaluation.fingerRecognitionSuccess(
+                            params
+                          );
+                        break;
+                      case 27:
+                        this.$refs.outroom &&
+                          this.$refs.outroom.fingerRecognitionSuccess(params);
+                        break;
+                      default:
+                        this.fingerRecognitionSuccess(params);
+                        break;
+                    }
+                  } else {
+                    this.voiceBroadcast("指纹识别失败");
+                  }
                 }
               }
-            );
-            // 来邦监听刷卡事件
-            getApp().globalData.FloatUniModule.setCardDataCallBack((res) => {
-              console.log("刷卡状态：" + JSON.stringify(res));
+            }
+          );
+          // 来邦监听测温事件
+          getApp().globalData.FloatUniModule.syncStopTemperature();
+          getApp().globalData.FloatUniModule.setTemperatureDataCallBack(
+            (res) => {
               if (res.code == "0") {
-                // 关闭刷卡
-                getApp().globalData.FloatUniModule.syncStopCard();
-                if (this.currentTab == 3) {
-                  this.closeModal("RecognitionDialogs");
-                  // 管教刷卡时间
-                  let registerTime = dateFormat(
-                    "YYYY-MM-DD hh:mm:ss",
-                    new Date()
-                  );
-                  let { roomNo } = uni.getStorageSync("terminalInfo");
-                  let cardNo = res.cardNum;
-                  let params = { roomNo, registerTime, cardNo };
-                  this.saveFaceManager(params);
-                  this.getPoliceByCardNum(cardNo);
+                this.temperature = res.temperature;
+                switch (this.currentTab) {
+                  case 6:
+                    this.$refs.call &&
+                      this.$refs.call.setTemperature(res.temperature);
+                    break;
+                  case 11:
+                    this.$refs.illness &&
+                      this.$refs.illness.setTemperature(res.temperature);
+                    break;
+                  case 15:
+                    this.$refs.temperatureMonitor &&
+                      this.$refs.temperatureMonitor.setTemperature(
+                        res.temperature
+                      );
+                    break;
                 }
+              } else {
+                console.log("测温失败");
               }
-            });
-            // 来邦监听门磁事件
-            getApp().globalData.FloatUniModule.onDoorContactValue((res) => {
-              console.log("门磁状态：" + JSON.stringify(res));
-              // 门磁防拆报警 1开启 0关闭
-              if (res.isOpen == 1) {
-                this.setAlarmDynamic(res.isOpen);
+            }
+          );
+          // 来邦监听刷卡事件
+          getApp().globalData.FloatUniModule.setCardDataCallBack((res) => {
+            console.log("刷卡状态：" + JSON.stringify(res));
+            if (res.code == "0") {
+              // 关闭刷卡
+              getApp().globalData.FloatUniModule.syncStopCard();
+              if (this.currentTab == 3) {
+                this.closeModal("RecognitionDialogs");
+                // 管教刷卡时间
+                let registerTime = dateFormat(
+                  "YYYY-MM-DD hh:mm:ss",
+                  new Date()
+                );
+                let { roomNo } = uni.getStorageSync("terminalInfo");
+                let cardNo = res.cardNum;
+                let params = { roomNo, registerTime, cardNo };
+                this.saveFaceManager(params);
+                this.getPoliceByCardNum(cardNo);
               }
-            });
-            // 来邦初始化电教系统
-            getApp().globalData.FloatUniModule.initEducation();
-            getApp().globalData.FloatUniModule.setEducationStateListener(
-              (res) => {
-                console.log("电教任务状态：" + JSON.stringify(res));
-                if (this.isIntercom || this.isCalling || this.radioPlayState) {
-                  return;
-                }
+            }
+          });
+          // 来邦监听门磁事件
+          getApp().globalData.FloatUniModule.onDoorContactValue((res) => {
+            console.log("门磁状态：" + JSON.stringify(res));
+            // 门磁防拆报警 1开启 0关闭
+            if (res.isOpen == 1) {
+              this.setAlarmDynamic(res.isOpen);
+            }
+          });
+          // 来邦初始化电教系统
+          getApp().globalData.FloatUniModule.initEducation();
+          getApp().globalData.FloatUniModule.setEducationStateListener(
+            (res) => {
+              console.log("电教任务状态：" + JSON.stringify(res));
+              if (this.isIntercom || this.isCalling || this.radioPlayState) {
+                return;
+              }
+              let isOpenEdu = uni.getStorageSync("isOpenEdu") || 0;
+              if (isOpenEdu == 1) {
                 const { taskState } = JSON.parse(res.educationTaskStateBean);
                 switch (taskState) {
                   case 0:
@@ -1040,10 +1035,10 @@ export default {
                     break;
                 }
               }
-            );
-          });
+            });
         }
       });
+
       //websocket连接
       if (!getApp().globalData.webSocketConnected) {
         const { terminalCode } = uni.getStorageSync("terminalInfo");
@@ -1092,16 +1087,6 @@ export default {
       // 设置心理测评状态
       setIsEvaluation: "app/SET_ISEVALUATION",
     }),
-    gotoNativePage() {
-      const terminalInfo = uni.getStorageSync("terminalInfo");
-      let webrtcServerUrl = uni.getStorageSync("webrtcServerUrl");
-      let reqJson = {
-        position: { width: 900, height: 400, left: 0, top: 200 },
-        data: terminalInfo,
-        url: `${webrtcServerUrl}/web-terminal`,
-      };
-      getApp().globalData.Base.gotoNativePage(reqJson);
-    },
     // 获取APP配置菜单
     async getAppMenuList() {
       const { areaCode } = uni.getStorageSync("terminalInfo");
@@ -1890,7 +1875,11 @@ export default {
       // 获取主机websocket数据
       this.socketTask.onMessage((res) => {
         let info = JSON.parse(res.data);
-        console.log(JSON.stringify(info));
+        if (info.type == this.$config.controlType.FACE) {
+          console.log(info);
+        } else {
+          console.log(JSON.stringify(info));
+        }
         if (info.type == this.$config.controlType.HEARTBEAT) {
           const { terminalCode } = uni.getStorageSync("terminalInfo");
           this.sendWebsocket(
@@ -1903,26 +1892,32 @@ export default {
             this.webSocketReConnect();
           }, this.heartBeatTimeOut * 1000);
         } else if (info.type == this.$config.controlType.WEBRTC) {
-          if (info.msg == "0") {
-            // 主机对讲分机
+          if (info.msg == "0" || info.msg == "2") {
+            // 0-开始视频对讲 2-开始监视监听
             const terminalInfo = uni.getStorageSync("terminalInfo");
             let webrtcServerUrl = uni.getStorageSync("webrtcServerUrl");
-            let reqJson = {
-              position: { width: 100, height: 100, left: 0, top: 0 },
-              data: terminalInfo,
+            this.webrtcObj = {
+              position: { width: 500, height: 400, left: 0, top: 0 },
+              data: Object.assign(terminalInfo, {
+                type: info.msg == "0" ? "intercom" : "monitor"
+              }),
               url: `${webrtcServerUrl}/web-terminal`,
             };
-            getApp().globalData.Base.gotoNativePage(reqJson);
+            getApp().globalData.Base.gotoNativePage(this.webrtcObj);
           } else if (info.msg == "1" || info.msg == "24") {
             // 挂断视频对讲
+            getApp().globalData.Base.toggleCommonBtn("buttonTerminalExit");
+            if (Object.keys(this.webrtcObj).length) {
+              const { data: { type } } = this.webrtcObj;
+              if (type == "intercom") {
+                this.voiceBroadcast("对讲已挂断");
+              }
+            }
             this.resetIntercom();
             this.setIsWaitingIntercom(false);
             if (this.isCalling) {
               this.setCurrentTab(6);
             }
-            getApp().globalData.Base.toggleCommonBtn("buttonTerminalExit");
-          } else if (info.msg == "2") {
-            // 开启监视监听
           } else if (info.msg == "6") {
             // 视频通话无应答
             this.voiceBroadcast("对方正忙，请稍后再拨");
@@ -1968,10 +1963,27 @@ export default {
           } else if (info.msg == "12") {
             // 主机拨通仓内|仓外屏
             this.setIsIntercom(true);
+            if (Object.keys(this.webrtcObj).length) {
+              const { data: { type } } = this.webrtcObj;
+              if (type == "intercom") {
+                this.voiceBroadcast("请注意，已经开启视频对讲");
+              }
+            }
           } else if (info.msg == "27") {
             this.showVideoConnect = false;
             // 分机对讲中
             this.voiceBroadcast("正在对讲中，请勿重复操作");
+          }
+        } else if (info.type == this.$config.controlType.FACE) {
+          if (info.msg == "1") {
+            let { base64, length } = JSON.parse(info.extend);
+            if (base64 && base64.startsWith("data:image/jpeg;base64,")) {
+              this.base64Str = "";
+            }
+            this.base64Str += base64;
+            if (this.base64Str.length >= length) {
+              console.log(length, this.base64Str.length, { result: this.base64Str });
+            }
           }
         } else if (info.type == this.$config.controlType.INTERCOM) {
           if (info.msg == "1" || info.msg == "24") {
@@ -2219,42 +2231,52 @@ export default {
             this.audioPlayState = false;
             this.videoPlayState = true;
             let extend = JSON.parse(info.extend);
-            let videoInfo = extend.videoList[0];
-            uni.$emit("video-player", "video", "start", videoInfo.url);
-            clearInterval(this.videoTimer);
-            if (extend.hasOwnProperty("duration")) {
-              // 后台控制视频
-              let duration = extend.duration;
-              this.videoTimer = setInterval(() => {
-                duration--;
-                if (duration == 0) {
-                  // 停止播放音频
-                  clearInterval(this.videoTimer);
-                  duration = extend.duration;
-                  uni.$emit("video-player", "video", "stop");
+            if (extend.videoList.length) {
+              let videoInfo = extend.videoList[0];
+              uni.$emit("video-player", "video", "start", videoInfo.url);
+              clearInterval(this.videoTimer);
+              if (extend.hasOwnProperty("duration")) {
+                // 后台控制视频
+                let { endTime } = extend;
+                let seconds = convertTimeToSeconds(endTime);
+                if (!!seconds) {
+                  this.videoTimer = setInterval(() => {
+                    seconds--;
+                    if (seconds <= 0) {
+                      // 停止播放音频
+                      this.stopVideoHandler("stop");
+                    }
+                  }, 1000);
+                  this.receiveTask("video", "start");
+                  this.disabledState = true;
+                } else {
+                  // 停止播放视频
+                  this.stopVideoHandler("stop");
                 }
-              }, 1000);
-            } else {
-              getApp().globalData.FloatUniModule.getStreamVolumeTypeMusic(
-                (e) => {
-                  // 主机播放视频
-                  let terminalObj = {
-                    maindevno: info.maindevno,
-                    devno: uni.getStorageSync("terminalInfo").terminalCode,
-                    type: "400",
-                    msg: "3",
-                    extend: {
+              } else {
+                getApp().globalData.FloatUniModule.getStreamVolumeTypeMusic(
+                  (e) => {
+                    // 主机播放视频
+                    let terminalObj = {
+                      maindevno: info.maindevno,
                       devno: uni.getStorageSync("terminalInfo").terminalCode,
-                      video: videoInfo.name,
-                      volume: e.value,
-                    },
-                  };
-                  this.sendWebsocket(JSON.stringify(terminalObj));
-                }
-              );
+                      type: "400",
+                      msg: "3",
+                      extend: {
+                        devno: uni.getStorageSync("terminalInfo").terminalCode,
+                        video: videoInfo.name,
+                        volume: e.value,
+                      },
+                    };
+                    this.sendWebsocket(JSON.stringify(terminalObj));
+                  }
+                );
+                this.receiveTask("video", "start");
+                this.disabledState = true;
+              }
+            } else {
+              this.handleShowToast("当前视频列表为空");
             }
-            this.receiveTask("video", "start");
-            this.disabledState = true;
           } else if (info.msg == "1") {
             // 停止播放视频
             this.stopVideoHandler("stop", true);

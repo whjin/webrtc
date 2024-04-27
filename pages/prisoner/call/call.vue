@@ -100,6 +100,8 @@ export default {
       // 自动滚动
       scrollToView: "",
       temperature: 0,
+      // 执行下一个定时器
+      nextTimer: null,
     };
   },
   computed: {
@@ -265,13 +267,14 @@ export default {
       setTimeout(() => {
         this.showRecognitionDialogs = false;
       }, 2000);
-      setTimeout(() => {
+      this.nextTimer = setTimeout(() => {
         this.regConfig.isRecognitionSuccess = false;
         this.nextSignHandler(this.handleRollCall);
       }, 5000);
     },
     // 执行下一个点名
     nextSignHandler(Func) {
+      clearTimeout(this.nextTimer);
       this.curIndex++;
       if (this.curIndex < this.unSignCallList.length) {
         Func();

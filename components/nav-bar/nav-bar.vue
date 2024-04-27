@@ -16,38 +16,34 @@
 
 <script>
 export default {
-  name: "NavBar",
-  props: {
-    currentTab: {
-      type: Number,
-      default: 1,
-    },
-    title: {
-      type: String,
-      default: "监室智能交互终端系统",
-    },
-    homeState: {
-      type: Boolean,
-      default: true,
-    },
-    backState: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  methods: {
-    onClickInit () {
-      this.$emit("click-init");
-    },
-    // 返回首页
-    onClickHome () {
-      this.$emit("click-home");
-    },
-    // 页面回退
-    onClickBack () {
-      this.$emit("click-back");
-    },
-  },
+	name: "NavBar",
+	props: {
+		title: {
+			type: String,
+			default: "监室智能交互终端",
+		},
+		homeState: {
+			type: Boolean,
+			default: true,
+		},
+		backState: {
+			type: Boolean,
+			default: true,
+		},
+	},
+	methods: {
+		onClickInit () {
+			this.$emit("click-init");
+		},
+		// 返回首页
+		onClickHome () {
+			this.$emit("click-home");
+		},
+		// 页面回退
+		onClickBack () {
+			this.$emit("click-back");
+		},
+	},
 };
 </script>
 

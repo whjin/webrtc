@@ -1,8 +1,8 @@
 export default {
   // pro
-  // baseUrl: "http://192.168.20.214:8100/",
+  baseUrl: "http://192.168.20.214:8100/",
   // dev
-  baseUrl: "http://192.168.20.187:8100/",
+  // baseUrl: "http://192.168.20.187:8100/",
 
   terminalIP: "192.168.20.105",
 
@@ -18,7 +18,8 @@ export default {
     DUTY: "800",
     CONVERSATION: "900",
     EVALUATION: "1000",
-    WEBRTC: "1100"
+    WEBRTC: "1100",
+    FACE: "1200"
   },
   // 管理员账号
   admin: {
