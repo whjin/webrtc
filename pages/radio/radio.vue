@@ -4,37 +4,72 @@
       <div class="radio-left">
         <div class="radio-left-box">
           <div class="left-tab">
-            <div :class="page == 0 ? 'tab-active' : 'tab'" @click="handleTabChange(0)">
+            <div
+              :class="page == 0 ? 'tab-active' : 'tab'"
+              @click="handleTabChange(0)"
+            >
               分机列表
             </div>
-            <div :class="page == 1 ? 'tab-active' : 'tab'" @click="handleTabChange(1)">
+            <div
+              :class="page == 1 ? 'tab-active' : 'tab'"
+              @click="handleTabChange(1)"
+            >
               分组列表
             </div>
           </div>
           <div class="left-content">
             <div v-if="page == 0" class="terminal-list">
               <div class="terminal-search rectangle-img">
-                <input class="input-search" v-model="searchTerminal" @input="searchTerminalChange" />
-                <common-icons type="iconsearch" color="#fff" size="20" @click="searchTerminalRoom"></common-icons>
+                <input
+                  class="input-search"
+                  v-model="searchTerminal"
+                  @input="searchTerminalChange"
+                />
+                <common-icons
+                  type="iconsearch"
+                  color="#fff"
+                  size="20"
+                  @click="searchTerminalRoom"
+                ></common-icons>
               </div>
               <div class="terminal-room-box">
                 <scroll-view scroll-y="true">
-                  <v-tree showCheckbox :disabledSelect="radioState" :root="terminalList"
-                    :changeHandler="terminalSelect"></v-tree>
+                  <v-tree
+                    showCheckbox
+                    :disabledSelect="radioState"
+                    :root="terminalList"
+                    :changeHandler="terminalSelect"
+                  ></v-tree>
                 </scroll-view>
               </div>
             </div>
             <div v-if="page == 1" class="groups-list">
               <div class="terminal-search rectangle-img">
-                <input class="input-search" v-model="searchGroup" @input="searchGroupChange" />
+                <input
+                  class="input-search"
+                  v-model="searchGroup"
+                  @input="searchGroupChange"
+                />
                 <div class="search-btn" @click="searchGroupRoom">
-                  <common-icons type="iconsearch" color="#fff" size="20"></common-icons>
+                  <common-icons
+                    type="iconsearch"
+                    color="#fff"
+                    size="20"
+                  ></common-icons>
                 </div>
               </div>
               <div class="terminal-room-box">
                 <scroll-view scroll-y="true">
-                  <v-tree ref="vTree" showCheckbox :disabledSelect="radioState" :showGroup="true" :root="groupList"
-                    :changeHandler="groupSelect" @group-change="openModifyGroup" @group-delete="openDeleteGroup"></v-tree>
+                  <v-tree
+                    ref="vTree"
+                    showCheckbox
+                    :disabledSelect="radioState"
+                    :showGroup="true"
+                    :root="groupList"
+                    :changeHandler="groupSelect"
+                    @group-change="openModifyGroup"
+                    @group-delete="openDeleteGroup"
+                  ></v-tree>
                 </scroll-view>
               </div>
             </div>
@@ -47,13 +82,16 @@
             <div class="head-label">已选监室列表</div>
             <div class="head-content">
               <div>
-                已选中:<text style="color: #21cdc5">{{ selectedNum }}</text>个监室
+                已选中:<text style="color: #21cdc5">{{ selectedNum }}</text
+                >个监室
               </div>
               <div>
-                已连接:<text style="color: #0267df">{{ connectedNum }}</text>个监室
+                已连接:<text style="color: #0267df">{{ connectedNum }}</text
+                >个监室
               </div>
               <div>
-                未连接:<text style="color: #e30c12">{{ disconnectNum }}</text>个监室
+                未连接:<text style="color: #e30c12">{{ disconnectNum }}</text
+                >个监室
               </div>
             </div>
           </div>
@@ -62,20 +100,36 @@
           <div class="radio-center-content">
             <div class="center-btn-box">
               <div class="center-btn-left">
-                <div class="btn-left" v-show="!radioState" :class="isRoomAll ? 'btn-active-img' : 'btn-img'"
-                  @click="handleSelectAll">
+                <div
+                  class="btn-left"
+                  v-show="!radioState"
+                  :class="isRoomAll ? 'btn-active-img' : 'btn-img'"
+                  @click="handleSelectAll"
+                >
                   <text>全选</text>
                 </div>
-                <div class="btn-left btn-img" v-show="!radioState" @click="handleRemoveAll">
+                <div
+                  class="btn-left btn-img"
+                  v-show="!radioState"
+                  @click="handleRemoveAll"
+                >
                   <text>移除</text>
                 </div>
                 <div class="btn-left btn-img" @click="handleAddGroup">
                   <text>添加分组</text>
                 </div>
-                <div class="btn-left btn-img" v-show="radioState" @click="decreaseVolume">
+                <div
+                  class="btn-left btn-img"
+                  v-show="radioState"
+                  @click="decreaseVolume"
+                >
                   <text>音量－</text>
                 </div>
-                <div class="btn-left btn-img" v-show="radioState" @click="increaseVolume">
+                <div
+                  class="btn-left btn-img"
+                  v-show="radioState"
+                  @click="increaseVolume"
+                >
                   <text>音量＋</text>
                 </div>
               </div>
@@ -88,54 +142,103 @@
             <div class="center-table-box">
               <div class="table-head">
                 <div class="head-checkbox" @click="checkRoomAll">
-                  <common-icons :type="isRoomAll ? 'iconcheckbox' : 'iconcheck-unselect'" color="#2A4273"
-                    size="24"></common-icons>
+                  <common-icons
+                    :type="isRoomAll ? 'iconcheckbox' : 'iconcheck-unselect'"
+                    color="#2A4273"
+                    size="24"
+                  ></common-icons>
                 </div>
-                <div class="radio-head-item" v-for="(item, index) in radioColumns" :key="index">
+                <div
+                  class="radio-head-item"
+                  v-for="(item, index) in radioColumns"
+                  :key="index"
+                >
                   {{ item.title }}
                 </div>
               </div>
-              <scroll-view scroll-y="true" class="center-table-scroll" :style="{ height: tableHeight + 'upx' }">
-                <div class="radio-table-main" v-for="(item, index) in roomTableList" :key="index">
+              <scroll-view
+                scroll-y="true"
+                class="center-table-scroll"
+                :style="{ height: tableHeight + 'upx' }"
+              >
+                <div
+                  class="radio-table-main"
+                  v-for="(item, index) in roomTableList"
+                  :key="index"
+                >
                   <div class="table-content">
-                    <div class="content-checkbox" @click="checkRoomChange(item, index)">
-                      <common-icons :type="item.isSelectRoom
-                        ? 'iconcheckbox'
-                        : 'iconcheck-unselect'
-                        " color="#2A4273" size="24"></common-icons>
+                    <div
+                      class="content-checkbox"
+                      @click="checkRoomChange(item, index)"
+                    >
+                      <common-icons
+                        :type="
+                          item.isSelectRoom
+                            ? 'iconcheckbox'
+                            : 'iconcheck-unselect'
+                        "
+                        color="#2A4273"
+                        size="24"
+                      ></common-icons>
                     </div>
                     <div class="radio-table-item" style="flex: 1">
                       {{ item.name }}
                     </div>
                     <div class="radio-table-item" style="flex: 1">
-                      {{ item.status == "0" ? "连接成功" : "连接失败" }}
+                      {{ item.status == "0" ? "已连接" : "未连接" }}
                     </div>
                     <div class="radio-table-item" style="flex: 1">
                       {{ item.volume }}
                     </div>
                     <div class="radio-table-item" style="flex: 1">
                       <div class="control-button" v-if="radioState">
-                        <image class="image-button" v-if="item.muted" src="@/static/images/common/button/stoped.png"
-                          @click="handleMutedChange(item, index)"></image>
-                        <image class="image-button" v-else src="@/static/images/common/button/started.png"
-                          @click="handleMutedChange(item, index)"></image>
+                        <image
+                          class="image-button"
+                          v-if="item.muted"
+                          src="@/static/images/common/button/stoped.png"
+                          @click="handleMutedChange(item, index)"
+                        ></image>
+                        <image
+                          class="image-button"
+                          v-else
+                          src="@/static/images/common/button/started.png"
+                          @click="handleMutedChange(item, index)"
+                        ></image>
                       </div>
                       <div class="delete-button" v-else>
-                        <image class="image-button" src="@/static/images/common/button/removed.png"
-                          @click="handleDeleteRoom(item, index)"></image>
+                        <image
+                          class="image-button"
+                          src="@/static/images/common/button/removed.png"
+                          @click="handleDeleteRoom(item, index)"
+                        ></image>
                       </div>
                     </div>
                   </div>
-                  <image class="table-line" src="@/static/images/table/bottom.png"></image>
+                  <image
+                    class="table-line"
+                    src="@/static/images/table/bottom.png"
+                  ></image>
                 </div>
               </scroll-view>
               <div class="sound-wave-box" v-if="radioState">
                 <div class="sound-wave-image">
-                  <image class="wave-img" v-if="isMuted" src="@/static/images/radio/radio.png"></image>
-                  <image class="wave-img" v-else :src="gifUrl" @load="loadGifImage"></image>
+                  <image
+                    class="wave-img"
+                    v-if="isMuted"
+                    src="@/static/images/radio/radio.png"
+                  ></image>
+                  <image
+                    class="wave-img"
+                    v-else
+                    :src="gifUrl"
+                    @load="loadGifImage"
+                  ></image>
                 </div>
-                <div class="sound-wave-button" :class="isMuted ? 'btn-active-img' : 'btn-img'"
-                  @click="handleControlMuted">
+                <div
+                  class="sound-wave-button"
+                  :class="isMuted ? 'btn-active-img' : 'btn-img'"
+                  @click="handleControlMuted"
+                >
                   <text>静音</text>
                 </div>
               </div>
@@ -145,7 +248,10 @@
       </div>
       <div class="radio-right">
         <scroll-view scroll-y="true" class="right-dynamic-scroll">
-          <vtimeLine title="广播动态信息" :messageList="messageList"></vtimeLine>
+          <vtimeLine
+            title="广播动态信息"
+            :messageList="messageList"
+          ></vtimeLine>
         </scroll-view>
       </div>
     </div>
@@ -172,7 +278,11 @@
           <div class="group-name-box">
             <div class="group-modal-label">请输入添加分组名称：</div>
             <div class="group-content rectangle-img">
-              <input class="group-name" v-model="addGroupName" @input="addGroupChange" />
+              <input
+                class="group-name"
+                v-model="addGroupName"
+                @input="addGroupChange"
+              />
             </div>
           </div>
           <div class="group-modal-btn">
@@ -191,7 +301,11 @@
           <div class="group-name-box">
             <div class="group-modal-label">请输入修改分组名称：</div>
             <div class="group-content rectangle-img">
-              <input class="group-name" v-model="modifyGroupName" @input="modifyGroupChange" />
+              <input
+                class="group-name"
+                v-model="modifyGroupName"
+                @input="modifyGroupChange"
+              />
             </div>
           </div>
           <div class="group-modal-btn">
@@ -227,9 +341,10 @@ import vtimeLine from "@/components/v-timeLine/v-timeLine.vue";
 import vTree from "@/components/v-tree/v-tree.vue";
 import Api from "@/common/api.js";
 import { mapMutations } from "vuex";
-import { unique, uniqueArr, dateFormat, currentPages } from "@/common/utils/util.js";
+import { unique, uniqueArr, dateFormat } from "@/common/utils/util.js";
 import radioColumns from "@/static/mock/radioColumns.json";
 
+// 设备按键
 export default {
   name: "control-radio",
   components: {
@@ -329,7 +444,7 @@ export default {
     // 切换分机、分组列表
     handleTabChange(page) {
       if (this.radioState) {
-        currentPages().handleShowToast("请先停止广播", "center", 5000);
+        this.$parent.handleShowToast("请先停止广播", "center", 5000);
         return;
       }
       this.page = page;
@@ -385,7 +500,7 @@ export default {
     // 搜索分机监室
     searchTerminalRoom() {
       if (!this.searchTerminal) {
-        currentPages().handleShowToast("请输入搜索内容", "center");
+        this.$parent.handleShowToast("请输入搜索内容", "center");
         return;
       }
       let reg = new RegExp(this.searchTerminal);
@@ -435,7 +550,7 @@ export default {
     // 搜索分组监室
     searchGroupRoom() {
       if (!this.searchGroup) {
-        currentPages().handleShowToast("请输入搜索内容", "center");
+        this.$parent.handleShowToast("请输入搜索内容", "center");
         return;
       }
       let reg = new RegExp(this.searchGroup);
@@ -491,7 +606,7 @@ export default {
     // 选择分机列表
     terminalSelect(list) {
       if (this.radioState) {
-        currentPages().handleShowToast("请先停止广播", "center", 5000);
+        this.$parent.handleShowToast("请先停止广播", "center", 5000);
         return;
       }
       list.map((item) => {
@@ -542,7 +657,7 @@ export default {
         });
       }
       this.roomTableList = list;
-      this.roomTableList = uniqueArr(this.roomTableList, "name");
+      this.roomTableList = uniqueArr(this.roomTableList);
       if (!list.length) {
         this.isRoomAll = false;
       } else {
@@ -674,7 +789,7 @@ export default {
     // 打开广播弹框
     handleRadioModal() {
       if (!this.roomSelectList.length) {
-        currentPages().handleShowToast("请先选择监室", "center");
+        this.$parent.handleShowToast("请先选择监室", "center");
         return;
       }
       this.showRadioConfirm = true;
@@ -685,18 +800,24 @@ export default {
       this.radioState = !this.radioState;
       const { controlCode } = uni.getStorageSync("controlInfo");
       let terminalCode = this.roomSelectList
-        .map((item) => item.terminalCode)
-        .toString();
+        .map((item) => {
+          return item.terminalCode;
+        })
+        .join(",");
       this.rootName = this.roomSelectList[0].rootName;
-      this.prisonName = this.roomSelectList.map((item) => item.name).toString();
+      this.prisonName = this.roomSelectList
+        .map((item) => {
+          return item.name;
+        })
+        .join(",");
       if (this.radioState) {
         // 开始广播
         getApp().globalData.FloatUniModule.setExtMicEna(true);
         this.getRadioStatusInfo("300");
         this.getRadioStatusInfo("400");
-        currentPages().startLivePusher();
+        this.$parent.startLivePusher();
         setTimeout(() => {
-          currentPages().sendWebsocket(
+          this.$parent.sendWebsocket(
             `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"200",msg:"0"}`
           );
           this.setDynamicInfo("200", `开始${this.prisonName}广播`);
@@ -715,10 +836,16 @@ export default {
       // 取消主机静音
       this.isMuted = false;
       this.setMuted(false);
-      currentPages().sendWebsocket(
+      const { controlCode } = uni.getStorageSync("controlInfo");
+      let terminalCode = this.roomSelectList
+        .map((item) => {
+          return item.terminalCode;
+        })
+        .join(",");
+      this.$parent.sendWebsocket(
         `{maindevno:"${controlCode}",devno:"${terminalCode}",type:"200",msg:"1"}`
       );
-      currentPages().stopLivePusher();
+      this.$parent.stopLivePusher();
       this.setDynamicInfo("200", `停止${this.prisonName}广播`);
       // 保存广播播放状态
       this.saveRadioPlayStatus("stop");
@@ -737,7 +864,7 @@ export default {
         // 刷新动态信息
         this.getDynamicInfo();
       } else {
-        currentPages().handleShowToast("请求错误", "center");
+        this.$parent.handleShowToast("请求错误", "center");
       }
     },
     // 保存广播播放状态
@@ -762,7 +889,7 @@ export default {
         params
       );
       if (res.state.code == 200) {
-        currentPages().handleShowToast("保存状态成功", "bottom");
+        this.$parent.handleShowToast("保存状态成功", "bottom");
       }
     },
     // 获取广播播放状态信息
@@ -777,7 +904,7 @@ export default {
         if (res.data.roomList.length) {
           switch (type) {
             case "200":
-              currentPages().startLivePusher();
+              this.$parent.startLivePusher();
               this.radioState = res.data.status == "start" ? true : false;
               this.roomTableList = res.data.roomList;
               this.roomSelectList = this.roomTableList;
@@ -806,14 +933,18 @@ export default {
               break;
             case "300":
               let audioRoomName = res.data.roomList
-                .map((item) => item.name)
-                .toString();
+                .map((item) => {
+                  return item.name;
+                })
+                .join(",");
               this.setDynamicInfo("300", `停止播放${audioRoomName}音频`);
               break;
             case "400":
               let videoRoomName = res.data.roomList
-                .map((item) => item.name)
-                .toString();
+                .map((item) => {
+                  return item.name;
+                })
+                .join(",");
               this.setDynamicInfo("400", `停止播放${videoRoomName}视频`);
               break;
           }
@@ -859,7 +990,7 @@ export default {
             this.roomTableList.splice(index, 1, data);
           }
         });
-        currentPages().sendWebsocket(
+        this.$parent.sendWebsocket(
           `{maindevno:"${controlCode}",devno:"${data.terminalCode}",type:"200",msg:"3",extend:"0"}`
         );
       } else {
@@ -870,7 +1001,7 @@ export default {
             this.roomTableList.splice(index, 1, data);
           }
         });
-        currentPages().sendWebsocket(
+        this.$parent.sendWebsocket(
           `{maindevno:"${controlCode}",devno:"${data.terminalCode}",type:"200",msg:"3",extend:"1"}`
         );
       }
@@ -889,7 +1020,7 @@ export default {
     // 添加分组弹框
     handleAddGroup() {
       if (!this.roomSelectList.length) {
-        currentPages().handleShowToast("请先选择监室", "center");
+        this.$parent.handleShowToast("请先选择监室", "center");
         return;
       }
       this.addGroupName = "";
@@ -902,7 +1033,7 @@ export default {
     // 确认添加分组
     addGroupConfirm() {
       if (!this.addGroupName) {
-        currentPages().handleShowToast("请输入分组名称", "center");
+        this.$parent.handleShowToast("请输入分组名称", "center");
         return;
       }
       this.addGroup();
@@ -944,7 +1075,7 @@ export default {
     // 确认修改分组名称
     modifyGroupConfirm() {
       if (!this.modifyGroupName) {
-        currentPages().handleShowToast("请输入分组名称", "center");
+        this.$parent.handleShowToast("请输入分组名称", "center");
         return;
       }
       this.$refs.vTree.groupChange = false;
@@ -1038,7 +1169,7 @@ export default {
         msg: "5",
         extend: { volumeList },
       };
-      currentPages().sendWebsocket(JSON.stringify(controlObj));
+      this.$parent.sendWebsocket(JSON.stringify(controlObj));
     },
     openModal(type) {
       this[`show${type}`] = true;

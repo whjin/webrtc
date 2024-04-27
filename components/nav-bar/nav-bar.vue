@@ -20,7 +20,7 @@
 			// 标题内容
 			title: {
 				type: String,
-				default: "监室智能管理终端系统"
+				default: "监室智能管理终端"
 			}
 		},
     data() {
@@ -49,7 +49,7 @@
         } else if (this.clickCount == 2) {
           this.endTime = new Date().getTime();
           if (this.endTime - this.startTime < 300) {
-            // this.getAppInfo();
+            this.getAppInfo();
             this.isShowCenter = !this.isShowCenter;
             setTimeout(() => {
               this.isShowCenter = !this.isShowCenter;
@@ -60,7 +60,7 @@
       },
       getAppInfo () {
         this.version = plus.runtime.version;
-        this.curIP = this.$config.controlIP;
+        this.curIP = getApp().globalData.Base.getIpAddress().ip;
         this.authIP = uni.getStorageSync('authControlIP');
       }
 		}

@@ -83,14 +83,14 @@ export const unique = (arr) => {
 };
 
 // 数组对象去重
-export const uniqueArr = (arr, key) => {
+export const uniqueArr = (arr) => {
   if (!Array.isArray(arr)) {
     return;
   }
   let map = new Map();
   for (let i = 0, len = arr.length; i < len; i++) {
-    if (!map.has(arr[i][key])) {
-      map.set(arr[i][key], arr[i]);
+    if (!map.has(arr[i].name)) {
+      map.set(arr[i].name, arr[i]);
     }
   }
   return [...map.values()];
@@ -112,9 +112,4 @@ export const readDirectory = (dirPath) => {
       }
     );
   });
-};
-
-export const currentPages = () => {
-  const pages = getCurrentPages();
-  return pages[pages.length - 1];
 };

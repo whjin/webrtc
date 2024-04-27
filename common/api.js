@@ -127,6 +127,8 @@ export default {
         }
         return res.data;
       }
+    } else {
+      this.handleShowToast("请先设置基础baseUrl！");
     }
   },
 
