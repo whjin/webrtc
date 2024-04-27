@@ -30,3 +30,12 @@ export const dateFormat = (fmt, date) => {
     }
     return fmt;
 };
+
+// video To base64
+export const convertVideoToImage = (video) => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, 440, 268);
+    let image = canvas.toDataURL("image/jpeg");
+    return image;
+};

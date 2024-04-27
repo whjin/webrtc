@@ -1,22 +1,25 @@
 <template>
   <div class="terminal-container">
-    <video id="terminalVideo" autoplay playsinline poster="../assets/images/poster.jpg"></video>
+    <video id="terminalVideo" v-show="isShow" autoplay playsinline poster="../assets/images/poster.jpg"></video>
+    <video id="localVideo" v-show="!isShow" autoplay playsinline poster="../assets/images/poster.jpg"></video>
   </div>
 </template>
 
 <script>
 import global from "@/assets/js/global.js";
-import { ElMessage } from "element-plus";
-import { isValidJSON } from "@/assets/js/utils";
+import { ElMessage, ElButton } from "element-plus";
+import { isValidJSON, convertVideoToImage } from "@/assets/js/utils";
 import config from "@/assets/js/comlib";
 
 export default {
   name: "Terminal",
   components: {
     ElMessage,
+    ElButton,
   },
   data() {
     return {
+      isShow: true,
       // 网络异常计时
       heartbeatTimeOut: 60,
       // 网络异常定时器
@@ -42,22 +45,36 @@ export default {
   created() {
     if (!this.webSocketConnected) {
       this.terminalInfo = JSON.parse(JSON.parse(result.getData()).data);
+      // this.terminalInfo = { controlCode: "control01", terminalCode: "terminal103", terminalIp: "192.168.20.47" };
       const { controlCode, terminalCode, terminalIp } = this.terminalInfo;
       this.terminalInfo = Object.assign(this.terminalInfo, {
         webControlCode: `web_${controlCode}`,
         webTerminalCode: `web_${terminalCode}`,
         webTerminalIp: `web_${terminalIp}`,
       });
+
       this.connectWebSocketInit(this.terminalInfo.webTerminalCode);
     }
   },
   mounted() {
     this.terminalVideo = document.getElementById("terminalVideo");
+    this.localVideo = document.getElementById("localVideo");
     window.isDomFinish = this.isDomFinish;
     window.hangupTerminalVideo = this.hangupTerminalVideo;
+    window.hangupFaceVideo = this.hangupFaceVideo;
   },
   beforeDestroy() { },
   methods: {
+    isDomFinish() {
+      const { type } = this.terminalInfo;
+      if (type == "face") {
+        this.isShow = false;
+        this.startFaceVideo();
+      } else {
+        this.isShow = true;
+        this.startRtcVideo(this.terminalInfo.type);
+      }
+    },
     // socket上线
     websocketOn() {
       this.webSocketConnected = true;
@@ -78,6 +95,29 @@ export default {
       } catch (err) {
         console.log("消息发送失败", err);
       }
+    },
+    // 向APP发送数据
+    sendAppData(data) {
+      const { controlCode, terminalCode } = this.terminalInfo;
+      let socketObj = {
+        maindevno: controlCode,
+        devno: terminalCode,
+        type: global.controlType.WEBRTC,
+        msg: "8",
+        extend: data
+      };
+      this.sendWebsocket(JSON.stringify(socketObj));
+    },
+    // 向APP发送人脸base64数据
+    sendFaceImage(data) {
+      const { terminalCode } = this.terminalInfo;
+      let socketObj = {
+        maindevno: terminalCode,
+        type: global.controlType.FACE,
+        msg: "1",
+        extend: data
+      };
+      this.sendWebsocket(JSON.stringify(socketObj));
     },
     // websocket心跳检测
     socketHeartbeatCheck() {
@@ -116,7 +156,7 @@ export default {
         this.websocketOn();
       };
       this.socketTask.onclose = e => {
-        console.log("WebSocket已关闭");
+        console.log("WebSocket已关闭", e);
       };
       this.socketTask.addEventListener("error", e => {
       });
@@ -178,6 +218,15 @@ export default {
             // 分机接收主机挂断
             this.hangupTerminalVideo();
           }
+        } else if (info.type == global.controlType.FACE) {
+          if (info.msg == "0") {
+            // 获取人脸视频截图
+            this.getFaceImage();
+          }
+          if (info.msg == "1") {
+            // 关闭人脸视频
+            this.hangupFaceVideo();
+          }
         }
       });
     },
@@ -186,6 +235,9 @@ export default {
 
       this.peer.ontrack = e => {
         if (e && e.streams) {
+          const { type } = this.terminalInfo;
+          let muted = type == "monitor" ? true : false;
+          this.terminalVideo.muted = muted;
           this.terminalVideo.srcObject = e.streams[0];
         }
       };
@@ -217,16 +269,13 @@ export default {
 
       cb && cb();
     },
-    isDomFinish() {
-      this.startRtcVideo();
-    },
-    startLive(audioState = true) {
+    startLive() {
       return new Promise(async (resolve, reject) => {
         let stream;
         try {
           stream = await navigator.mediaDevices.getUserMedia({
             video: true,
-            audio: audioState,
+            audio: true
           });
           resolve(stream);
         } catch (err) {
@@ -237,29 +286,23 @@ export default {
     },
     startRtcVideo(cb) {
       this.createRtcConnect(() => {
+        const { controlCode, terminalCode } = this.terminalInfo;
         this.startLive().then(stream => {
           stream.getTracks().map(track => {
             this.peer.addTrack(track, stream);
           });
+          let socketObj = {
+            maindevno: controlCode,
+            devno: terminalCode,
+            type: global.controlType.WEBRTC,
+            msg: "35",
+          };
+          this.sendWebsocket(JSON.stringify(socketObj));
           cb && cb();
         });
       });
     },
-    // 人脸识别
-    startFaceVideo(selector, audioState) {
-      return new Promise(async (resolve, reject) => {
-        try {
-          this.startLive(audioState).then(stream => {
-            this.localVideo = selector;
-            this.localVideo.srcObject = stream;
-            resolve(this.localVideo);
-          });
-        } catch (err) {
-          reject(err);
-        }
-      });
-    },
-    // 停止对讲
+    // 停止webrtc对讲
     hangupTerminalVideo() {
       if (!!this.terminalVideo.srcObject) {
         this.terminalVideo.srcObject.getTracks().map(track => {
@@ -269,10 +312,36 @@ export default {
       }
       this.muted = true;
       this.offerState = false;
-      this.startRtcVideo();
+      this.isShow = true;
+      this.startRtcVideo(this.terminalInfo.type);
+    },
+    // 人脸识别
+    startFaceVideo() {
+      this.startLive().then(stream => {
+        this.localVideo.srcObject = stream;
+        // 获取人脸视频截图
+        this.getFaceImage();
+      });
+    },
+    // 获取人脸视频截图
+    getFaceImage() {
+      if (this.localVideo.srcObject) {
+        this.localVideo.onloadedmetadata = () => {
+          let image = convertVideoToImage(this.localVideo);
+          let length = image.length;
+          let index = 0;
+          while (index <= image.length) {
+            let string = image.substring(index, index + 5000);
+            this.sendFaceImage({ length, base64: string });
+            index += 5000;
+          }
+        };
+      } else {
+        this.showMessage("获取视频流失败", "error");
+      }
     },
     // 停止人脸
-    stopFaceVideo() {
+    hangupFaceVideo() {
       if (this.localVideo && this.localVideo.srcObject) {
         this.localVideo.srcObject.getTracks().map(track => {
           track.stop();

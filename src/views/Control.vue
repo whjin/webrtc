@@ -34,6 +34,18 @@ export default {
       peer: null,
       controlInfo: {},
       offerState: false,
+      // 拦截重复动作
+      isRepeatState: false,
+      options: {
+        intercom: {
+          video: true,
+          audio: true
+        },
+        monitor: {
+          video: false,
+          audio: true
+        }
+      }
     };
   },
   created() {
@@ -55,6 +67,9 @@ export default {
   },
   beforeDestroy() { },
   methods: {
+    isDomFinish() {
+      this.startRtcVideo(this.controlInfo.type);
+    },
     // socket上线
     websocketOn() {
       this.webSocketConnected = true;
@@ -75,6 +90,18 @@ export default {
       } catch (err) {
         console.log("消息发送失败", err);
       }
+    },
+    // 向APP发送数据
+    sendAppData(data) {
+      const { controlCode, terminalCode } = this.controlInfo;
+      let socketObj = {
+        maindevno: controlCode,
+        devno: terminalCode,
+        type: global.controlType.WEBRTC,
+        msg: "9",
+        extend: data
+      };
+      this.sendWebsocket(JSON.stringify(socketObj));
     },
     // websocket心跳检测
     socketHeartbeatCheck() {
@@ -108,6 +135,7 @@ export default {
       }
       console.log(`${config.websocketUrl}${code}`);
       this.socketTask = new WebSocket(`${config.websocketUrl}${code}`);
+
       this.socketTask.onopen = e => {
         this.websocketOn();
       };
@@ -116,6 +144,7 @@ export default {
       };
       this.socketTask.addEventListener("error", e => {
       });
+
       // 获取主机websocket数据
       this.socketTask.addEventListener("message", res => {
         let info = JSON.parse(res.data);
@@ -161,6 +190,20 @@ export default {
       this.peer.ontrack = e => {
         if (e && e.streams) {
           this.controlVideo.srcObject = e.streams[0];
+          if (!this.isRepeatState) {
+            this.isRepeatState = true;
+            setTimeout(() => {
+              this.isRepeatState = false;
+            }, 1000);
+            const { controlCode, terminalCode } = this.controlInfo;
+            let socketObj = {
+              maindevno: controlCode,
+              devno: terminalCode,
+              type: global.controlType.WEBRTC,
+              msg: "36",
+            };
+            this.sendWebsocket(JSON.stringify(socketObj));
+          }
         }
       };
 
@@ -191,25 +234,12 @@ export default {
 
       cb && cb();
     },
-    isDomFinish() {
-      this.startRtcVideo();
-    },
-    startLive(type = 1) {
+    startLive(type) {
       return new Promise(async (resolve, reject) => {
         let stream;
         try {
-          const options = {
-            "intercom": {
-              video: true,
-              audio: true
-            },
-            "monitor": {
-              video: false,
-              audio: true
-            }
-          };
-          const constraints = type == 1 ? options["intercom"] : options["monitor"];
-          stream = await navigator.mediaDevices.getUserMedia(constraints);
+          this.showMessage(this.options[type]);
+          stream = await navigator.mediaDevices.getUserMedia(this.options[type]);
           resolve(stream);
         } catch (err) {
           this.showMessage(`Failed to get the stream ${err}`, "error");
@@ -218,15 +248,13 @@ export default {
       });
     },
     // 开始视频对讲
-    startRtcVideo() {
+    startRtcVideo(type = "intercom") {
       this.createRtcConnect(() => {
-        this.startLive().then(stream => {
+        this.startLive(type).then(stream => {
           stream.getTracks().map(track => {
             this.peer.addTrack(track, stream);
           });
-          setTimeout(() => {
-            this.callRemoteVideo();
-          }, 1500);
+          this.callRemoteVideo();
         });
       });
     },

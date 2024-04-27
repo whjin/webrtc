@@ -1,7 +1,15 @@
 export default {
     controlType: {
         HEARTBEAT: "000",
+        INTERCOM: "100",
+        RADIO: "200",
+        AUDIO: "300",
+        VIDEO: "400",
+        ALARM: "500",
+        CALL: "600",
+        DEVICE: "700",
         WEBRTC: "1100",
+        FACE: "1200",
     },
 
     iceServerConfig: {
