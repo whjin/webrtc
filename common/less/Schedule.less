@@ -1,0 +1,108 @@
+.schedule-container {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  .schedule-wrapper {
+    height: 600upx;
+    box-sizing: border-box;
+    display: flex;
+    margin: 27.77upx;
+    .schedule-left {
+      margin-right: 13.88upx;
+      .schedule-left-scroll {
+        height: 560upx;
+        .schedule-left-item {
+          width: 297.22upx;
+          box-sizing: border-box;
+          margin-bottom: 15.28upx;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          white-space: nowrap;
+          overflow: hidden;
+          text {
+            color: #fff;
+            font-size: 18.05upx;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: auto;
+            margin: 0 13.88upx;
+          }
+        }
+        .schedule-selected-img {
+          .select-item {
+            color: #35fffa;
+          }
+        }
+      }
+    }
+    .schedule-right {
+      flex: 1;
+      box-sizing: border-box;
+      margin-left: 13.88upx;
+      .schedule-right-scroll {
+        height: 560upx;
+        .schedule-right-item {
+          color: #35fffa;
+          padding: 6.88upx 6.88upx 10.38upx 13.88upx;
+          border: 1upx solid #00c6ff;
+          border-radius: 4upx;
+          box-shadow: 0 0 5upx 5upx rgba(25, 106, 190, 0.5) inset;
+          margin-bottom: 18upx;
+          font-size: 18.05upx;
+          .button {
+            display: flex;
+            justify-content: flex-end;
+            margin: 6.88upx;
+            .btn {
+              width: 111.11upx;
+              height: 43.05upx;
+              line-height: 45upx;
+              font-size: 18.05upx;
+              text-align: center;
+              font-weight: 500;
+              border-radius: 2.77upx;
+              color: #fff;
+              border: 1upx solid #3797ff;
+              background: #007aff;
+            }
+            .btn:hover {
+              background-color: #888;
+            }
+          }
+          .button-type {
+            justify-content: center;
+            margin-top: 13.88upx;
+          }
+          header {
+            text-align: center;
+            font-size: 24upx;
+          }
+          .item {
+            font-weight: bold;
+            font-size: 20upx;
+            text-align: left;
+          }
+          section {
+            line-height: 1.6;
+          }
+        }
+        .content {
+          section {
+            margin-left: 6.88upx;
+            margin-top: 13.88upx;
+          }
+        }
+      }
+    }
+    .schedule-empty {
+      height: 100%;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24upx;
+      color: #fff;
+    }
+  }
+}

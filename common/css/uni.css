@@ -5,6 +5,13 @@
   src: url("./static/font/uni.ttf") format("truetype");
 }
 
+.show-box {
+  width: 237upx;
+  position: relative;
+  padding-left: 13.88upx;
+  margin-left: 3.88upx;
+}
+
 view {
   color: #ffffff;
   font-size: 25upx;
@@ -169,7 +176,6 @@ form {
 .page-vertical-divider {
   width: 1upx;
   box-sizing: border-box;
-  margin-right: 14.58upx;
   background-image: linear-gradient(
     to bottom,
     rgba(0, 198, 255, 0),
@@ -1339,7 +1345,7 @@ loadmore .uni-loadmore {
   color: #fff;
 }
 .uni-picker-view-indicator {
-  background-color: rgba(42, 66, 115, .5);
+  background-color: rgba(42, 66, 115, 0.5);
 }
 .uni-picker-view-indicator:after,
 .uni-picker-view-indicator:before {

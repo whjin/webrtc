@@ -1573,6 +1573,32 @@ export default {
         });
       }
     },
+    // 清理缓存
+    clearALLCache() {
+      uni.showModal({
+        title: "提示",
+        content: "是否确定清除App所有数据存储缓存？",
+        success: res => {
+          if (res.confirm) {
+            uni.clearStorageSync();
+            uni.removeStorageSync("saveCartList");
+            this.sysCacheInfo = "";
+            this.webSocketOff();
+            if (this.socketTask) {
+              this.socketTask.close({
+                success: (res) => {
+                  console.log(JSON.stringify(res), "关闭WebSocket成功！");
+                },
+                fail: (err) => {
+                  console.log(JSON.stringify(err), "关闭WebSocket失败！");
+                },
+              });
+            }
+          } else if (res.cancel) {
+          }
+        },
+      });
+    },
     // 加载系统缓存
     async setAllSettingCache() {
       if (!isNullStr(this.sysCacheInfo)) {
@@ -1706,19 +1732,6 @@ export default {
         getApp().globalData.Base.rebootApp("com.gksc.terminal");
       }
     },
-    // 发送WebSocket数据
-    sendWebsocket(data) {
-      this.socketTask.send({
-        data,
-        success(res) {
-          console.log("消息发送成功:" + JSON.stringify(data));
-        },
-        fail(err) {
-          console.log("消息发送失败:" + JSON.stringify(err));
-          this.webSocketReConnect();
-        },
-      });
-    },
     // 开始拍照
     startTakePicture() {
       this.isTakingPic = true;
@@ -1825,18 +1838,207 @@ export default {
           });
       });
     },
+    // 智能谈话|心理测评处理方法
+    taskHandler(info, type) {
+      if (info.msg == "0") {
+        if (this.isCalling || this.isConversation || this.isEvaluation) {
+          return;
+        }
+        // 开始智能谈话|心理测评
+        clearInterval(this.timer);
+        this.setTaskId(info.extend);
+        this.voiceBroadcast(type == 0 ? "开始智能谈话" : "开始心理测评");
+        setTimeout(() => {
+          this.setCurrentTab(type == 0 ? 19 : 21);
+        }, 3000);
+      } else if (info.msg == "1") {
+        if (type == 0) {
+          // 结束智能谈话
+          this.setIsConversation(false);
+        } else {
+          // 结束心理测评
+          this.setIsEvaluation(false);
+        }
+        this.voiceBroadcast(type == 0 ? "谈话已结束" : "测评已结束");
+        this.closeModal("RecognitionDialogs");
+        if (![6].includes(this.currentTab)) {
+          this.setCurrentTab(1);
+        }
+      }
+    },
+    // 停止广播
+    stopRadioHandler(status, state) {
+      if (this.radioPlayState) {
+        uni.$emit("video-player", "radio", "stop");
+      }
+      this.receiveTask("radio", `${status}`);
+      this.radioPlayState = false;
+      this.disabledState = false;
+      if (state) {
+        // 开始播放电教
+        this.startEduPlay();
+      }
+    },
+    // 停止播放音频
+    stopAudioHandler(status, state) {
+      clearInterval(this.audioTimer);
+      if (this.audioPlayState) {
+        uni.$emit("video-player", "audio", "stop");
+      }
+      uni.$off("onEnded");
+      this.receiveTask("audio", `${status}`);
+      this.audioPlayState = false;
+      this.disabledState = false;
+      if (state) {
+        // 开始播放电教
+        this.startEduPlay();
+      }
+    },
+    // 停止播放视频
+    stopVideoHandler(status, state) {
+      clearInterval(this.videoTimer);
+      if (this.videoPlayState) {
+        uni.$emit("video-player", "video", "stop");
+      }
+      this.receiveTask("video", `${status}`);
+      this.videoPlayState = false;
+      this.disabledState = false;
+      if (state) {
+        // 开始播放电教
+        this.startEduPlay();
+      }
+    },
+    // 分机广播回传音量
+    radioVolumeHandler(info, msg) {
+      getApp().globalData.FloatUniModule.getStreamVolumeTypeMusic((e) => {
+        uni.setStorageSync("mediaDefaultVolume", e.value);
+        const { terminalCode } = uni.getStorageSync("terminalInfo");
+        let terminalObj = {
+          maindevno: info.maindevno,
+          devno: terminalCode,
+          type: "200",
+          msg,
+          extend: e.value,
+        };
+        this.sendWebsocket(JSON.stringify(terminalObj));
+      });
+    },
+    // 获取首页数据
+    initHomeData(state) {
+      // 获取警官信息
+      this.getPoliceInfo();
+      // 获取监室人数
+      this.getPrisonerNum();
+      // 获取动态信息
+      this.getDynamicInfo(state);
+    },
+    // 打开监室等级时间周期弹框
+    openRoomLevelModal() {
+      if (this.roomLevel == "严管监室") {
+        this.showLevelTimeModal = true;
+        this.levelTimer = setTimeout(() => {
+          clearTimeout(this.levelTimer);
+          this.showLevelTimeModal = false;
+        }, 8000);
+      }
+    },
+    webSocketReConnect() {
+      this.webSocketOff();
+      this.showVideoConnect = false;
+      this.reconnectCount++;
+      this.connectWebSocketInit(uni.getStorageSync("terminalInfo").terminalCode);
+    },
+    webSocketOn() {
+      getApp().globalData.webSocketConnected = true;
+      this.sysWebSocketInfo = "已连接";
+      this.sysCacheInfo = "配置系统缓存成功！";
+      // 禁用重复认证终端
+      this.isWebSocketDisable = true;
+      this.showDevOffline = false;
+      this.reconnectCount = 0;
+      console.log("WebSocket连接成功！");
+    },
+    webSocketOff() {
+      // 离线标记
+      this.showDevOffline = true;
+      // websocket 断开标记
+      getApp().globalData.webSocketConnected = false;
+      // 系统配置信息
+      this.sysWebSocketInfo = "";
+      // 打开重复认证终端
+      this.isWebSocketDisable = false;
+    },
+    // 发送WebSocket数据
+    sendWebsocket(data, successCB, failCB) {
+      this.socketTask.send({
+        data,
+        success(res) {
+          successCB && successCB();
+          console.log("消息发送成功:" + JSON.stringify(data));
+        },
+        fail(err) {
+          failCB && failCB();
+          console.log("消息发送失败:" + JSON.stringify(err));
+        },
+      });
+    },
+    socketHeartbeatCheck() {
+      if (this.heartbeatTimer == null) {
+        let hearTimeOut = uni.getStorageSync("heartBeatTimeOut");
+        this.heartbeatTimer = setInterval(() => {
+          // 规定时间内未收到心跳，发起重新连接
+          if (!this.isHeartbeat) {
+            let now = dateFormat("YYYY-MM-DD hh:mm:ss", new Date());
+            Log.writeLog(
+              `socket-heartbeat-check-status-${this.isHeartbeat}-${now}`,
+              false
+            );
+            this.webSocketReConnect();
+          }
+          // 触发一次检测后重置心跳默认状态
+          this.isHeartbeat = false;
+          // 数据为空，重新加载
+          if (isNullStr(this.prisonerNum)) {
+            this.initHomeData(false);
+          }
+        }, hearTimeOut * 1000);
+      }
+    },
+    closeSocket() {
+      if (this.socketTask != null) {
+        this.socketTask.close({
+          success: (res) => {
+            let now = dateFormat("YYYY-MM-DD hh:mm:ss", new Date());
+            Log.writeLog(
+              `socketTask.close.success-${JSON.stringify(res)}-${now}`,
+              false
+            );
+          },
+          fail: (err) => {
+            let now = dateFormat("YYYY-MM-DD hh:mm:ss", new Date());
+            Log.writeLog(
+              `socketTask.close.fail-${JSON.stringify(err)}-${now}`,
+              false
+            );
+          },
+        });
+        this.socketTask = null;
+      }
+    },
     // WebSocket初始连接
     connectWebSocketInit(code) {
+      // 开启心跳检查
+      this.socketHeartbeatCheck();
       // 设备离线状态
       if (!getApp().globalData.webSocketConnected) {
         this.showVideoConnect = false;
-        if (this.currentTab == 2) {
-          this.closeRecognitionDialogs();
-        }
         this.showDevOffline = true;
       } else {
         this.showDevOffline = false;
         return;
+      }
+      if (this.socketTask != null) {
+        this.closeSocket();
       }
       this.socketTask = uni.connectSocket({
         url: uni.getStorageSync("webSocketUrl") + code,
@@ -1850,27 +2052,11 @@ export default {
       this.socketTask.onOpen((res) => {
         this.handleShowToast("绑定终端信息成功！");
         this.webSocketOn();
-        clearTimeout(this.socketTimer);
-        clearTimeout(this.heartbeatTimer);
-        // 数据为空，重新加载
-        if (isNullStr(this.prisonerNum.totalNum)) {
-          setTimeout(() => {
-            this.initHomeData(false);
-          }, 60000);
-        }
       });
       this.socketTask.onError((err) => {
-        console.log(
-          "连接失败，可能是websocket服务不可用，正在发起重连",
-          JSON.stringify(err)
-        );
-        this.webSocketReConnect();
       });
       // 关闭WebSocket
       this.socketTask.onClose((res) => {
-        console.log("检测到WebSocket连接关闭，正在发起重连！！");
-        clearTimeout(this.heartbeatTimer);
-        this.webSocketReConnect();
       });
       // 获取主机websocket数据
       this.socketTask.onMessage((res) => {
@@ -1885,12 +2071,6 @@ export default {
           this.sendWebsocket(
             `{maindevno:'', devno:'${terminalCode}', type:'000', msg:'1',extend:{'ip':'${this.terminalIP}'}}`
           );
-          if (!isNullStr(this.heartbeatTimer)) {
-            clearTimeout(this.heartbeatTimer);
-          }
-          this.heartbeatTimer = setTimeout(() => {
-            this.webSocketReConnect();
-          }, this.heartBeatTimeOut * 1000);
         } else if (info.type == this.$config.controlType.WEBRTC) {
           if (info.msg == "0" || info.msg == "2") {
             // 0-开始视频对讲 2-开始监视监听
@@ -1932,6 +2112,7 @@ export default {
             // 开始播放电教
             this.startEduPlay();
           } else if (info.msg == "8") {
+            console.log(JSON.parse(info.extend));
             if (info.extend == "") {
               // 回传本机通话音量
               getApp().globalData.FloatUniModule.getStreamVolumeTypeVoiceCall(
@@ -1976,13 +2157,15 @@ export default {
           }
         } else if (info.type == this.$config.controlType.FACE) {
           if (info.msg == "1") {
-            let { base64, length } = JSON.parse(info.extend);
+            let { length, base64 } = JSON.parse(info.extend);
             if (base64 && base64.startsWith("data:image/jpeg;base64,")) {
               this.base64Str = "";
             }
             this.base64Str += base64;
             if (this.base64Str.length >= length) {
-              console.log(length, this.base64Str.length, { result: this.base64Str });
+              if (this.showRecognitionDialogs) {
+                this.$refs.recognitionDialogs.handleWebFaceInfo(this.base64Str);
+              }
             }
           }
         } else if (info.type == this.$config.controlType.INTERCOM) {
@@ -2520,158 +2703,6 @@ export default {
         }
       });
     },
-    // 智能谈话|心理测评处理方法
-    taskHandler(info, type) {
-      if (info.msg == "0") {
-        if (this.isCalling || this.isConversation || this.isEvaluation) {
-          return;
-        }
-        // 开始智能谈话|心理测评
-        clearInterval(this.timer);
-        this.setTaskId(info.extend);
-        this.voiceBroadcast(type == 0 ? "开始智能谈话" : "开始心理测评");
-        setTimeout(() => {
-          this.setCurrentTab(type == 0 ? 19 : 21);
-        }, 3000);
-      } else if (info.msg == "1") {
-        if (type == 0) {
-          // 结束智能谈话
-          this.setIsConversation(false);
-        } else {
-          // 结束心理测评
-          this.setIsEvaluation(false);
-        }
-        this.voiceBroadcast(type == 0 ? "谈话已结束" : "测评已结束");
-        this.closeModal("RecognitionDialogs");
-        if (![6].includes(this.currentTab)) {
-          this.setCurrentTab(1);
-        }
-      }
-    },
-    // 停止广播
-    stopRadioHandler(status, state) {
-      if (this.radioPlayState) {
-        uni.$emit("video-player", "radio", "stop");
-      }
-      this.receiveTask("radio", `${status}`);
-      this.radioPlayState = false;
-      this.disabledState = false;
-      if (state) {
-        // 开始播放电教
-        this.startEduPlay();
-      }
-    },
-    // 停止播放音频
-    stopAudioHandler(status, state) {
-      clearInterval(this.audioTimer);
-      if (this.audioPlayState) {
-        uni.$emit("video-player", "audio", "stop");
-      }
-      uni.$off("onEnded");
-      this.receiveTask("audio", `${status}`);
-      this.audioPlayState = false;
-      this.disabledState = false;
-      if (state) {
-        // 开始播放电教
-        this.startEduPlay();
-      }
-    },
-    // 停止播放视频
-    stopVideoHandler(status, state) {
-      clearInterval(this.videoTimer);
-      if (this.videoPlayState) {
-        uni.$emit("video-player", "video", "stop");
-      }
-      this.receiveTask("video", `${status}`);
-      this.videoPlayState = false;
-      this.disabledState = false;
-      if (state) {
-        // 开始播放电教
-        this.startEduPlay();
-      }
-    },
-    // 分机广播回传音量
-    radioVolumeHandler(info, msg) {
-      getApp().globalData.FloatUniModule.getStreamVolumeTypeMusic((e) => {
-        uni.setStorageSync("mediaDefaultVolume", e.value);
-        const { terminalCode } = uni.getStorageSync("terminalInfo");
-        let terminalObj = {
-          maindevno: info.maindevno,
-          devno: terminalCode,
-          type: "200",
-          msg,
-          extend: e.value,
-        };
-        this.sendWebsocket(JSON.stringify(terminalObj));
-      });
-    },
-    // 获取首页数据
-    initHomeData(state) {
-      // 获取警官信息
-      this.getPoliceInfo();
-      // 获取监室人数
-      this.getPrisonerNum();
-      // 获取动态信息
-      this.getDynamicInfo(state);
-    },
-    // 打开监室等级时间周期弹框
-    openRoomLevelModal() {
-      if (this.roomLevel == "严管监室") {
-        this.showLevelTimeModal = true;
-        this.levelTimer = setTimeout(() => {
-          clearTimeout(this.levelTimer);
-          this.showLevelTimeModal = false;
-        }, 8000);
-      }
-    },
-    webSocketReConnect() {
-      clearTimeout(this.socketTimer);
-      // 重置会话，如不重置，重复创建会话对象，不知资源是否会释放
-      if (this.socketTask != null) {
-        this.socketTask.close({
-          success: (res) => {
-            console.log(JSON.stringify(res), "关闭WebSocket成功！");
-          },
-          fail: (err) => {
-            console.log(JSON.stringify(err), "关闭WebSocket失败！");
-          },
-        });
-        this.socketTask = null;
-      }
-      this.webSocketOff();
-      this.showVideoConnect = false;
-      this.reconnectCount++;
-      this.socketTimer = setTimeout(() => {
-        const { terminalCode } = uni.getStorageSync("terminalInfo");
-        console.log(
-          "create，清除this.socketTimer定时器，触发重连机制",
-          terminalCode
-        );
-        this.connectWebSocketInit(terminalCode);
-      }, this.websocketTime);
-    },
-    webSocketOff() {
-      // 离线标记
-      this.showDevOffline = true;
-      // websocket 断开标记
-      getApp().globalData.webSocketConnected = false;
-      // 系统配置信息
-      this.sysWebSocketInfo = "";
-      // 打开重复认证终端
-      this.isWebSocketDisable = false;
-    },
-    webSocketOn() {
-      getApp().globalData.webSocketConnected = true;
-      this.sysWebSocketInfo = "已连接";
-      this.sysCacheInfo = "配置系统缓存成功！";
-      // 禁用重复认证终端
-      this.isWebSocketDisable = true;
-      this.showDevOffline = false;
-      this.reconnectCount = 0;
-      console.log("WebSocket连接成功！");
-      // 获取APP配置菜单
-      this.getAppMenuList();
-    },
     // 删除在押人员指纹
     delPrisonerFingerId(ids) {
       // 打开指纹设备
@@ -2967,32 +2998,6 @@ export default {
           this.clickNums = this.clickNums + 1;
         }
       }
-    },
-    // 清理缓存
-    clearALLCache() {
-      uni.showModal({
-        title: "提示",
-        content: "是否确定清除App所有数据存储缓存？",
-        success: res => {
-          if (res.confirm) {
-            uni.clearStorageSync();
-            uni.removeStorageSync("saveCartList");
-            this.sysCacheInfo = "";
-            this.webSocketOff();
-            if (this.socketTask) {
-              this.socketTask.close({
-                success: (res) => {
-                  console.log(JSON.stringify(res), "关闭WebSocket成功！");
-                },
-                fail: (err) => {
-                  console.log(JSON.stringify(err), "关闭WebSocket失败！");
-                },
-              });
-            }
-          } else if (res.cancel) {
-          }
-        },
-      });
     },
     // 新增(防拆报警)动态信息
     async setAlarmDynamic() {

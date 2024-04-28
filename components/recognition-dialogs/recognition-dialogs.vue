@@ -121,10 +121,8 @@ export default {
       // 指纹开启状态
       isOpen: false,
       currentTab: 2,
-      faceTimer: null,
       // 人脸定时器
       faceTimer: null,
-      faceVideo: null
     };
   },
   computed: {
@@ -186,7 +184,6 @@ export default {
     isShow(state) {
       if (!state) {
         this.isFacing = false;
-        console.log("111111111111");
         this.stopFacePreview();
         this.closeFingerPrint();
         this.stopTemperature();
@@ -199,7 +196,6 @@ export default {
   },
   beforeDestroy() {
     this.stopTemperature();
-    console.log("222222222222222");
     this.stopFacePreview();
     this.closeFingerPrint();
   },
@@ -236,19 +232,16 @@ export default {
     },
     // 人脸拍照
     startFaceRecognition() {
-      this.isFacing = true;
-      if (this.isShow) {
-        const terminalInfo = uni.getStorageSync("terminalInfo");
-        let webrtcServerUrl = uni.getStorageSync("webrtcServerUrl");
-        this.webrtcObj = {
-          position: { width: 440, height: 268, left: 420, top: 232 },
-          data: Object.assign(terminalInfo, {
-            type: "face",
-          }),
-          url: `${webrtcServerUrl}/web-terminal`,
-        };
-        getApp().globalData.Base.gotoNativePage(this.webrtcObj);
+      if (this.isShow && this.isFacing) {
+        clearTimeout(this.faceTimer);
+        this.startFacePreview();
       }
+    },
+    // 处理webrtc人脸数据
+    handleWebFaceInfo(image) {
+      let base64 = image.substr(image.indexOf(",") + 1);
+      let base64Str = base64.replace(/[\r\n]/g, "");
+      this.faceRecognition(base64Str);
     },
     // 人脸识别
     async faceRecognition(base64Str = "") {
@@ -269,6 +262,7 @@ export default {
           url = Api.police.policeFaceOneToMany;
         }
       }
+      console.log(params);
       let res = await Api.apiCall("post", url, { data: params }, true, true);
       if (!this.isShow || !this.isFaceRecognition) {
         return;
@@ -298,29 +292,50 @@ export default {
       } else {
         let text = res.state.msg || "未检测到有效人脸，请站好正视屏幕";
         this.faceVoice(text);
-        const { terminalCode } = uni.getStorageSync("terminalInfo");
-        this.$parent.sendWebsocket(
-          `{maindevno:'', devno:'${`web_${terminalCode}`}', type:'1200', msg:'0'}`
-        );
+        clearTimeout(this.faceTimer);
+        this.faceTimer = setTimeout(() => {
+          this.snapshotPreview();
+        }, 3000);
       }
       if (this.$parent.screenSaverSwitch) {
         this.$parent.screenSaverSwitch =
           uni.getStorageSync("screenSaverSwitch") || 30;
       }
     },
+    // 开始人脸视频预览
+    startFacePreview() {
+      const terminalInfo = uni.getStorageSync("terminalInfo");
+      let webrtcServerUrl = uni.getStorageSync("webrtcServerUrl");
+      this.webrtcObj = {
+        position: { width: 440, height: 268, left: 420, top: 232 },
+        data: Object.assign(terminalInfo, {
+          type: "face",
+        }),
+        url: `${webrtcServerUrl}/web-terminal`,
+      };
+      getApp().globalData.Base.gotoNativePage(this.webrtcObj);
+    },
+    // 人脸认证拍照
+    snapshotPreview() {
+      const { terminalCode } = uni.getStorageSync("terminalInfo");
+      this.$parent.sendWebsocket && this.$parent.sendWebsocket(
+        `{maindevno:'', devno:'${`web_${terminalCode}`}', type:'1200', msg:'0'}`
+      );
+    },
     // 停止人脸视频预览
     stopFacePreview() {
       clearTimeout(this.faceTimer);
       this.isFacing = false;
-      getApp().globalData.Base.toggleCommonBtn("buttonTerminalExit");
       const { terminalCode } = uni.getStorageSync("terminalInfo");
-      this.$parent.sendWebsocket(
-        `{maindevno:'', devno:'${`web_${terminalCode}`}', type:'1200', msg:'2'}`
+      this.$parent.sendWebsocket && this.$parent.sendWebsocket(
+        `{maindevno:'', devno:'${`web_${terminalCode}`}', type:'1200', msg:'2'}`,
+        () => {
+          getApp().globalData.Base.toggleCommonBtn("buttonTerminalExit");
+        }
       );
     },
     // 关闭人脸识别弹窗
     handleClose() {
-      console.log("3333333333");
       this.stopFacePreview();
       this.$emit("close");
     },
@@ -337,7 +352,6 @@ export default {
     // 开始指纹识别
     verifyFingerPrint() {
       this.isFacing = false;
-      console.log("44444444444444444");
       this.stopFacePreview();
       if (!this.isOpen) {
         // 打开指纹设备

@@ -1,82 +1,80 @@
 <template>
-  <div class="suggestion-container">
-    <div class="suggestion-wrapper">
-      <div class="suggestion-title">
-        <text>投诉建议</text>
-      </div>
-      <div class="suggestion-content">
-        <textarea v-model="content" maxlength="-1" placeholder="请填写你的建议" @input="handleInputChange"></textarea>
-        <div class="button-group">
-          <div class="button" @touchstart.stop="handleCancel">取消</div>
-          <div class="button" :class="!content ? 'btn-submit' : ''" @touchstart.stop="handleSubmit">
-            提交
+  <div class="schedule-container">
+    <div class="schedule-wrapper" v-if="scheduleList.length">
+      <div class="schedule-left">
+        <scroll-view scroll-y="true" class="schedule-left-scroll">
+          <div class="schedule-left-item" v-for="list in scheduleList" :key="list.type"
+            :class="selectInfo.type == list.type ? 'schedule-selected-img' : 'schedule-img'"
+            @click="selectScheduleItem(list)">
+            <text :class="selectInfo.type == list.type ? 'select-item' : ''">{{ list.typeName }}</text>
           </div>
-        </div>
+        </scroll-view>
+      </div>
+      <div class="page-vertical-divider"></div>
+      <div class="schedule-right">
+        <scroll-view scroll-y="true" class="schedule-right-scroll">
+          <div v-if="['1', '3'].includes(selectInfo.type)">
+            <div class="schedule-right-item">
+              <div class="content">
+                <header>{{ selectInfo.info.title }}</header>
+                <section v-html="selectInfo.info.content"></section>
+              </div>
+              <div class="button button-type">
+                <span class="btn">确认</span>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <div class="list" v-for="(item, index) in selectInfo.list" :key="index">
+              <div class="schedule-right-item">
+                <div class="item">{{ item.title }}</div>
+                <section v-html="item.content"></section>
+                <div class="button">
+                  <span class="btn">确认</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </scroll-view>
       </div>
     </div>
+    <div class="schedule-empty" v-else>暂无数据</div>
   </div>
 </template>
 
 <script>
-import Api from "@/common/api.js";
-import { dateFormat } from "@/common/utils/util.js";
-import { mapState, mapMutations } from "vuex";
+import Api from "@/common/api";
+import noticeList from "@/static/mock/noticeList.json";
 
 export default {
-  name: "suggestion",
-  components: {},
-  data () {
+  name: "schedule",
+  data() {
     return {
-      // 建议内容
-      content: "",
+      // 事务列表
+      scheduleList: [],
+      // 已选事务项
+      selectInfo: {},
     };
   },
-  computed: {
-    ...mapState({
-      // 登录人员信息
-      personInfo: (state) => state.app.personInfo,
-    })
-  },
-  created () {
-    // 开启倒计时
-    this.$parent.countTimer();
+  mounted() {
+    // 获取事务列表
+    this.getScheduleInfo();
   },
   methods: {
-    ...mapMutations({
-      // 设置当前页面
-      setCurrentTab: "app/SET_CURRENTTAB",
-    }),
-    // 建议内容
-    handleInputChange (e) {
-      this.content = e.target.value;
-    },
-    handleCancel () {
-      this.setCurrentTab(2);
-    },
-    // 提交建议
-    handleSubmit () {
-      if (!this.content) {
-        this.$parent.handleShowToast("请先填写投诉建议内容", "center");
-        return;
-      }
-      this.saveSuggestion();
-    },
-    // 保存投诉建议
-    async saveSuggestion () {
-      let content = this.content;
-      let recordTime = dateFormat("YYYY-MM-DD hh:mm:ss", new Date());
-      let rybh = this.personInfo.rybh;
+    // 获取事务列表
+    async getScheduleInfo() {
       let params = {
-        content,
-        recordTime,
-        rybh,
+        data: {}
       };
-      let res = await Api.apiCall("post", Api.prisoner.saveSuggestion, params);
+      let res = await Api.apiCall("post", Api.police.schedule.findReminder, params);
       if (res.state.code == 200) {
-        this.$parent.handleShowToast("保存成功");
-        this.setCurrentTab(2);
+        this.scheduleList = noticeList;
+        this.selectInfo = this.scheduleList[0];
       }
-    }
+    },
+    selectScheduleItem(item) {
+      this.selectInfo = item;
+    },
   },
 };
 </script>

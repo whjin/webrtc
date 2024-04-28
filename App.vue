@@ -88,5 +88,6 @@ export default {
 @import "./common/css/images/input-img.css";
 @import "./common/css/images/media-img.css";
 @import "./common/css/images/btn-img.css";
+@import './common/css/images/schedule-img.css';
 /* #endif*/
 </style>

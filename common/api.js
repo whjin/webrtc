@@ -176,6 +176,11 @@ export default {
       // 查询值班记录
       findSignRecord: "terminal/pacRoomDutyData/findSignRecord",
     },
+    // 保存投诉建议
+    saveSuggestion: "terminal/terComplain/save",
+    // 获取家属通信列表
+    getCommunication:
+      "terminal/pacFamilyCommunication/selectFamilyCommunication",
   },
   police: {
     // 获取民警指纹录入信息
@@ -214,6 +219,12 @@ export default {
     getCheckTypeAndContent: "terminal/check/api/getCheckTypeAndContent",
     // 刷卡（卡号）获取民警信息
     getUserByCardNum: "terminal/sysUser/getUserByCardNum?cardNum=",
+
+    // 监室事务提醒
+    schedule: {
+      // 获取监室事务信息
+      findReminder: "terminal/pacReminder/findReminder",
+    },
   },
 
   /**
