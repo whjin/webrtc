@@ -2,7 +2,8 @@
   <div class="home-container">
     <h1>WebRTC</h1>
     <nav>
-      <RouterLink v-for="(item, index) in routes" :key="index" :to="item.path" target="_blank">{{ item.name }}
+      <RouterLink v-for="(item, index) in routes" :key="index" :to="item.path" target="_blank">
+        <el-button type="primary">{{ item.name }}</el-button>
       </RouterLink>
     </nav>
   </div>
@@ -10,10 +11,11 @@
 
 <script>
 import { RouterLink } from 'vue-router';
+import { ElButton } from 'element-plus';
 
 export default {
   name: "Home",
-  components: { RouterLink },
+  components: { RouterLink, ElButton },
   data() {
     return {
       routes: [

@@ -45,7 +45,6 @@ export default {
   created() {
     if (!this.webSocketConnected) {
       this.terminalInfo = JSON.parse(JSON.parse(result.getData()).data);
-      // this.terminalInfo = { controlCode: "control01", terminalCode: "terminal103", terminalIp: "192.168.20.47" };
       const { controlCode, terminalCode, terminalIp } = this.terminalInfo;
       this.terminalInfo = Object.assign(this.terminalInfo, {
         webControlCode: `web_${controlCode}`,
@@ -63,7 +62,13 @@ export default {
     window.hangupTerminalVideo = this.hangupTerminalVideo;
     window.hangupFaceVideo = this.hangupFaceVideo;
   },
-  beforeDestroy() { },
+  beforeDestroy() {
+    if (this.isShow) {
+      this.hangupTerminalVideo();
+    } else {
+      this.hangupFaceVideo();
+    }
+  },
   methods: {
     isDomFinish() {
       const { type } = this.terminalInfo;
@@ -95,29 +100,6 @@ export default {
       } catch (err) {
         console.log("消息发送失败", err);
       }
-    },
-    // 向APP发送数据
-    sendAppData(data) {
-      const { controlCode, terminalCode } = this.terminalInfo;
-      let socketObj = {
-        maindevno: controlCode,
-        devno: terminalCode,
-        type: global.controlType.WEBRTC,
-        msg: "8",
-        extend: data
-      };
-      this.sendWebsocket(JSON.stringify(socketObj));
-    },
-    // 向APP发送人脸base64数据
-    sendFaceImage(data) {
-      const { terminalCode } = this.terminalInfo;
-      let socketObj = {
-        maindevno: terminalCode,
-        type: global.controlType.FACE,
-        msg: "1",
-        extend: data
-      };
-      this.sendWebsocket(JSON.stringify(socketObj));
     },
     // websocket心跳检测
     socketHeartbeatCheck() {
@@ -220,10 +202,10 @@ export default {
           }
         } else if (info.type == global.controlType.FACE) {
           if (info.msg == "0") {
-            // 获取人脸视频截图
-            this.getFaceImage();
+            // 获取人脸视频
+            this.getLocalVideo(true);
           }
-          if (info.msg == "1") {
+          if (info.msg == "2") {
             // 关闭人脸视频
             this.hangupFaceVideo();
           }
@@ -302,9 +284,9 @@ export default {
         });
       });
     },
-    // 停止webrtc对讲
+    // 挂断webrtc对讲
     hangupTerminalVideo() {
-      if (!!this.terminalVideo.srcObject) {
+      if (this.terminalVideo && this.terminalVideo.srcObject) {
         this.terminalVideo.srcObject.getTracks().map(track => {
           track.stop();
         });
@@ -318,35 +300,67 @@ export default {
     // 人脸识别
     startFaceVideo() {
       this.startLive().then(stream => {
+        this.localVideo.muted = true;
         this.localVideo.srcObject = stream;
-        // 获取人脸视频截图
-        this.getFaceImage();
+        // 获取人脸视频
+        this.getLocalVideo(false);
       });
     },
-    // 获取人脸视频截图
-    getFaceImage() {
-      if (this.localVideo.srcObject) {
-        this.localVideo.onloadedmetadata = () => {
-          let image = convertVideoToImage(this.localVideo);
-          let length = image.length;
-          let index = 0;
-          while (index <= image.length) {
-            let string = image.substring(index, index + 5000);
-            this.sendFaceImage({ length, base64: string });
-            index += 5000;
-          }
-        };
+    // 获取人脸视频
+    getLocalVideo(state = false) {
+      if (this.localVideo && this.localVideo.srcObject) {
+        if (state) {
+          this.handleSnapshot();
+        } else {
+          this.localVideo.onloadedmetadata = e => {
+            this.handleSnapshot();
+          };
+        }
       } else {
         this.showMessage("获取视频流失败", "error");
       }
     },
-    // 停止人脸
+    // 人脸视频快照
+    handleSnapshot() {
+      let image = convertVideoToImage(this.localVideo);
+      let length = image.length;
+      let index = 0;
+      while (index <= image.length) {
+        let string = image.substring(index, index + 5000);
+        this.sendFaceImage({ length, base64: string });
+        index += 5000;
+      }
+    },
+    // 停止人脸视频截图
     hangupFaceVideo() {
       if (this.localVideo && this.localVideo.srcObject) {
         this.localVideo.srcObject.getTracks().map(track => {
           track.stop();
         });
       }
+    },
+    // 向APP发送数据
+    sendAppData(data) {
+      const { controlCode, terminalCode } = this.terminalInfo;
+      let socketObj = {
+        maindevno: controlCode,
+        devno: terminalCode,
+        type: global.controlType.WEBRTC,
+        msg: "8",
+        extend: data
+      };
+      this.sendWebsocket(JSON.stringify(socketObj));
+    },
+    // 向APP发送人脸base64数据
+    sendFaceImage(data) {
+      const { terminalCode } = this.terminalInfo;
+      let socketObj = {
+        maindevno: terminalCode,
+        type: global.controlType.FACE,
+        msg: "1",
+        extend: data
+      };
+      this.sendWebsocket(JSON.stringify(socketObj));
     },
     showMessage(message, type = "success", plain = true) {
       ElMessage({ message, type, plain });

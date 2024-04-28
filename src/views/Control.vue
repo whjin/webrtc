@@ -65,7 +65,9 @@ export default {
     window.isDomFinish = this.isDomFinish;
     window.hangupControlVideo = this.hangupControlVideo;
   },
-  beforeDestroy() { },
+  beforeDestroy() {
+    this.hangupControlVideo();
+  },
   methods: {
     isDomFinish() {
       this.startRtcVideo(this.controlInfo.type);
@@ -280,9 +282,9 @@ export default {
         this.showMessage(`Failed to create the offer ${err}`, "error");
       });
     },
-    // 挂断视屏对讲
+    // 挂断视频对讲
     hangupControlVideo() {
-      if (!!this.controlVideo.srcObject) {
+      if (this.controlVideo && this.controlVideo.srcObject) {
         this.controlVideo.srcObject.getTracks().map(track => {
           track.stop();
         });
